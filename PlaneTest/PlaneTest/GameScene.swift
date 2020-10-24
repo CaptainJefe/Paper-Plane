@@ -19,8 +19,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //    var platformRight: SKSpriteNode!
 //    var scoreNode: SKSpriteNode!
     
-    var platformGroup: [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode(), SKSpriteNode()]
+    var platformGroup = [SKSpriteNode]()
     var platformSpeed: CGFloat = 0.6 { didSet { for platforms in platformGroup { platforms.speed = platformSpeed } } }
+    
+    
     let platformTexture = SKTexture(imageNamed: "platform")
     var platformPhysics: SKPhysicsBody!
     
@@ -239,20 +241,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         platformLeft.physicsBody?.isDynamic = false
         platformLeft.scale(to: CGSize(width: platformLeft.size.width * 4, height: platformLeft.size.height * 4))
         platformLeft.zPosition = 20
+        platformLeft.name = "left"
+        platformLeft.speed = platformSpeed
+        
 
         let platformRight = SKSpriteNode(texture: platformTexture)
         platformRight.physicsBody = platformPhysics.copy() as? SKPhysicsBody
         platformRight.physicsBody?.isDynamic = false
         platformRight.scale(to: CGSize(width: platformRight.size.width * 4, height: platformRight.size.height * 4))
         platformRight.zPosition = 20
+        platformRight.name = "right"
+        platformRight.speed = platformSpeed
         
-        let scoreNode = SKSpriteNode(color: UIColor.clear, size: CGSize(width: frame.width, height: 32))
+        let scoreNode = SKSpriteNode(color: UIColor.red, size: CGSize(width: frame.width, height: 32))
         scoreNode.physicsBody = SKPhysicsBody(rectangleOf: scoreNode.size)
         scoreNode.physicsBody?.isDynamic = false
         scoreNode.name = "scoreDetect"
         scoreNode.zPosition = 40
+        scoreNode.speed = platformSpeed
 
-        platformGroup = [platformLeft, platformRight, scoreNode]
+        
+        let newNodes = [platformLeft, platformRight, scoreNode]
+        platformGroup += newNodes
+        
 
         let yPosition = frame.width - platformRight.frame.width
 
@@ -269,15 +280,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let endPosition = frame.maxY + (platformLeft.frame.height * 3)
 
         let moveAction = SKAction.moveBy(x: 0, y: endPosition, duration: 7)
-        let moveSequence = SKAction.sequence([moveAction, SKAction.removeFromParent()])
         
-        for platforms in platformGroup {
-            addChild(platforms)
-            platforms.run(moveSequence)
+        for (index, node) in newNodes.enumerated() {
+            let moveSequence = SKAction.sequence([
+                moveAction,
+                SKAction.removeFromParent(),
+                SKAction.run {
+                    self.platformGroup.remove(at: index)
+                }
+            ])
+            
+            addChild(node)
+            node.run(moveSequence)
         }
         
-        print(platformLeft.speed)
+//        print(platformGroup[1].speed)
         platformCount += 1
+        
+        print()
+        
+        
         
     }
     
@@ -292,6 +314,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let repeatForever = SKAction.repeatForever(sequence)
         
         run(repeatForever)
+        
+        
     }
     
     func createButtons() {
@@ -378,21 +402,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         
         // increasing game speed incremetally as game progresses to increase challenge
-        if score == 25 {
-            physicsWorld.speed = 1.2
-        } else if score == 50 {
-            physicsWorld.speed = 1.4
-        } else if score == 75 {
-            physicsWorld.speed = 1.5
-        }
+//        if score == 25 {
+//            physicsWorld.speed = 1.2
+//        } else if score == 50 {
+//            physicsWorld.speed = 1.4
+//        } else if score == 75 {
+//            physicsWorld.speed = 1.5
+//        }
+//
+//        if score == 10 {
+//            plane.colorBlendFactor = 1
+//            plane.color = .orange
+//        } else if score == 20 {
+//            plane.color = .green
+//        }
         
-        if score == 10 {
-            plane.colorBlendFactor = 1
-            plane.color = .orange
-        } else if score == 20 {
-            plane.color = .green
-        }
-
+//        print("\(platformGroup.first?.speed)")
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
