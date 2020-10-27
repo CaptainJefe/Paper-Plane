@@ -19,7 +19,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //    var platformRight: SKSpriteNode!
 //    var scoreNode: SKSpriteNode!
     
-    var platformGroup = [SKSpriteNode]()
+    var platformGroup = Set<SKSpriteNode>()
     var platformSpeed: CGFloat = 0.6 { didSet { for platforms in platformGroup { platforms.speed = platformSpeed } } }
     
     
@@ -253,7 +253,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         platformRight.name = "right"
         platformRight.speed = platformSpeed
         
-        let scoreNode = SKSpriteNode(color: UIColor.red, size: CGSize(width: frame.width, height: 32))
+        let scoreNode = SKSpriteNode(color: UIColor.clear, size: CGSize(width: frame.width, height: 32))
         scoreNode.physicsBody = SKPhysicsBody(rectangleOf: scoreNode.size)
         scoreNode.physicsBody?.isDynamic = false
         scoreNode.name = "scoreDetect"
@@ -261,8 +261,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreNode.speed = platformSpeed
 
         
-        let newNodes = [platformLeft, platformRight, scoreNode]
-        platformGroup += newNodes
+        let newNodes: Set<SKSpriteNode> = [platformLeft, platformRight, scoreNode]
+        for node in newNodes {
+            platformGroup.insert(node)
+        }
         
 
         let yPosition = frame.width - platformRight.frame.width
@@ -281,12 +283,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         let moveAction = SKAction.moveBy(x: 0, y: endPosition, duration: 7)
         
-        for (index, node) in newNodes.enumerated() {
+        for node in newNodes {
             let moveSequence = SKAction.sequence([
                 moveAction,
                 SKAction.removeFromParent(),
                 SKAction.run {
-                    self.platformGroup.remove(at: index)
+                    self.platformGroup.remove(node)
                 }
             ])
             
@@ -298,9 +300,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         platformCount += 1
         
         print()
-        
-        
-        
     }
     
     func startPlatforms() {
@@ -309,7 +308,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             platformCount += 1
         }
         
-        let wait = SKAction.wait(forDuration: 1.1)
+        let wait = SKAction.wait(forDuration: 0.9)
         let sequence = SKAction.sequence([create, wait])
         let repeatForever = SKAction.repeatForever(sequence)
         
@@ -380,7 +379,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         guard contact.bodyA.node != nil && contact.bodyB.node != nil else {
             return
         }
-//
+
 //        if contact.bodyA.node == plane || contact.bodyB.node == plane {
 //            if let particles = SKEmitterNode(fileNamed: "DestroyPlane") {
 //                particles.position = plane.position
