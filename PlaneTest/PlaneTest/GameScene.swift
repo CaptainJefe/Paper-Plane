@@ -188,6 +188,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        plane.colorBlendFactor = 1
 //        plane.color = plane.color
         plane.size = CGSize(width: 100, height: 100)
+        plane.name = "plane"
         addChild(plane)
         
         plane.physicsBody = SKPhysicsBody(texture: planeTexture, size: planeTexture.size())
@@ -239,25 +240,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let platformLeft = SKSpriteNode(texture: platformTexture)
         platformLeft.physicsBody = platformPhysics.copy() as? SKPhysicsBody
         platformLeft.physicsBody?.isDynamic = false
+        platformLeft.physicsBody?.affectedByGravity = false
+        platformLeft.physicsBody?.collisionBitMask = 0
         platformLeft.scale(to: CGSize(width: platformLeft.size.width * 4, height: platformLeft.size.height * 4))
         platformLeft.zPosition = 20
-        platformLeft.name = "left"
+        platformLeft.name = "platform"
         platformLeft.speed = platformSpeed
         
 
         let platformRight = SKSpriteNode(texture: platformTexture)
         platformRight.physicsBody = platformPhysics.copy() as? SKPhysicsBody
         platformRight.physicsBody?.isDynamic = false
+        platformRight.physicsBody?.collisionBitMask = 0
         platformRight.scale(to: CGSize(width: platformRight.size.width * 4, height: platformRight.size.height * 4))
         platformRight.zPosition = 20
-        platformRight.name = "right"
+        platformRight.name = "platform"
         platformRight.speed = platformSpeed
         
         let scoreNode = SKSpriteNode(color: UIColor.clear, size: CGSize(width: frame.width, height: 32))
         scoreNode.physicsBody = SKPhysicsBody(rectangleOf: scoreNode.size)
         scoreNode.physicsBody?.isDynamic = false
-        scoreNode.name = "scoreDetect"
         scoreNode.zPosition = 40
+        scoreNode.name = "scoreDetect"
         scoreNode.speed = platformSpeed
 
         
@@ -303,18 +307,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func startPlatforms() {
+        let spawnNode = SKSpriteNode(color: UIColor.green, size: CGSize(width: frame.width, height: 20))
+        
+        spawnNode.name = "spawn"
+        spawnNode.zPosition = 40
+        spawnNode.position = CGPoint(x: frame.midX, y: frame.midY - 180)
+        addChild(spawnNode)
+        
+        spawnNode.physicsBody = SKPhysicsBody(rectangleOf: spawnNode.size)
+        spawnNode.physicsBody?.isDynamic = false
+        spawnNode.physicsBody!.contactTestBitMask = spawnNode.physicsBody!.collisionBitMask
+        spawnNode.physicsBody?.collisionBitMask = 1
+        spawnNode.physicsBody?.affectedByGravity = false
+        
+        
         let create = SKAction.run { [unowned self] in
             self.createPlatforms()
             platformCount += 1
         }
         
-        let wait = SKAction.wait(forDuration: 0.9)
-        let sequence = SKAction.sequence([create, wait])
-        let repeatForever = SKAction.repeatForever(sequence)
+//        let wait = SKAction.wait(forDuration: 0.9)
+//        let sequence = SKAction.sequence([create, wait])
+//        let repeatForever = SKAction.repeatForever(sequence)
         
-        run(repeatForever)
-        
-        
+        run(create)
     }
     
     func createButtons() {
@@ -364,6 +380,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
+        print("collision")
+        
         if contact.bodyA.node?.name == "scoreDetect" || contact.bodyB.node?.name == "scoreDetect" {
             if contact.bodyA.node == plane {
                 contact.bodyB.node?.removeFromParent()
@@ -375,22 +393,36 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
             return
         }
+        
+        if contact.bodyA.node?.name == "platform" || contact.bodyB.node?.name == "platform" {
+            if contact.bodyA.node?.name == "spawn" || contact.bodyB.node?.name == "spawn" {
+                let create = SKAction.run { [unowned self] in
+                    self.createPlatforms()
+                    platformCount += 1
+                }
+                
+                run(create)
+                
+            }
+        }
 
+        
         guard contact.bodyA.node != nil && contact.bodyB.node != nil else {
             return
         }
+        
+        
+        if contact.bodyA.node == plane || contact.bodyB.node == plane {
+            if let particles = SKEmitterNode(fileNamed: "DestroyPlane") {
+                particles.position = plane.position
+                particles.zPosition = 50
+                addChild(particles)
+            }
 
-//        if contact.bodyA.node == plane || contact.bodyB.node == plane {
-//            if let particles = SKEmitterNode(fileNamed: "DestroyPlane") {
-//                particles.position = plane.position
-//                particles.zPosition = 50
-//                addChild(particles)
-//            }
-//
-//            plane.removeFromParent()
-//            speed = 0
-//            gameState = 1
-//        }
+            plane.removeFromParent()
+            speed = 0
+            gameState = 1
+        }
     }
     
     func start() {
