@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D662BDAB250EADBA0048CC9D /* InfiniteScrollingBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = D662BDAA250EADBA0048CC9D /* InfiniteScrollingBackground.swift */; };
-		D662BDAD250EEB750048CC9D /* Scroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = D662BDAC250EEB750048CC9D /* Scroll.swift */; };
 		D6800755252AE6100090D16D /* DestroyPlane.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6800753252AE6100090D16D /* DestroyPlane.sks */; };
 		D6800756252AE6100090D16D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6800754252AE6100090D16D /* Assets.xcassets */; };
 		D68007652537E8DA0090D16D /* TitleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68007642537E8DA0090D16D /* TitleScreen.swift */; };
 		D680076A2537F2CE0090D16D /* TitleScreen.sks in Resources */ = {isa = PBXBuildFile; fileRef = D68007692537F2CE0090D16D /* TitleScreen.sks */; };
+		D6974235259C4C58006F6049 /* Asai-Analogue.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6974234259C4C58006F6049 /* Asai-Analogue.ttf */; };
+		D69BFEAF25AD79D500B99E91 /* GameScene Backup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */; };
 		D6AD9B3A24EFBAA000503775 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AD9B3924EFBAA000503775 /* AppDelegate.swift */; };
 		D6AD9B3C24EFBAA000503775 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6AD9B3B24EFBAA000503775 /* GameScene.sks */; };
 		D6AD9B4024EFBAA000503775 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AD9B3F24EFBAA000503775 /* GameScene.swift */; };
@@ -20,15 +20,16 @@
 		D6AD9B4524EFBAA000503775 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6AD9B4324EFBAA000503775 /* Main.storyboard */; };
 		D6AD9B4724EFBAA000503775 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6AD9B4624EFBAA000503775 /* Assets.xcassets */; };
 		D6AD9B4A24EFBAA000503775 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6AD9B4824EFBAA000503775 /* LaunchScreen.storyboard */; };
+		D6E06BAE25C95168005FAC98 /* Paper Plane.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D6E06BAD25C95168005FAC98 /* Paper Plane.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D662BDAA250EADBA0048CC9D /* InfiniteScrollingBackground.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfiniteScrollingBackground.swift; sourceTree = "<group>"; };
-		D662BDAC250EEB750048CC9D /* Scroll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scroll.swift; sourceTree = "<group>"; };
 		D6800753252AE6100090D16D /* DestroyPlane.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = DestroyPlane.sks; sourceTree = SOURCE_ROOT; };
 		D6800754252AE6100090D16D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		D68007642537E8DA0090D16D /* TitleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleScreen.swift; sourceTree = "<group>"; };
 		D68007692537F2CE0090D16D /* TitleScreen.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TitleScreen.sks; sourceTree = "<group>"; };
+		D6974234259C4C58006F6049 /* Asai-Analogue.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Asai-Analogue.ttf"; sourceTree = "<group>"; };
+		D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameScene Backup.swift"; sourceTree = "<group>"; };
 		D6AD9B3624EFBAA000503775 /* PlaneTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlaneTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6AD9B3924EFBAA000503775 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D6AD9B3B24EFBAA000503775 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -38,6 +39,7 @@
 		D6AD9B4624EFBAA000503775 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D6AD9B4924EFBAA000503775 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D6AD9B4B24EFBAA000503775 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D6E06BAD25C95168005FAC98 /* Paper Plane.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Paper Plane.mp3"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +53,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D6974233259C4C41006F6049 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D6E06BAD25C95168005FAC98 /* Paper Plane.mp3 */,
+				D6974234259C4C58006F6049 /* Asai-Analogue.ttf */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		D6AD9B2D24EFBA9F00503775 = {
 			isa = PBXGroup;
 			children = (
@@ -73,8 +84,7 @@
 				D6AD9B3924EFBAA000503775 /* AppDelegate.swift */,
 				D6AD9B3B24EFBAA000503775 /* GameScene.sks */,
 				D6AD9B3F24EFBAA000503775 /* GameScene.swift */,
-				D662BDAA250EADBA0048CC9D /* InfiniteScrollingBackground.swift */,
-				D662BDAC250EEB750048CC9D /* Scroll.swift */,
+				D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */,
 				D6AD9B4124EFBAA000503775 /* GameViewController.swift */,
 				D68007692537F2CE0090D16D /* TitleScreen.sks */,
 				D68007642537E8DA0090D16D /* TitleScreen.swift */,
@@ -84,6 +94,7 @@
 				D6800754252AE6100090D16D /* Assets.xcassets */,
 				D6AD9B4824EFBAA000503775 /* LaunchScreen.storyboard */,
 				D6AD9B4B24EFBAA000503775 /* Info.plist */,
+				D6974233259C4C41006F6049 /* Resources */,
 			);
 			path = PlaneTest;
 			sourceTree = "<group>";
@@ -115,7 +126,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Cade Williams";
 				TargetAttributes = {
 					D6AD9B3524EFBAA000503775 = {
@@ -150,7 +161,9 @@
 				D6AD9B3C24EFBAA000503775 /* GameScene.sks in Resources */,
 				D680076A2537F2CE0090D16D /* TitleScreen.sks in Resources */,
 				D6AD9B4724EFBAA000503775 /* Assets.xcassets in Resources */,
+				D6974235259C4C58006F6049 /* Asai-Analogue.ttf in Resources */,
 				D6AD9B4A24EFBAA000503775 /* LaunchScreen.storyboard in Resources */,
+				D6E06BAE25C95168005FAC98 /* Paper Plane.mp3 in Resources */,
 				D6800756252AE6100090D16D /* Assets.xcassets in Resources */,
 				D6800755252AE6100090D16D /* DestroyPlane.sks in Resources */,
 			);
@@ -164,10 +177,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6AD9B4024EFBAA000503775 /* GameScene.swift in Sources */,
-				D662BDAB250EADBA0048CC9D /* InfiniteScrollingBackground.swift in Sources */,
 				D68007652537E8DA0090D16D /* TitleScreen.swift in Sources */,
 				D6AD9B4224EFBAA000503775 /* GameViewController.swift in Sources */,
-				D662BDAD250EEB750048CC9D /* Scroll.swift in Sources */,
+				D69BFEAF25AD79D500B99E91 /* GameScene Backup.swift in Sources */,
 				D6AD9B3A24EFBAA000503775 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -220,6 +232,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -280,6 +293,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -312,7 +326,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = PlaneTest/PlaneTest.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9R9H53AU37;
 				INFOPLIST_FILE = PlaneTest/Info.plist;
@@ -333,7 +346,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = PlaneTest/PlaneTest.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9R9H53AU37;
 				INFOPLIST_FILE = PlaneTest/Info.plist;
