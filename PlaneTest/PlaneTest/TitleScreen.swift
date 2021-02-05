@@ -21,11 +21,13 @@ class TitleScreen: SKScene {
     var musicButton = SKSpriteNode(imageNamed: "Music Button")
     var closeButton = SKSpriteNode(imageNamed: "Close Button")
     
+    var highScoresWindow = SKSpriteNode(imageNamed: "High Scores Window")
     var optionsWindow = SKSpriteNode(imageNamed: "Options Window")
     
     var buttonIsPressed = false
     
-    var defaultSize = CGSize(width: 256, height: 128)
+    var bigButtonSize = CGSize(width: 256, height: 128)
+    var smallButtonSize = CGSize(width: 100, height: 100)
     
     var isButtonTouched: String!
     
@@ -39,6 +41,7 @@ class TitleScreen: SKScene {
         addChild(logo)
     }
     
+    
     func shrink(node: SKSpriteNode) {
         let shrink = SKAction.scale(to: 0.75, duration: 0.1)
         let fade = SKAction.run {
@@ -48,6 +51,7 @@ class TitleScreen: SKScene {
         
         node.run(sequence)
     }
+    
     
     func expand(node: SKSpriteNode) {
         
@@ -63,8 +67,9 @@ class TitleScreen: SKScene {
         node.run(sequence)
     }
     
+    
     func createButtons() {
-        playButton.size = defaultSize
+        playButton.size = bigButtonSize
         playButton.position = CGPoint(x: frame.midX, y: frame.midY)
         playButton.colorBlendFactor = 0
         playButton.zPosition = 10
@@ -72,22 +77,23 @@ class TitleScreen: SKScene {
         addChild(playButton)
         buttonContainer.append(playButton)
         
-        highScoresButton.size = defaultSize
-        highScoresButton.position = CGPoint(x: playButton.position.x, y: playButton.position.y - 150)
+        highScoresButton.size = bigButtonSize
+        highScoresButton.position = CGPoint(x: playButton.position.x, y: playButton.position.y - 175)
         highScoresButton.colorBlendFactor = 0
         highScoresButton.zPosition = 10
         highScoresButton.name = "High Scores"
         addChild(highScoresButton)
         buttonContainer.append(highScoresButton)
         
-        optionsButton.size = defaultSize
-        optionsButton.position = CGPoint(x: highScoresButton.position.x, y: highScoresButton.position.y - 150)
+        optionsButton.size = smallButtonSize
+        optionsButton.position = CGPoint(x: frame.maxX - 150, y: frame.minY + 100)
         optionsButton.colorBlendFactor = 0
         optionsButton.zPosition = 10
         optionsButton.name = "Options"
         addChild(optionsButton)
         buttonContainer.append(optionsButton)
     }
+    
     
     func startGame() {
         if let skView = self.view {
@@ -100,6 +106,38 @@ class TitleScreen: SKScene {
             skView.presentScene(scene, transition: transition)
         }
     }
+    
+    
+    func highScoresMenu(isOpen: Bool) {
+        highScoresWindow.size = CGSize(width: 512, height: 1024)
+        highScoresWindow.alpha = 1
+        highScoresWindow.color = .green
+        highScoresWindow.position = CGPoint(x: frame.midX, y: frame.midY)
+        highScoresWindow.zPosition = 50
+        
+        closeButton.size = CGSize(width: 64, height: 64)
+        closeButton.alpha = 1
+        closeButton.position = CGPoint(x: highScoresWindow.frame.maxX - 10, y: highScoresWindow.frame.maxY - 10)
+        closeButton.zPosition = 55
+        closeButton.name = "Close Button"
+        
+        let scalePrelim = SKAction.scale(to: CGSize(width: 1, height: 1), duration: 0)
+        let scaleMenuUp = SKAction.scale(to: CGSize(width: 512, height: 1024), duration: 0.065)
+        
+        let menuSequence = SKAction.sequence([scalePrelim, scaleMenuUp])
+        
+        if isOpen == true {
+            addChild(highScoresWindow)
+            addChild(closeButton)
+            
+            highScoresWindow.run(menuSequence)
+//            closeButton.run(scaleSeq)
+        } else if isOpen == false {
+            highScoresWindow.removeFromParent()
+            closeButton.removeFromParent()
+        }
+    }
+    
     
     func optionsMenu(isOpen: Bool) {
         optionsWindow.size = CGSize(width: 512, height: 512)
@@ -148,6 +186,7 @@ class TitleScreen: SKScene {
         }
     }
     
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
@@ -188,6 +227,7 @@ class TitleScreen: SKScene {
         }
     }
     
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
@@ -202,7 +242,10 @@ class TitleScreen: SKScene {
             }
             
             if touchedNode.name == "High Scores" && isButtonTouched == "High Scores" {
+                highScoresMenu(isOpen: true)
                 expand(node: highScoresButton)
+                for node in buttonContainer { node.isUserInteractionEnabled = true }
+                
             } else if touchedNode.name != "High Scores" && isButtonTouched == "High Scores" {
                 expand(node: highScoresButton)
             }
@@ -232,6 +275,7 @@ class TitleScreen: SKScene {
             
             if touchedNode.name == "Close Button" && isButtonTouched == "Close Button" {
                 optionsMenu(isOpen: false)
+                highScoresMenu(isOpen: false) // may be buggy
                 expand(node: closeButton)
                 
                 for node in buttonContainer { node.isUserInteractionEnabled = false }
@@ -244,6 +288,7 @@ class TitleScreen: SKScene {
 //            expand(node: optionsButton)
         }
     }
+    
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
@@ -258,6 +303,7 @@ class TitleScreen: SKScene {
 //        print(buttonIsPressed)
         print(optionsButton.isUserInteractionEnabled)
     }
+    
     
     deinit {
         print("All Good")

@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "Option Button v3.png",
+      "filename" : "High Scores Window.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Option Button v3@2x.png",
+      "filename" : "High Scores Window@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

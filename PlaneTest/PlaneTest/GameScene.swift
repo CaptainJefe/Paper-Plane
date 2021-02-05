@@ -34,6 +34,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var platformTexture = SKTexture(imageNamed: "platform")
     var platformPhysics: SKPhysicsBody!
     
+    var spawnNode: SKSpriteNode!
+    
+    
     var timer: Timer?
     var gameState: Int = 0
     
@@ -66,8 +69,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         musicPlayer()
 //        createSky()
         
-        platformPhysics = SKPhysicsBody(rectangleOf: CGSize(width: platformTexture.size().width / 1.2, height: platformTexture.size().height / 10))
+        spawnNode = SKSpriteNode(color: UIColor.clear, size: CGSize(width: frame.width, height: 20))
+        spawnNode.name = "spawn"
+        spawnNode.zPosition = 40
+        spawnNode.position = CGPoint(x: frame.midX, y: -(frame.minY + (frame.midY / 2)) + 512) // original is - 390 // 768 is 1.5x the height of the transition platform so when it spawns it needs to go it's entire height to space correctly, so it's entire height + half of it's height because it spawns from the middle of the texture.
+        addChild(spawnNode)
         
+        spawnNode.physicsBody = SKPhysicsBody(rectangleOf: spawnNode.size)
+        spawnNode.physicsBody?.isDynamic = false
+        spawnNode.physicsBody!.contactTestBitMask = spawnNode.physicsBody!.collisionBitMask
+        spawnNode.physicsBody?.collisionBitMask = 1
+        spawnNode.physicsBody?.affectedByGravity = false
+        
+
         physicsWorld.gravity = .zero
         physicsWorld.contactDelegate = self
         
@@ -218,7 +232,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(plane)
         nodeArray.append(plane)
         
-        plane.physicsBody = SKPhysicsBody(circleOfRadius: plane.size.width / 6)
+        plane.physicsBody = SKPhysicsBody(circleOfRadius: plane.size.width / 7)
         plane.physicsBody!.contactTestBitMask = plane.physicsBody!.collisionBitMask
         plane.physicsBody?.collisionBitMask = 0
         plane.physicsBody?.isDynamic = true
@@ -259,7 +273,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             // walls won't loop properly unless they are being moved as backgroundTexture.size().height it seems, despite them both being the height, 2048px
             
             let wallLeft = wallPieces[i]
-            wallLeft.texture = wallTexture
+            wallLeft.texture = nil
             wallLeft.anchorPoint = CGPoint(x: 0, y: 0)
             wallLeft.zPosition = 50
             wallLeft.position = CGPoint(x: frame.minX, y: wallTexture.size().height + (-wallTexture.size().height) + (-wallTexture.size().height * CGFloat(i)))
@@ -268,7 +282,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             nodeArray.append(wallLeft)
             
             let wallRight = wallPieces2[i]
-            wallRight.texture = wallTexture
+            wallRight.texture = nil
             wallRight.anchorPoint = CGPoint(x: 0, y: 0)
             wallRight.zPosition = 50
             wallRight.position = CGPoint(x: frame.maxX - 130, y: wallTexture.size().height + (-wallTexture.size().height) + (-wallTexture.size().height * CGFloat(i)))
@@ -322,21 +336,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     func createPlatforms() {
-        let max = CGFloat(frame.width / 4)
-        var xPosition = CGFloat.random(in: -70...max)
+        let min = CGFloat(frame.width / 12)
+        let max = CGFloat(frame.width / 3)
+        var xPosition = CGFloat.random(in: -min ... max)
         
         if platformCount > 14 {
             platformTexture = SKTexture(imageNamed: "platform2")
         } else if platformCount > 4 {
             platformTexture = SKTexture(imageNamed: "Transition Platform")
-            xPosition = max + -70
-            
+            xPosition = 119
         }
         print(max)
+        print(frame.width)
+        
+        platformPhysics = SKPhysicsBody(rectangleOf: CGSize(width: platformTexture.size().width, height: platformTexture.size().height))
+        
         
         let platformLeft = SKSpriteNode(texture: platformTexture)
         platformLeft.physicsBody = platformPhysics.copy() as? SKPhysicsBody
-        platformLeft.physicsBody?.isDynamic = true
+        platformLeft.physicsBody?.isDynamic = false
         platformLeft.physicsBody?.affectedByGravity = false
         platformLeft.physicsBody?.collisionBitMask = 0
         platformLeft.scale(to: CGSize(width: platformLeft.size.width * 4, height: platformLeft.size.height * 4))
@@ -346,40 +364,46 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         let platformRight = SKSpriteNode(texture: platformTexture)
         platformRight.physicsBody = platformPhysics.copy() as? SKPhysicsBody
-        platformRight.physicsBody?.isDynamic = false
+        platformRight.physicsBody?.isDynamic = true
         platformRight.physicsBody?.collisionBitMask = 0
         platformRight.scale(to: CGSize(width: platformRight.size.width * 4, height: platformRight.size.height * 4))
         platformRight.zPosition = 20
         platformRight.name = "platform"
         platformRight.speed = platformSpeed
         
-        let scoreNode = SKSpriteNode(color: UIColor.clear, size: CGSize(width: frame.width, height: 32))
+        let scoreNode = SKSpriteNode(color: UIColor.red, size: CGSize(width: frame.width, height: 32))
         scoreNode.physicsBody = SKPhysicsBody(rectangleOf: scoreNode.size)
         scoreNode.physicsBody?.isDynamic = false
         scoreNode.zPosition = 100
         scoreNode.name = "scoreDetect"
         scoreNode.speed = platformSpeed
 
+        let platformTrigger = SKSpriteNode(color: UIColor.orange, size: CGSize(width: frame.width, height: 1))
+        platformTrigger.physicsBody = SKPhysicsBody(rectangleOf: platformTrigger.size)
+        platformTrigger.physicsBody?.isDynamic = true
+        platformTrigger.physicsBody?.affectedByGravity = false
+        platformTrigger.physicsBody?.collisionBitMask = 0
+        platformTrigger.zPosition = 100
+        platformTrigger.name = "platformTrigger"
+        platformTrigger.speed = platformSpeed
         
-        let newNodes: Set<SKSpriteNode> = [platformLeft, platformRight, scoreNode]
+        let newNodes: Set<SKSpriteNode> = [platformLeft, platformRight, scoreNode, platformTrigger]
         for node in newNodes {
             platformGroup.insert(node)
         }
         
 
-        let yPosition = frame.width - platformRight.frame.width
+        let yPosition = frame.minY + (frame.midY / 2)
 
-        
-        
-
-        let gapSize: CGFloat = -50
+        let gapSize: CGFloat = -70
 
 
         platformLeft.position = CGPoint(x: xPosition + platformLeft.size.width - gapSize, y: -yPosition)
         platformRight.position = CGPoint(x: xPosition + gapSize, y: -yPosition)
-        scoreNode.position = CGPoint(x: frame.midX, y: yPosition - (scoreNode.size.width / 1.5))
+        scoreNode.position = CGPoint(x: frame.midX, y: platformLeft.position.y - platformLeft.size.height / 2)
+        platformTrigger.position = CGPoint(x: frame.midX, y: platformLeft.position.y)
 
-        let endPosition = frame.maxY + (platformLeft.frame.height * 3)
+        let endPosition = frame.maxY + frame.midY
 
         let moveAction = SKAction.moveBy(x: 0, y: endPosition, duration: 7)
         
@@ -406,17 +430,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func startPlatforms() {
         
-        let spawnNode = SKSpriteNode(color: UIColor.clear, size: CGSize(width: frame.width, height: 20))
-        spawnNode.name = "spawn"
-        spawnNode.zPosition = 40
-        spawnNode.position = CGPoint(x: frame.midX, y: frame.midY - 460) // original is - 390
-        addChild(spawnNode)
         
-        spawnNode.physicsBody = SKPhysicsBody(rectangleOf: spawnNode.size)
-        spawnNode.physicsBody?.isDynamic = false
-        spawnNode.physicsBody!.contactTestBitMask = spawnNode.physicsBody!.collisionBitMask
-        spawnNode.physicsBody?.collisionBitMask = 1
-        spawnNode.physicsBody?.affectedByGravity = false
         
         let create = SKAction.run { [unowned self] in
             self.createPlatforms()
@@ -663,7 +677,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             return
         }
         
-        if contact.bodyA.node?.name == "platform" || contact.bodyB.node?.name == "platform" {
+        if contact.bodyA.node?.name == "platformTrigger" || contact.bodyB.node?.name == "platformTrigger" {
             if contact.bodyA.node?.name == "spawn" || contact.bodyB.node?.name == "spawn" {
                 let create = SKAction.run { [unowned self] in
                     self.createPlatforms()
@@ -682,6 +696,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         if contact.bodyA.node == plane || contact.bodyB.node == plane {
+            if contact.bodyA.node?.name == "platformTrigger" || contact.bodyB.node?.name == "platformTrigger" {
+                return
+            }
             if let particles = SKEmitterNode(fileNamed: "DestroyPlane") {
                 particles.position = plane.position
                 particles.zPosition = 50
@@ -721,8 +738,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        }
         
 //        print("\(platformGroup.first?.speed)")
-        
-        print(gameIsPaused)
     }
     
 
