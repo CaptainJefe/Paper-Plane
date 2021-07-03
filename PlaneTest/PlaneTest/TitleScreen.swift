@@ -27,7 +27,7 @@ class TitleScreen: SKScene {
     var buttonIsPressed = false
     
     var bigButtonSize = CGSize(width: 256, height: 128)
-    var smallButtonSize = CGSize(width: 100, height: 100)
+    var smallButtonSize = CGSize(width: 160, height: 160)
     
     var isButtonTouched: String!
     
@@ -35,6 +35,13 @@ class TitleScreen: SKScene {
     
     override func didMove(to view: SKView) {
         createButtons()
+        
+        let background = SKSpriteNode(imageNamed: "Title Screen BG")
+        background.size = CGSize(width: frame.size.width, height: frame.size.height)
+        background.position = CGPoint(x: 0, y: 0)
+        background.anchorPoint = CGPoint(x: 0, y: 0)
+        background.zPosition = -10
+//        addChild(background)
         
         logo.size = CGSize(width: 512, height: 512)
         logo.position = CGPoint(x: frame.midX, y: frame.midY + 300)
@@ -65,6 +72,18 @@ class TitleScreen: SKScene {
         let sequence = SKAction.sequence([expand, defaultColor, normal])
         
         node.run(sequence)
+    }
+    
+    func rotateCW(node: SKSpriteNode) {
+        let rotateCW = SKAction.rotate(byAngle: -.pi, duration: 0.4)
+        
+        node.run(rotateCW)
+    }
+    
+    func rotateCCW(node: SKSpriteNode) {
+        let rotateCCW = SKAction.rotate(byAngle: .pi, duration: 0.4)
+        
+        node.run(rotateCCW)
     }
     
     
@@ -160,7 +179,7 @@ class TitleScreen: SKScene {
         
         closeButton.size = CGSize(width: 64, height: 64)
         closeButton.alpha = 1
-        closeButton.position = CGPoint(x: optionsWindow.frame.maxX - 10, y: optionsWindow.frame.maxY - 10)
+        closeButton.position = CGPoint(x: optionsWindow.frame.maxX - 60, y: optionsWindow.frame.maxY - 60)
         closeButton.zPosition = 55
         closeButton.name = "Close Button"
         
@@ -183,6 +202,9 @@ class TitleScreen: SKScene {
             optionsWindow.removeFromParent()
             musicButton.removeFromParent()
             closeButton.removeFromParent()
+            
+            rotateCCW(node: optionsButton)
+            // causes it to rotate when the exit button is clicked on other menus beside options
         }
     }
     
@@ -211,7 +233,7 @@ class TitleScreen: SKScene {
             }
             
             if touchedNode.name == "Options" {
-                shrink(node: optionsButton)
+                rotateCW(node: optionsButton)
                 isButtonTouched = "Options"
             }
             
@@ -252,11 +274,10 @@ class TitleScreen: SKScene {
             
             if touchedNode.name == "Options" && isButtonTouched == "Options" {
                 optionsMenu(isOpen: true)
-                expand(node: optionsButton)
                 for node in buttonContainer { node.isUserInteractionEnabled = true }
                 
             } else if touchedNode.name != "Options" && isButtonTouched == "Options" {
-                expand(node: optionsButton)
+                rotateCCW(node: optionsButton)
             }
             
             if touchedNode.name == "Music Button" && isButtonTouched == "Music Button" {
@@ -301,7 +322,7 @@ class TitleScreen: SKScene {
     override func update(_ currentTime: TimeInterval) {
         
 //        print(buttonIsPressed)
-        print(optionsButton.isUserInteractionEnabled)
+//        print(optionsButton.isUserInteractionEnabled)
     }
     
     

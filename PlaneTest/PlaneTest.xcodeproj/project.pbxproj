@@ -11,6 +11,7 @@
 		D6800756252AE6100090D16D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6800754252AE6100090D16D /* Assets.xcassets */; };
 		D68007652537E8DA0090D16D /* TitleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68007642537E8DA0090D16D /* TitleScreen.swift */; };
 		D680076A2537F2CE0090D16D /* TitleScreen.sks in Resources */ = {isa = PBXBuildFile; fileRef = D68007692537F2CE0090D16D /* TitleScreen.sks */; };
+		D6925D2125D284EE00D6AA90 /* ObjectProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6925D2025D284EE00D6AA90 /* ObjectProperties.swift */; };
 		D6974235259C4C58006F6049 /* Asai-Analogue.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6974234259C4C58006F6049 /* Asai-Analogue.ttf */; };
 		D69BFEAF25AD79D500B99E91 /* GameScene Backup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */; };
 		D6AD9B3A24EFBAA000503775 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AD9B3924EFBAA000503775 /* AppDelegate.swift */; };
@@ -28,6 +29,7 @@
 		D6800754252AE6100090D16D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		D68007642537E8DA0090D16D /* TitleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleScreen.swift; sourceTree = "<group>"; };
 		D68007692537F2CE0090D16D /* TitleScreen.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TitleScreen.sks; sourceTree = "<group>"; };
+		D6925D2025D284EE00D6AA90 /* ObjectProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectProperties.swift; sourceTree = "<group>"; };
 		D6974234259C4C58006F6049 /* Asai-Analogue.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Asai-Analogue.ttf"; sourceTree = "<group>"; };
 		D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameScene Backup.swift"; sourceTree = "<group>"; };
 		D6AD9B3624EFBAA000503775 /* PlaneTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlaneTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -84,6 +86,7 @@
 				D6AD9B3924EFBAA000503775 /* AppDelegate.swift */,
 				D6AD9B3B24EFBAA000503775 /* GameScene.sks */,
 				D6AD9B3F24EFBAA000503775 /* GameScene.swift */,
+				D6925D2025D284EE00D6AA90 /* ObjectProperties.swift */,
 				D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */,
 				D6AD9B4124EFBAA000503775 /* GameViewController.swift */,
 				D68007692537F2CE0090D16D /* TitleScreen.sks */,
@@ -177,6 +180,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6AD9B4024EFBAA000503775 /* GameScene.swift in Sources */,
+				D6925D2125D284EE00D6AA90 /* ObjectProperties.swift in Sources */,
 				D68007652537E8DA0090D16D /* TitleScreen.swift in Sources */,
 				D6AD9B4224EFBAA000503775 /* GameViewController.swift in Sources */,
 				D69BFEAF25AD79D500B99E91 /* GameScene Backup.swift in Sources */,

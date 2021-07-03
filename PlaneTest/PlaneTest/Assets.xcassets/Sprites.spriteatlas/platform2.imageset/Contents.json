@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "platform2.png",
+      "filename" : "platform2(1).png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "platform2@2x.png",
+      "filename" : "platform2@2x(1).png",
       "idiom" : "universal",
       "scale" : "2x"
     },
