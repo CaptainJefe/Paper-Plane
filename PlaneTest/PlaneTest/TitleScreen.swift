@@ -18,9 +18,13 @@ class TitleScreen: SKScene {
     var optionsButton = SKSpriteNode(imageNamed: "Options Button")
     var highScoresButton = SKSpriteNode(imageNamed: "High Scores Button")
     
+    var worldSelectButton1 = SKSpriteNode(imageNamed: "Restart Button")
+    var worldSelectButton2 = SKSpriteNode(imageNamed: "Restart Button")
+    
     var musicButton = SKSpriteNode(imageNamed: "Music Button")
     var closeButton = SKSpriteNode(imageNamed: "Close Button")
     
+    var worldSelectWindow = SKSpriteNode(imageNamed: "High Scores Window")
     var highScoresWindow = SKSpriteNode(imageNamed: "High Scores Window")
     var optionsWindow = SKSpriteNode(imageNamed: "Options Window")
     
@@ -126,6 +130,54 @@ class TitleScreen: SKScene {
         }
     }
     
+    // World Select Window as well as World Select Buttons
+    
+    func worldSelect(isOpen: Bool) {
+        worldSelectWindow.size = CGSize(width: 512, height: 1024)
+        worldSelectWindow.alpha = 1
+        worldSelectWindow.color = .red
+        worldSelectWindow.position = CGPoint(x: frame.midX, y: frame.midY)
+        worldSelectWindow.zPosition = 50
+        
+        worldSelectButton1.size = CGSize(width: 128, height: 128)
+        worldSelectButton1.alpha = 1
+        worldSelectButton1.position = CGPoint(x: worldSelectWindow.frame.width / 2, y: worldSelectWindow.frame.height)
+        worldSelectButton1.zPosition = 55
+        worldSelectButton1.name = "World 1"
+        
+        worldSelectButton2.size = CGSize(width: 128, height: 128)
+        worldSelectButton2.alpha = 1
+        worldSelectButton2.position = CGPoint(x: worldSelectWindow.frame.width, y: worldSelectWindow.frame.height)
+        worldSelectButton2.zPosition = 55
+        worldSelectButton2.name = "World 2"
+        
+        closeButton.size = CGSize(width: 64, height: 64)
+        closeButton.alpha = 1
+        closeButton.position = CGPoint(x: worldSelectWindow.frame.maxX - 10, y: worldSelectWindow.frame.maxY - 10)
+        closeButton.zPosition = 55
+        closeButton.name = "Close Button"
+        
+        let scalePrelim = SKAction.scale(to: CGSize(width: 1, height: 1), duration: 0)
+        let scaleMenuUp = SKAction.scale(to: CGSize(width: 512, height: 1024), duration: 0.065)
+        
+        let menuSequence = SKAction.sequence([scalePrelim, scaleMenuUp])
+        
+        if isOpen == true {
+            addChild(worldSelectWindow)
+            addChild(closeButton)
+            addChild(worldSelectButton1)
+            addChild(worldSelectButton2)
+            
+            highScoresWindow.run(menuSequence)
+//            closeButton.run(scaleSeq)
+        } else if isOpen == false {
+            worldSelectWindow.removeFromParent()
+            closeButton.removeFromParent()
+            worldSelectButton1.removeFromParent()
+            worldSelectButton2.removeFromParent()
+        }
+    }
+    
     
     func highScoresMenu(isOpen: Bool) {
         highScoresWindow.size = CGSize(width: 512, height: 1024)
@@ -227,6 +279,16 @@ class TitleScreen: SKScene {
                 isButtonTouched = "Play"
             }
             
+            if touchedNode.name == "World 1" {
+                shrink(node: worldSelectButton1)
+                isButtonTouched = "World 1"
+            }
+            
+            if touchedNode.name == "World 2" {
+                shrink(node: worldSelectButton2)
+                isButtonTouched = "World 2"
+            }
+            
             if touchedNode.name == "High Scores" {
                 shrink(node: highScoresButton)
                 isButtonTouched = "High Scores"
@@ -255,13 +317,37 @@ class TitleScreen: SKScene {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             
-            
             if touchedNode.name == "Play" && isButtonTouched == "Play" {
-                startGame()
+                worldSelect(isOpen: true)
                 expand(node: playButton)
             } else if touchedNode.name != "Play" && isButtonTouched == "Play" {
                 expand(node: playButton)
             }
+            
+            
+            if touchedNode.name == "World 1" && isButtonTouched == "World 1" {
+                world = "classic"
+                theme = "castle"
+                
+                startGame()
+                expand(node: worldSelectButton1)
+    
+            } else if touchedNode.name != "World 1" && isButtonTouched == "World 1" {
+                expand(node: worldSelectButton1)
+            }
+            
+            
+            if touchedNode.name == "World 2" && isButtonTouched == "World 2" {
+                world = "classic"
+                theme = "desert"
+                
+                startGame()
+                expand(node: worldSelectButton2)
+    
+            } else if touchedNode.name != "World 2" && isButtonTouched == "World 2" {
+                expand(node: worldSelectButton2)
+            }
+            
             
             if touchedNode.name == "High Scores" && isButtonTouched == "High Scores" {
                 highScoresMenu(isOpen: true)
@@ -272,6 +358,7 @@ class TitleScreen: SKScene {
                 expand(node: highScoresButton)
             }
             
+            
             if touchedNode.name == "Options" && isButtonTouched == "Options" {
                 optionsMenu(isOpen: true)
                 for node in buttonContainer { node.isUserInteractionEnabled = true }
@@ -279,6 +366,7 @@ class TitleScreen: SKScene {
             } else if touchedNode.name != "Options" && isButtonTouched == "Options" {
                 rotateCCW(node: optionsButton)
             }
+            
             
             if touchedNode.name == "Music Button" && isButtonTouched == "Music Button" {
                 isMusicMuted.toggle()
@@ -294,15 +382,18 @@ class TitleScreen: SKScene {
                 expand(node: musicButton)
             }
             
+            
             if touchedNode.name == "Close Button" && isButtonTouched == "Close Button" {
                 optionsMenu(isOpen: false)
-                highScoresMenu(isOpen: false) // may be buggy
+                highScoresMenu(isOpen: false) // may be buggy\
+                worldSelect(isOpen: false)
                 expand(node: closeButton)
                 
                 for node in buttonContainer { node.isUserInteractionEnabled = false }
             } else if touchedNode.name != "Close Button" && isButtonTouched == "Close Button" {
                 expand(node: closeButton)
             }
+            
             
             isButtonTouched = ""
 //            expand(node: playButton)
