@@ -39,6 +39,7 @@ class TitleScreen: SKScene {
     
     override func didMove(to view: SKView) {
         createButtons()
+        scoreList()
         
         let background = SKSpriteNode(imageNamed: "Title Screen BG")
         background.size = CGSize(width: frame.size.width, height: frame.size.height)
@@ -420,4 +421,12 @@ class TitleScreen: SKScene {
     deinit {
         print("All Good")
     }
+    
+    func scoreList() -> [Int] {
+        let scores = GameplayStats.shared.getScore()
+        print([scores])
+        return [scores]
+    }
+    
+    
 }

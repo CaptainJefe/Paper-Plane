@@ -173,7 +173,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             firstPlatform = SKTexture(imageNamed: "desert_platform_1")
             secondPlatform = SKTexture(imageNamed: "desert_platform_2")
             thirdPlatform = SKTexture(imageNamed: "desert_platform_3")
-            transitionPlatform = SKTexture(imageNamed: "Transition Platform")
+            transitionPlatform = SKTexture(imageNamed: "desert_transition_platform")
             
             castleSky = SKTexture(imageNamed: "sky_background")
             
@@ -185,7 +185,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             firstPlatform = SKTexture(imageNamed: "desert_platform_1")
             secondPlatform = SKTexture(imageNamed: "desert_platform_2")
             thirdPlatform = SKTexture(imageNamed: "desert_platform_3")
-            transitionPlatform = SKTexture(imageNamed: "Transition Platform")
+            transitionPlatform = SKTexture(imageNamed: "desert_transition_platform")
             
             desertSky = SKTexture(imageNamed: "sky_background")
             
@@ -808,6 +808,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         if gameState == 1 {
+            
+            GameplayStats.shared.setScore(score)
             
             addChild(gameOverWindow)
             addChild(homeButton)
