@@ -14,6 +14,8 @@ let gameGetScore = "getScore"
 let gameScore = "gameScore"
 let gameHighScore = "highScore"
 
+var highScores: [Int] = []
+
 class GameplayStats {
     
     private init() {}
@@ -23,14 +25,15 @@ class GameplayStats {
         
         if value > getHighscore() {
             setHighScore(value)
+            highScores.append(value)
         }
         
-        UserDefaults.standard.set(value, forKey: gameScore)
+        UserDefaults.standard.set(highScores, forKey: gameScore)
         UserDefaults.standard.synchronize()
     }
     
-    func getScore() -> Int {
-        return UserDefaults.standard.integer(forKey: gameScore)
+    func getScore() -> [Int]? {
+        return UserDefaults.standard.object(forKey: gameScore) as? [Int]
     }
     
     func setHighScore(_ value: Int) {

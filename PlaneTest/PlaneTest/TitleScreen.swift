@@ -422,10 +422,11 @@ class TitleScreen: SKScene {
         print("All Good")
     }
     
-    func scoreList() -> [Int] {
-        let scores = GameplayStats.shared.getScore()
+    func scoreList() {
+        let scores = GameplayStats.shared.getScore()?.sorted(by: >)
         print([scores])
-        return [scores]
+//
+        
     }
     
     

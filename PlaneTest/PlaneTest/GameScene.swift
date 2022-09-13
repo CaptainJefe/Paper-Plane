@@ -6,6 +6,11 @@
 //  Copyright © 2020 Cade Williams. All rights reserved.
 //
 
+struct Collisions {
+    static let spawn: UInt32 = 0x1 << 1
+    static let detect: UInt32 = 0x1 << 2
+}
+
 var stage = 1
 var world: String!
 var theme: String!
@@ -127,7 +132,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(noClipLabel)
         
         
-        spawnNode = SKSpriteNode(color: UIColor.clear, size: CGSize(width: frame.width, height: 10))
+        spawnNode = SKSpriteNode(color: UIColor.red, size: CGSize(width: frame.width, height: 1))
         spawnNode.name = "spawn"
         spawnNode.zPosition = 40
         spawnNode.position = CGPoint(x: frame.midX, y: -(frame.minY + (frame.midY / 2)) + 384) // original is - 390 // 768 is 1.5x the height of the transition platform so when it spawns it needs to go it's entire height to space correctly, so it's entire height + half of it's height because it spawns from the middle of the texture.
@@ -135,9 +140,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         spawnNode.physicsBody = SKPhysicsBody(rectangleOf: spawnNode.size)
         spawnNode.physicsBody?.isDynamic = false
-        spawnNode.physicsBody!.contactTestBitMask = spawnNode.physicsBody!.collisionBitMask
-        spawnNode.physicsBody?.collisionBitMask = 1
+        spawnNode.physicsBody?.categoryBitMask = Collisions.spawn
+        spawnNode.physicsBody?.contactTestBitMask = Collisions.detect
+        spawnNode.physicsBody?.collisionBitMask = Collisions.detect
         spawnNode.physicsBody?.affectedByGravity = false
+        spawnNode.physicsBody?.usesPreciseCollisionDetection = true
         
 
         physicsWorld.gravity = .zero
@@ -533,11 +540,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreNode.name = "scoreDetect"
         scoreNode.speed = platformSpeed
 
-        let platformTrigger = SKSpriteNode(color: UIColor.orange, size: CGSize(width: frame.width, height: 2))
+        let platformTrigger = SKSpriteNode(color: UIColor.orange, size: CGSize(width: frame.width, height: 1))
         platformTrigger.physicsBody = SKPhysicsBody(rectangleOf: platformTrigger.size)
         platformTrigger.physicsBody?.isDynamic = true
         platformTrigger.physicsBody?.affectedByGravity = false
+        platformTrigger.physicsBody?.categoryBitMask = Collisions.detect
+        platformTrigger.physicsBody?.contactTestBitMask = Collisions.spawn
         platformTrigger.physicsBody?.collisionBitMask = 0
+        platformTrigger.physicsBody?.usesPreciseCollisionDetection = true
         platformTrigger.zPosition = 100
         platformTrigger.name = "platformTrigger"
         platformTrigger.speed = platformSpeed
