@@ -1,11 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "Title Screen BG(1).png",
+      "filename" : "background.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "background@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "Paper Plane Logo Main Menu v2.png",
+      "filename" : "logo.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Paper Plane Logo Main Menu v2@2x.png",
+      "filename" : "logo@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "Play Button v6 - Thin Transparent.png",
+      "filename" : "New Play Button.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Play Button v6 - Thin Transparent@2x.png",
+      "filename" : "New Play Button@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

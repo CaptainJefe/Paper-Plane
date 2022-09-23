@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "desert_transition_platform.png",
+      "filename" : "No Clip Button.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "desert_transition_platform@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "desert_transition_platform@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

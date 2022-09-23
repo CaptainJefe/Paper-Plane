@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "Pause Button.png",
+      "filename" : "pause_button.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Pause Button@2x.png",
+      "filename" : "pause_button@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
