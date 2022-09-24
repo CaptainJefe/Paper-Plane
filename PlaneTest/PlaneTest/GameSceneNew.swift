@@ -98,7 +98,7 @@ class GameSceneNew: SKScene, SKPhysicsContactDelegate {
         createBackground()
         createSky()
 //        createWalls()
-//        startPlatforms()
+        startPlatforms()
         planeMode()
         musicPlayer()
 //        createSky()
@@ -146,7 +146,7 @@ class GameSceneNew: SKScene, SKPhysicsContactDelegate {
         
         switch theme {
         case "castle":
-            firstBackground = SKTexture(imageNamed: "castle_background_1")
+            firstBackground = SKTexture(imageNamed: "silo_background_1")
             secondBackground = SKTexture(imageNamed: "castle_background_2")
             thirdBackground = SKTexture(imageNamed: "castle_background_3")
             
@@ -175,7 +175,7 @@ class GameSceneNew: SKScene, SKPhysicsContactDelegate {
             desertSky = SKTexture(imageNamed: "sky_background")
             
         case "cave":
-            firstBackground = SKTexture(imageNamed: "cave_background_1")
+            firstBackground = SKTexture(imageNamed: "cave_background_2")
             secondBackground = SKTexture(imageNamed: "cave_background_2")
             thirdBackground = SKTexture(imageNamed: "cave_background_3")
             
@@ -390,7 +390,6 @@ class GameSceneNew: SKScene, SKPhysicsContactDelegate {
             let scrollLoop = SKAction.sequence([scrollUp, scrollReset])
             let scrollForever = SKAction.repeatForever(scrollLoop)
             
-            self.createPlatforms(yPosition: 150)
             
             background.run(scrollForever)
         }
@@ -552,14 +551,14 @@ class GameSceneNew: SKScene, SKPhysicsContactDelegate {
     }
     
     
-//    func startPlatforms() {
-//        let create = SKAction.run { [unowned self] in
-//            self.createPlatforms()
-////            platformCount += 1
-//        }
-//
-//        run(create)
-//    }
+    func startPlatforms() {
+        let create = SKAction.run { [unowned self] in
+            self.createPlatforms(yPosition: frame.midY)
+//            platformCount += 1
+        }
+
+        run(create)
+    }
     
     
     func createButtons() {
@@ -762,32 +761,6 @@ class GameSceneNew: SKScene, SKPhysicsContactDelegate {
     }
     
     
-    func shrink(node: SKSpriteNode) {
-        let shrink = SKAction.scale(to: 0.75, duration: 0.1)
-        let fade = SKAction.run {
-            node.colorBlendFactor = 0.35
-        }
-        
-        let sequence = SKAction.sequence([shrink, fade])
-        
-        node.run(sequence)
-    }
-    
-    
-    func expand(node: SKSpriteNode) {
-//        let wait = SKAction.wait(forDuration: 0.11)
-        let expand = SKAction.scale(to: 1.1, duration: 0.075)
-        let normal = SKAction.scale(to: 1.0, duration: 0.1)
-        let defaultColor = SKAction.run {
-            node.colorBlendFactor = 0
-        }
-        
-        let sequence = SKAction.sequence([expand, defaultColor, normal])
-        
-        node.run(sequence)
-    }
-    
-    
     func didBegin(_ contact: SKPhysicsContact) {
 //        print("collision")
         
@@ -897,44 +870,41 @@ class GameSceneNew: SKScene, SKPhysicsContactDelegate {
             let cycle = SKAction.run {
                 self.changeMode(node: touchedNode as! SKSpriteNode)
             }
-            let delay = SKAction.wait(forDuration: 0.11)
+            let delay = SKAction.wait(forDuration: 0.10)
             let seq = SKAction.sequence([cycle, delay])
             let repeatAction = SKAction.repeatForever(seq)
             
             if touchedNode.name == "buttonLeft" {
                 isButtonTouched = "buttonLeft"
                 
-                
                 buttonLeft.run(repeatAction, withKey: "cycle")
-                
 //                isLeftButtonPressed = true
             }
             
             if touchedNode.name == "buttonRight" {
                 isButtonTouched = "buttonRight"
-    
 
                 buttonRight.run(repeatAction, withKey: "cycle")
 //                isRightButtonPressed = true
             }
             
             if touchedNode.name == "pauseButton" {
-                shrink(node: pauseButton)
+                Animations.shared.shrink(node: pauseButton)
                 isButtonTouched = "pauseButton"
             }
             
             if touchedNode.name == "homeButton" {
-                shrink(node: homeButton)
+                Animations.shared.shrink(node: homeButton)
                 isButtonTouched = "homeButton"
             }
             
             if touchedNode.name == "restartButton" {
-                shrink(node: restartButton)
+                Animations.shared.shrink(node: restartButton)
                 isButtonTouched = "restartButton"
             }
             
             if touchedNode.name == "noClip" {
-                shrink(node: toggleNoClip)
+                Animations.shared.shrink(node: toggleNoClip)
                 isButtonTouched = "noClip"
             }
         }
@@ -948,30 +918,30 @@ class GameSceneNew: SKScene, SKPhysicsContactDelegate {
             
             // logically it can be put as only: else if isButtonIsTouched == "\stringName" rather than including touchedNode.name as well
             if touchedNode.name == "noClip" && isButtonTouched == "noClip" {
-                expand(node: toggleNoClip)
+                Animations.shared.expand(node: toggleNoClip)
             } else if touchedNode.name != "" && isButtonTouched == "noClip" {
-                expand(node: toggleNoClip)
+                Animations.shared.expand(node: toggleNoClip)
             }
             
             if touchedNode.name == "pauseButton" && isButtonTouched == "pauseButton" {
                 pauseGame()
-                expand(node: pauseButton)
+                Animations.shared.expand(node: pauseButton)
             } else if touchedNode.name != "" && isButtonTouched == "pauseButton" {
-                expand(node: pauseButton)
+                Animations.shared.expand(node: pauseButton)
             }
             
             if touchedNode.name == "homeButton" {
-                expand(node: homeButton)
+                Animations.shared.expand(node: homeButton)
                 backToTitle(node: homeButton)
             } else if touchedNode.name != "" && isButtonTouched == "homeButton" {
-                expand(node: homeButton)
+                Animations.shared.expand(node: homeButton)
             }
             
             if touchedNode.name == "restartButton" {
-                expand(node: restartButton)
+                Animations.shared.expand(node: restartButton)
                 restartGame(node: restartButton)
             } else if touchedNode.name != "" && isButtonTouched == "restartButton" {
-                expand(node: restartButton)
+                Animations.shared.expand(node: restartButton)
             }
             
             if touchedNode.name == "noClip" {

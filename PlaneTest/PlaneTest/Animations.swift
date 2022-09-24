@@ -8,9 +8,10 @@
 
 import SpriteKit
 
-class Animations {
+class Animations: SKNode {
     
-    private init() {}
+//    private init() {}
+    var titleScreen = TitleScreen()
     
     // Call a method using: Animations.shared.<function>
     static let shared = Animations()
@@ -24,7 +25,7 @@ class Animations {
         blur?.setValue(blurAmount, forKey: kCIInputRadiusKey)
         blurNode.filter = blur
         blurNode.shouldEnableEffects = true
-//        self.addChild(blurNode)
+        self.addChild(blurNode)
         node.removeFromParent()
         blurNode.addChild(node)
         
