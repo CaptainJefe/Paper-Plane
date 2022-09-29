@@ -8,6 +8,7 @@
 
 import SpriteKit
 import UIKit
+import SceneKit
 
 var isMusicMuted = true
 
@@ -19,6 +20,7 @@ class TitleScreen: SKScene {
     var optionsButton = SKSpriteNode(imageNamed: "Options Button")
     var highScoresButton = SKSpriteNode(imageNamed: "High Scores Button")
     
+    var worldSelectContainer = [SKSpriteNode]()
     var worldSelectButton1 = SKSpriteNode(imageNamed: "Castle Icon")
     var worldSelectButton2 = SKSpriteNode(imageNamed: "Cave Icon")
     
@@ -42,24 +44,44 @@ class TitleScreen: SKScene {
     
     var hasBeenOpened: Bool = false
     
+    var scoreFrame: SKSpriteNode!
+    var scoreFrameContainer = [SKSpriteNode]()
     var hsLabel: SKLabelNode!
     var labelContainer = [SKLabelNode]()
+    var highScoresUIContainer = [SKNode]()
+    
+    var sceneCamera = SKCameraNode()
+    var cameraFocusNode: SKSpriteNode!
     
     
     override func didMove(to view: SKView) {
+        
+        cameraFocusNode = SKSpriteNode()
+        cameraFocusNode.position = CGPoint(x: frame.midX, y: frame.midY)
+        cameraFocusNode.size = CGSize(width: 1, height: 1)
+        cameraFocusNode.alpha = 0
+        addChild(cameraFocusNode)
+        
+        self.camera = sceneCamera
+        
         createButtons()
-//        scoreList()
+        scoreList()
         
         background = SKSpriteNode(imageNamed: "Title Screen BG")
-        background.size = CGSize(width: frame.size.width, height: frame.size.width * 2.5)
-        background.position = CGPoint(x: frame.size.width, y: frame.size.height)
-        background.anchorPoint = CGPoint(x: 1, y: 1)
+        background.size = CGSize(width: frame.size.height * 1.5, height: frame.size.height)
+        background.position = CGPoint(x: view.center.x, y: view.center.y)
+        background.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         background.zPosition = -10
         addChild(background)
         
         logo.size = CGSize(width: logo.size.width * 2.5, height: logo.size.height * 2.5)
         logo.position = CGPoint(x: frame.midX, y: frame.maxY / 1.4)
         addChild(logo)
+    }
+    
+    func setCamera(xPosition: CGFloat) {
+        let moveTo = SKAction.move(to: CGPoint(x: xPosition, y: frame.midY), duration: 0.40)
+        cameraFocusNode.run(moveTo)
     }
     
     
@@ -82,7 +104,7 @@ class TitleScreen: SKScene {
     
     
     func createButtons() {
-        playButton.size = CGSize(width: frame.size.width / 2, height: frame.size.width / 4)
+        playButton.size = CGSize(width: 192, height: 84) // // non number size is CGSize(width: frame.size.width / 2, height: frame.size.width / 4)
         playButton.position = CGPoint(x: frame.midX, y: frame.midY / 1.1)
         playButton.colorBlendFactor = 0
         playButton.zPosition = 10
@@ -90,7 +112,7 @@ class TitleScreen: SKScene {
         addChild(playButton)
         buttonContainer.append(playButton)
         
-        highScoresButton.size = CGSize(width: frame.size.width / 2, height: frame.size.width / 4)
+        highScoresButton.size = CGSize(width: 192, height: 84) // non number size is CGSize(width: frame.size.width / 2, height: frame.size.width / 4)
         highScoresButton.position = CGPoint(x: playButton.position.x, y: playButton.position.y - 130)
         highScoresButton.colorBlendFactor = 0
         highScoresButton.zPosition = 10
@@ -105,13 +127,29 @@ class TitleScreen: SKScene {
         optionsButton.name = "Options"
         addChild(optionsButton)
         buttonContainer.append(optionsButton)
+        
+        worldSelectButton1.size = CGSize(width: worldSelectButton1.texture!.size().width * 2.5, height: worldSelectButton1.texture!.size().height * 2.5)
+        worldSelectButton1.alpha = 0
+        worldSelectButton1.position = CGPoint(x: frame.midX * 3, y: frame.maxY * 0.65)
+        worldSelectButton1.zPosition = 55
+        worldSelectButton1.name = "World 1"
+        addChild(worldSelectButton1)
+        worldSelectContainer.append(worldSelectButton1)
+        
+        worldSelectButton2.size = CGSize(width: worldSelectButton2.texture!.size().width * 2.5, height: worldSelectButton2.texture!.size().height * 2.5)
+        worldSelectButton2.alpha = 0
+        worldSelectButton2.position = CGPoint(x: worldSelectButton1.position.x, y: worldSelectButton1.position.y - worldSelectButton1.size.height * 1.2)
+        worldSelectButton2.zPosition = 55
+        worldSelectButton2.name = "World 2"
+        addChild(worldSelectButton2)
+        worldSelectContainer.append(worldSelectButton2)
     }
     
     
     func startGame() {
         if let skView = self.view {
             
-            guard let scene = GameSceneNew(fileNamed: "GameSceneNew") else { return }
+            guard let scene = GameSceneNewNew(fileNamed: "GameSceneNewNew") else { return }
             scene.size = skView.frame.size
             
             let transition = SKTransition.fade(withDuration: 1.5)
@@ -126,43 +164,38 @@ class TitleScreen: SKScene {
     func worldSelect() {
         // worldSelectButton 2 original position: CGPoint(x: frame.midX, y: worldSelectButton1.position.y - worldSelectButton1.position.y / 2)
         
-        worldSelectButton1.size = CGSize(width: worldSelectButton1.texture!.size().width * 2.5, height: worldSelectButton1.texture!.size().height * 2.5)
-        worldSelectButton1.alpha = 1
-        worldSelectButton1.position = CGPoint(x: frame.midX, y: -frame.maxY * 0.65)
-        worldSelectButton1.zPosition = 55
-        worldSelectButton1.name = "World 1"
-        
-        worldSelectButton2.size = CGSize(width: worldSelectButton2.texture!.size().width * 2.5, height: worldSelectButton2.texture!.size().height * 2.5)
-        worldSelectButton2.alpha = 1
-        worldSelectButton2.position = CGPoint(x: frame.midX, y: worldSelectButton1.position.y + worldSelectButton1.size.height * 1.2)
-        worldSelectButton2.zPosition = 55
-        worldSelectButton2.name = "World 2"
-        
         closeButton.size = CGSize(width: 64, height: 64)
         closeButton.alpha = 1
-        closeButton.position = CGPoint(x: frame.midX, y: frame.maxY * 0.9)
-        closeButton.zPosition = 55
+        closeButton.position = CGPoint(x: frame.midX * 3, y: frame.maxY * 0.9)
+        closeButton.zPosition = 80
         closeButton.name = "Close Button"
-
         addChild(closeButton)
-        addChild(worldSelectButton1)
-        addChild(worldSelectButton2)
         
-        Animations.shared.moveUIY(node: worldSelectButton1, duration: 0.25)
-        Animations.shared.moveUIY(node: worldSelectButton2, duration: 0.25)
+        setCamera(xPosition: frame.midX * 3)
         
-        Animations.shared.moveUIX(node: logo, duration: 0.25)
-        Animations.shared.moveUIX(node: playButton, duration: 0.25)
-        Animations.shared.moveUIX(node: highScoresButton, duration: 0.25)
-        Animations.shared.moveUIX(node: optionsButton, duration: 0.25)
+        var timeIncrease: TimeInterval = 0.0
         
-        addBlur(node: background)
+        Animations.shared.fadeAlphaOut(node: logo, duration: 0.5)
+        for buttons in buttonContainer { Animations.shared.fadeAlphaOut(node: buttons, duration: 0.5) }
+        for wsButton in worldSelectContainer { Animations.shared.fadeAlphaIn(node: wsButton, duration: 0.4, waitTime: 0.2 + timeIncrease); timeIncrease += 0.15 }
+        
+//        Animations.shared.moveUIX(node: worldSelectButton1, duration: 0.25)
+//        Animations.shared.moveUIX(node: worldSelectButton2, duration: 0.25)
+//
+//        Animations.shared.moveUIX(node: logo, duration: 0.25)
+//        Animations.shared.moveUIX(node: playButton, duration: 0.25)
+//        Animations.shared.moveUIX(node: highScoresButton, duration: 0.25)
+//        Animations.shared.moveUIX(node: optionsButton, duration: 0.25)
+        
+//        addBlur(node: background)
         
         lastMenuOpened = "WorldSelect"
     }
     
+    
 
     func highScoresMenu() {
+        lastMenuOpened = "HighScores"
         
         highScoresWindow.size = CGSize(width: highScoresWindow.size.width, height: highScoresWindow.size.height)
         highScoresWindow.setScale(1.7)
@@ -173,28 +206,24 @@ class TitleScreen: SKScene {
         
         closeButton.size = CGSize(width: 48, height: 48)
         closeButton.alpha = 1
-        closeButton.position = CGPoint(x: highScoresWindow.frame.maxX - 10, y: highScoresWindow.frame.maxY - 10)
-        closeButton.zPosition = 55
+        closeButton.position = CGPoint(x: -frame.midX, y: frame.maxY * 0.9)
+        closeButton.zPosition = 80
         closeButton.name = "Close Button"
         
-        let scalePrelim = SKAction.scale(to: CGSize(width: 1, height: 1), duration: 0)
-        let scaleMenuUp = SKAction.scale(to: CGSize(width: highScoresWindow.size.width, height: highScoresWindow.size.height), duration: 0.065)
-        let menuSequence = SKAction.sequence([scalePrelim, scaleMenuUp])
+//        Animations.shared.scaleUp(node: highScoresWindow)
         
-        var scores = GameplayStats.shared.getScore()?.sorted(by: >)
+        setCamera(xPosition: -frame.midX)
         
-//        addChild(highScoresWindow)
+        var timeIncrease: TimeInterval = 0.0
+        
+        Animations.shared.fadeAlphaOut(node: logo, duration: 0.5)
+        for buttons in buttonContainer { Animations.shared.fadeAlphaOut(node: buttons, duration: 0.5) }
+        
+        for nodes in highScoresUIContainer {
+            Animations.shared.fadeAlphaIn(node: nodes, duration: 0.25, waitTime: 0.25 + timeIncrease); timeIncrease += 0.05
+        }
+        
         addChild(closeButton)
-        
-        logo.isHidden = true
-        playButton.isHidden = true
-        highScoresButton.isHidden = true
-        optionsButton.isHidden = true
-        
-        highScoresWindow.run(menuSequence)
-        scoreList()
-        
-        lastMenuOpened = "HighScores"
     }
     
     
@@ -220,7 +249,7 @@ class TitleScreen: SKScene {
         closeButton.size = CGSize(width: 48, height: 48)
         closeButton.alpha = 1
         closeButton.position = CGPoint(x: optionsWindow.frame.maxX * 0.98, y: optionsWindow.frame.maxY)
-        closeButton.zPosition = 55
+        closeButton.zPosition = 80
         closeButton.name = "Close Button"
         
         let scalePrelim = SKAction.scale(to: CGSize(width: 1, height: 1), duration: 0)
@@ -254,20 +283,25 @@ class TitleScreen: SKScene {
         
         switch lastMenuOpened {
         case "WorldSelect":
-            worldSelectButton1.removeFromParent()
-            worldSelectButton2.removeFromParent()
             closeButton.removeFromParent()
             background.removeFromParent()
             childNode(withName: "blur")?.removeFromParent() // blurNode from addBlur() was never being removed, only its child node: background
             addChild(background)
             
-            Animations.shared.moveUIY(node: worldSelectButton1, duration: 0.25)
-            Animations.shared.moveUIY(node: worldSelectButton2, duration: 0.25)
+            Animations.shared.fadeAlphaIn(node: logo, duration: 0.6, waitTime: 0)
+            for buttons in buttonContainer { Animations.shared.fadeAlphaIn(node: buttons, duration: 0.6, waitTime: 0) }
+            for wsButton in worldSelectContainer { Animations.shared.fadeAlphaOut(node: wsButton, duration: 0.5) }
             
-            Animations.shared.moveUIX(node: logo, duration: 0.25)
-            Animations.shared.moveUIX(node: playButton, duration: 0.25)
-            Animations.shared.moveUIX(node: highScoresButton, duration: 0.25)
-            Animations.shared.moveUIX(node: optionsButton, duration: 0.25)
+            setCamera(xPosition: frame.midX)
+
+            
+//            Animations.shared.moveUIX(node: worldSelectButton1, duration: 0.25)
+//            Animations.shared.moveUIX(node: worldSelectButton2, duration: 0.25)
+//
+//            Animations.shared.moveUIX(node: logo, duration: 0.25)
+//            Animations.shared.moveUIX(node: playButton, duration: 0.25)
+//            Animations.shared.moveUIX(node: highScoresButton, duration: 0.25)
+//            Animations.shared.moveUIX(node: optionsButton, duration: 0.25)
             
         case "HighScores":
 //            highScoresWindow.removeFromParent()
@@ -278,9 +312,11 @@ class TitleScreen: SKScene {
             highScoresButton.isHidden = false
             optionsButton.isHidden = false
             
-            for label in labelContainer {
-                label.removeFromParent()
-            }
+            Animations.shared.fadeAlphaIn(node: logo, duration: 0.6, waitTime: 0)
+            for buttons in buttonContainer { Animations.shared.fadeAlphaIn(node: buttons, duration: 0.6, waitTime: 0) }
+            for nodes in highScoresUIContainer { Animations.shared.fadeAlphaOut(node: nodes, duration: 0.5) }
+            
+            setCamera(xPosition: frame.midX)
             
         case "Options":
             optionsWindow.removeFromParent()
@@ -358,6 +394,8 @@ class TitleScreen: SKScene {
             if touchedNode.name == "Play" && isButtonTouched == "Play" {
                 worldSelect()
                 Animations.shared.expand(node: playButton)
+                for node in buttonContainer { node.isUserInteractionEnabled = true }
+                
             } else if touchedNode.name != "Play" && isButtonTouched == "Play" {
                 Animations.shared.expand(node: playButton)
             }
@@ -447,7 +485,7 @@ class TitleScreen: SKScene {
     
     
     override func update(_ currentTime: TimeInterval) {
-        
+        sceneCamera.position = cameraFocusNode.position
 //        print(buttonIsPressed)
 //        print(optionsButton.isUserInteractionEnabled)
     }
@@ -459,24 +497,40 @@ class TitleScreen: SKScene {
     
     func scoreList() {
         let scores = GameplayStats.shared.getScore()!.sorted(by: >)
-        print("Scores: \([scores])")
-        var pos = 0
+        print("Scores: \(scores)")
+//        var pos = 0
         
-        let scoreArray = [1, 2, 3, 4, 5]
-        let scoresAsString = scoreArray.map(String.init)
+        let scoresArray = [1, 2, 3, 4, 5]
+        let scoresAsString = scoresArray.map(String.init)
 
         // This works, but it doesn't space out the strings in an added position yet
         
+        var counter: CGFloat = 0
+        
         for highscore in scoresAsString {
-            hsLabel = SKLabelNode(fontNamed: "Times New Roman")
+            scoreFrame = SKSpriteNode(imageNamed: "high_scores_frame")
+            scoreFrame.position = CGPoint(x: -self.frame.midX, y: ((frame.maxY - 100) + (counter * -120)) / 1.2)
+            scoreFrame.size = CGSize(width: scoreFrame.texture!.size().width * 2.5, height: scoreFrame.texture!.size().height * 2.5)
+            scoreFrame.alpha = 0
+            scoreFrame.zPosition = 150
+            scoreFrame.name = "scoreFrame"
+            addChild(scoreFrame)
+            scoreFrameContainer.append(scoreFrame)
+            
+            hsLabel = SKLabelNode(fontNamed: "Ariel")
             hsLabel.text = highscore as String
+            hsLabel.alpha = 0
             hsLabel.fontSize = 50
             hsLabel.fontColor = SKColor.white
-            hsLabel.position = CGPoint(x: self.frame.midX, y: (frame.maxY - 50) / 1.1)
-            hsLabel.zPosition = 1000
+            hsLabel.position = CGPoint(x: -self.frame.maxX / 1.25, y: ((frame.maxY - 121) + (counter * -120)) / 1.2)
+            hsLabel.zPosition = 160
             hsLabel.name = "hsLabel"
-            self.addChild(hsLabel)
+            addChild(hsLabel)
             labelContainer.append(hsLabel)
+            
+            highScoresUIContainer.append(scoreFrame)
+            highScoresUIContainer.append(hsLabel)
+            counter += 1
         }
     }
 }

@@ -22,10 +22,12 @@ class GameplayStats {
     static let shared = GameplayStats()
     
     func setScore(_ value: Int) {
-        
+    
         if value > getHighscore() {
             setHighScore(value)
             highScores.append(value)
+        } else {
+            highScores.append(value) // if value is not higher than getHighscore(), it won't append a score to the array and the array will remain empty
         }
         
         UserDefaults.standard.set(highScores, forKey: gameScore)

@@ -89,4 +89,29 @@ class Animations: SKNode {
         let moveNode = SKAction.move(to: CGPoint(x: node.position.x, y: -nodePositionY), duration: duration)
         node.run(moveNode)
     }
+    
+    // Fades a nodes alpha value to 0 over a duration
+    func fadeAlphaOut(node: SKNode, duration: TimeInterval) {
+        let fadeOut = SKAction.fadeOut(withDuration: duration)
+        
+        node.run(fadeOut)
+    }
+    
+    // Fades a nodes alpha value to 1 over a duration
+    func fadeAlphaIn(node: SKNode, duration: Double, waitTime: Double) {
+        let wait = SKAction.wait(forDuration: waitTime)
+        let fadeIn = SKAction.fadeIn(withDuration: duration)
+            
+        let seq = SKAction.sequence([wait, fadeIn])
+        node.run(seq)
+    }
+    
+    
+    func scaleUp(node: SKSpriteNode) {
+        let scalePrelim = SKAction.scale(to: CGSize(width: 1, height: 1), duration: 0)
+        let scaleMenuUp = SKAction.scale(to: CGSize(width: node.size.width, height: node.size.height), duration: 0.065) // Consider changing this duration to a function parameter
+        let menuSequence = SKAction.sequence([scalePrelim, scaleMenuUp])
+        
+        node.run(menuSequence)
+    }
 }

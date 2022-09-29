@@ -27,6 +27,10 @@
 		D6EED41128D58A8700A7F703 /* GameSceneNew.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6EED41028D58A8700A7F703 /* GameSceneNew.sks */; };
 		D6EED41328D6DCBC00A7F703 /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EED41228D6DCBC00A7F703 /* Animations.swift */; };
 		D6EED41528DDBA7500A7F703 /* TitleScreenDuplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EED41428DDBA7500A7F703 /* TitleScreenDuplicate.swift */; };
+		D6EED41728DF40AF00A7F703 /* GameSceneNewNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EED41628DF40AF00A7F703 /* GameSceneNewNew.swift */; };
+		D6EED41928DF458000A7F703 /* GameSceneNewNew.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6EED41828DF458000A7F703 /* GameSceneNewNew.sks */; };
+		D6EED41B28E04CFB00A7F703 /* Temp Test Code.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EED41A28E04CFB00A7F703 /* Temp Test Code.swift */; };
+		D6EED41D28E15CFD00A7F703 /* SKSmoothCameraNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EED41C28E15CFD00A7F703 /* SKSmoothCameraNode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +56,10 @@
 		D6EED41028D58A8700A7F703 /* GameSceneNew.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameSceneNew.sks; sourceTree = "<group>"; };
 		D6EED41228D6DCBC00A7F703 /* Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
 		D6EED41428DDBA7500A7F703 /* TitleScreenDuplicate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleScreenDuplicate.swift; sourceTree = "<group>"; };
+		D6EED41628DF40AF00A7F703 /* GameSceneNewNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSceneNewNew.swift; sourceTree = "<group>"; };
+		D6EED41828DF458000A7F703 /* GameSceneNewNew.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameSceneNewNew.sks; sourceTree = "<group>"; };
+		D6EED41A28E04CFB00A7F703 /* Temp Test Code.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Temp Test Code.swift"; sourceTree = "<group>"; };
+		D6EED41C28E15CFD00A7F703 /* SKSmoothCameraNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKSmoothCameraNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +101,9 @@
 		D6AD9B3824EFBAA000503775 /* PlaneTest */ = {
 			isa = PBXGroup;
 			children = (
+				D6EED41628DF40AF00A7F703 /* GameSceneNewNew.swift */,
+				D6EED41C28E15CFD00A7F703 /* SKSmoothCameraNode.swift */,
+				D6EED41828DF458000A7F703 /* GameSceneNewNew.sks */,
 				D6AD9B3924EFBAA000503775 /* AppDelegate.swift */,
 				D68007642537E8DA0090D16D /* TitleScreen.swift */,
 				D6EED41428DDBA7500A7F703 /* TitleScreenDuplicate.swift */,
@@ -106,6 +117,7 @@
 				D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */,
 				D6AD9B4124EFBAA000503775 /* GameViewController.swift */,
 				D60153C227AE86340076CF76 /* GameplayStats.swift */,
+				D6EED41A28E04CFB00A7F703 /* Temp Test Code.swift */,
 				D6AD9B4624EFBAA000503775 /* Assets.xcassets */,
 				D6800754252AE6100090D16D /* Assets.xcassets */,
 				D6800753252AE6100090D16D /* DestroyPlane.sks */,
@@ -177,6 +189,7 @@
 			files = (
 				D6AD9B4524EFBAA000503775 /* Main.storyboard in Resources */,
 				D6AD9B3C24EFBAA000503775 /* GameScene.sks in Resources */,
+				D6EED41928DF458000A7F703 /* GameSceneNewNew.sks in Resources */,
 				D680076A2537F2CE0090D16D /* TitleScreen.sks in Resources */,
 				D6EED41128D58A8700A7F703 /* GameSceneNew.sks in Resources */,
 				D6AD9B4724EFBAA000503775 /* Assets.xcassets in Resources */,
@@ -200,9 +213,12 @@
 				D68007652537E8DA0090D16D /* TitleScreen.swift in Sources */,
 				D60153C327AE86340076CF76 /* GameplayStats.swift in Sources */,
 				D6AD9B4224EFBAA000503775 /* GameViewController.swift in Sources */,
+				D6EED41D28E15CFD00A7F703 /* SKSmoothCameraNode.swift in Sources */,
 				D6EED41328D6DCBC00A7F703 /* Animations.swift in Sources */,
 				D69BFEAF25AD79D500B99E91 /* GameScene Backup.swift in Sources */,
 				D6AD9B3A24EFBAA000503775 /* AppDelegate.swift in Sources */,
+				D6EED41B28E04CFB00A7F703 /* Temp Test Code.swift in Sources */,
+				D6EED41728DF40AF00A7F703 /* GameSceneNewNew.swift in Sources */,
 				D6EED41528DDBA7500A7F703 /* TitleScreenDuplicate.swift in Sources */,
 				D6EED40F28D5835900A7F703 /* GameSceneNew.swift in Sources */,
 			);

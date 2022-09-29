@@ -1,11 +1,11 @@
+////
+////  GameScene.swift
+////  PlaneTest
+////
+////  Created by Cade Williams on 8/21/20.
+////  Copyright © 2020 Cade Williams. All rights reserved.
 //
-//  GameScene.swift
-//  PlaneTest
 //
-//  Created by Cade Williams on 8/21/20.
-//  Copyright © 2020 Cade Williams. All rights reserved.
-//
-
 //struct Collisions {
 //    static let spawn: UInt32 = 0x1 << 1
 //    static let detect: UInt32 = 0x1 << 2
@@ -499,7 +499,7 @@
 //        var xPosition = CGFloat.random(in: -min ... max)
 //        
 //        
-//        if platformCount >= 20 && platformCount < 30 {
+//        if platformCount >= 2 && platformCount < 30 {
 //            stage = 0
 //            setTextures()
 //            xPosition = frame.size.width * 0.125
@@ -562,8 +562,8 @@
 //            platformGroup.insert(node)
 //        }
 //        
-//    
-//        let yPosition = spawnNode.position.y - transitionPlatform.size().height
+////        let yPosition = spawnNode.position.y + platformTexture.size().height / 5 + transitionPlatform.size().height // fits well with new spawnNode position
+//        let yPosition = spawnNode.position.y + platformTexture.size().height / 4 - transitionPlatform.size().height
 //        let gapSize: CGFloat = -frame.size.width / 6
 //        
 //        print(gapSize)
@@ -677,6 +677,7 @@
 //            let transition = SKTransition.fade(withDuration: 1.5)
 //            
 //            scene.scaleMode = .aspectFill
+//            scene.size = self.view!.frame.size
 //            
 //            skView.presentScene(scene, transition: transition)
 //            pauseButton.removeFromParent()
@@ -788,6 +789,8 @@
 //        if gameState == 1 {
 //            
 //            GameplayStats.shared.setScore(score)
+//            print(score)
+//            print("SAVED SCORE")
 //            
 //            addChild(gameOverWindow)
 //            addChild(homeButton)
