@@ -41,12 +41,17 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
     var wallSpeed: CGFloat = 1.0 { didSet { for walls in wallPieces { walls.speed = wallSpeed }; for walls in wallPieces2 { walls.speed = wallSpeed } } }
 
     var plane: SKSpriteNode!
-    var platformGroup = Set<SKSpriteNode>()
+    var platformGroup = Set<SKSpriteNode>() { didSet { platformTrigger = platformGroup.filter { $0.position.y < (frame.height / 2) } } }
     var platformSpeed: CGFloat = 0.6 { didSet { for platforms in platformGroup { platforms.speed = platformSpeed } } }
 
     var platformTexture: SKTexture!
     var platformPhysics: SKPhysicsBody!
-    var platformCount = 0
+    var platformGap: CGFloat!
+    var platformCount = 0 {
+        didSet {
+            platformGap = frame.midY - (((transitionPlatform.size().height * 3) * CGFloat(min(platformCount,2))))
+        }
+    }
 
     var spawnNode: SKSpriteNode!
 
@@ -67,43 +72,50 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
     var isRightButtonPressed: Bool!
 
     var nodeArray = [SKNode]()
-    var platformArray = [SKSpriteNode]() { didSet { platformTrigger = platformArray.filter { $0.position.y < (frame.height / 2) } } }
+    var platformDelta: CGFloat = 0.0
+    var platformArray = [SKSpriteNode]() {
+        didSet {
+            
+            if platformArray.count > 1 {
+                platformDelta = platformArray[0].position.y - platformArray[1].position.y
+            }
+        }
+    }
+    
     var firstBackground: SKTexture!
     var secondBackground: SKTexture!
     var thirdBackground: SKTexture!
-    var platformTrigger: [SKSpriteNode]! { didSet { topPlatform = platformTrigger.sorted(by: { $0.position.y < $1.position.y})[0] }}
+    var platformTrigger = [SKSpriteNode]() { didSet { topPlatform = platformTrigger.sorted(by: { $0.position.y < $1.position.y})[0] } }
     var topPlatform: SKSpriteNode!
     
-    var firstPlatform: SKTexture!
+    var firstPlatform: SKTexture! { didSet { firstPlatformSize = firstPlatform.size() } }
     var secondPlatform: SKTexture!
     var thirdPlatform: SKTexture!
-    var transitionPlatform: SKTexture!
+    var transitionPlatform = SKTexture(imageNamed: "desert_transition_platform")
+    var firstPlatformSize: CGSize!
 
     var castleSky: SKTexture!
     var desertSky: SKTexture!
 
     var toggleNoClip: SKSpriteNode!
     var noClipLabel: SKLabelNode!
-    var noClip = true
-    { didSet { noClipLabel.text = "Collision: \(!noClip)" } }
+    var noClip = true { didSet { noClipLabel.text = "Collision: \(!noClip)" } }
 
     var initialPlatforms = true
 
     override func didMove(to view: SKView) {
-        stage = 1
+        platformGap = frame.midY - (((transitionPlatform.size().height * 3) * CGFloat(min(platformCount,2))))
+        setTextures(currentStage: 1)
         physicsWorld.speed = 1.0
 
-        
         createPlane()
         createLabels()
         createButtons()
-        setTextures()
+        
         createBackground()
         createSky()
+        platformer()
         print("tran plat: \(transitionPlatform.size().height)")
-        createPlatforms(yPosition: frame.midY)
-        createPlatforms(yPosition: frame.midY - transitionPlatform.size().height * 3)
-        createPlatforms(yPosition: frame.midY - ((transitionPlatform.size().height * 3) * 2))
 //        createWalls()
 //        startPlatforms()
         planeMode()
@@ -135,12 +147,13 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 
         print(frame.width)
         print(frame.height)
+        print(" maxY when topPlatform \(self.frame.midY - self.transitionPlatform.size().height * 3)")
 //        print("transition size \(transitionPlatform.size())")
     }
 
 
-    func setTextures() {
-
+    func setTextures(currentStage: Int) {
+        stage = currentStage
         // perhaps two or three switch cases which will read which properties are set to which then go down the list and pick which texture fits within those parameters. e.g. World? -> Theme? -> Stage? : World gives you the asset catelog for the particular world | Theme gives you the asset catelog within that chosen world | Stage gives you the sizes for the platforms for any given set theme.
 
 
@@ -153,14 +166,9 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 
         switch theme {
         case "castle":
-            firstBackground = SKTexture(imageNamed: "silo_background_1")
+            firstBackground = SKTexture(imageNamed: "castle_background_1")
             secondBackground = SKTexture(imageNamed: "castle_background_2")
             thirdBackground = SKTexture(imageNamed: "castle_background_3")
-
-//            firstPlatform = SKTexture(imageNamed: "castle_platform_1")
-//            secondPlatform = SKTexture(imageNamed: "castle_platform_2")
-//            thirdPlatform = SKTexture(imageNamed: "castle_platform_3")
-//            transitionPlatform = SKTexture(imageNamed: "Transition Platform")
 
             firstPlatform = SKTexture(imageNamed: "desert_platform_1")
             secondPlatform = SKTexture(imageNamed: "desert_platform_2")
@@ -168,18 +176,6 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             transitionPlatform = SKTexture(imageNamed: "desert_transition_platform")
 
             castleSky = SKTexture(imageNamed: "sky_background")
-
-        case "desert":
-            firstBackground = SKTexture(imageNamed: "desert_background_1")
-            secondBackground = SKTexture(imageNamed: "desert_background_2")
-            thirdBackground = SKTexture(imageNamed: "desert_background_3")
-
-            firstPlatform = SKTexture(imageNamed: "desert_platform_1")
-            secondPlatform = SKTexture(imageNamed: "desert_platform_2")
-            thirdPlatform = SKTexture(imageNamed: "desert_platform_3")
-            transitionPlatform = SKTexture(imageNamed: "desert_transition_platform")
-
-            desertSky = SKTexture(imageNamed: "sky_background")
 
         case "cave":
             firstBackground = SKTexture(imageNamed: "cave_background_2")
@@ -192,7 +188,19 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             transitionPlatform = SKTexture(imageNamed: "desert_transition_platform")
 
             desertSky = SKTexture(imageNamed: "sky_background")
-            break
+            
+        case "reactor":
+            firstBackground = SKTexture(imageNamed: "desert_background_1")
+            secondBackground = SKTexture(imageNamed: "desert_background_2")
+            thirdBackground = SKTexture(imageNamed: "desert_background_3")
+
+            firstPlatform = SKTexture(imageNamed: "desert_platform_1")
+            secondPlatform = SKTexture(imageNamed: "desert_platform_2")
+            thirdPlatform = SKTexture(imageNamed: "desert_platform_3")
+            transitionPlatform = SKTexture(imageNamed: "desert_transition_platform")
+
+            desertSky = SKTexture(imageNamed: "sky_background")
+
         default:
             break
         }
@@ -424,62 +432,25 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             sky.run(scrollForever)
         }
     }
-
-    func createWalls() {
-        let wallTexture = SKTexture(imageNamed: "Wall")
-
-        for i in 0 ... 1 {
-
-            let wallLeft = wallPieces[i]
-            wallLeft.texture = wallTexture
-            wallLeft.anchorPoint = CGPoint(x: 0, y: 0)
-            wallLeft.zPosition = 50
-            wallLeft.position = CGPoint(x: 0, y: wallTexture.size().height + (-wallTexture.size().height) + (-wallTexture.size().height * CGFloat(i)))
-
-            let wallRight = wallPieces[i]
-            wallRight.texture = wallTexture
-            wallRight.anchorPoint = CGPoint(x: 0, y: 0)
-            wallRight.zPosition = 50
-            wallRight.position = CGPoint(x: 0, y: wallTexture.size().height + (-wallTexture.size().height) + (-wallTexture.size().height * CGFloat(i)))
-
-            self.addChild(wallLeft)
-            nodeArray.append(wallLeft)
-
-            self.addChild(wallRight)
-            nodeArray.append(wallRight)
-
-            let scrollUp = SKAction.moveBy(x: 0, y: wallTexture.size().height, duration: 5)
-            let scrollReset = SKAction.moveBy(x: 0, y: -wallTexture.size().height, duration: 0)
-            let scrollLoop = SKAction.sequence([scrollUp, scrollReset])
-            let scrollForever = SKAction.repeatForever(scrollLoop)
-
-            wallLeft.run(scrollForever)
-            wallRight.run(scrollForever)
-        }
-    }
-
-
-    func createPlatforms(yPosition: CGFloat) {
-
+    
+    
+    func createPlatforms() {
+   
         let min = CGFloat(frame.width / 12)
         let max = CGFloat(frame.width / 3)
         var xPosition = CGFloat.random(in: -min ... max)
 
 
-        if platformCount >= 2 && platformCount < 30 {
-            stage = 0
-            setTextures()
-            xPosition = frame.size.width * 0.125
+        if platformCount >= 19 && platformCount < 30 {
+            setTextures(currentStage: 0)
+            xPosition = frame.width * 0.125
         } else if platformCount == 30 {
-            stage = 2
-            setTextures()
+            setTextures(currentStage: 2)
         } else if platformCount >= 50 && platformCount < 60 {
-            stage = 0
-            setTextures()
+            setTextures(currentStage: 0)
             xPosition = 184
         } else if platformCount == 60 {
-            stage = 3
-            setTextures()
+            setTextures(currentStage: 3)
         }
 
 
@@ -510,8 +481,8 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
         }
 
         let gapSize: CGFloat = -frame.size.width / 6
-        platformLeft.position = CGPoint(x: xPosition + platformLeft.size.width - gapSize, y: yPosition)
-        platformRight.position = CGPoint(x: xPosition + gapSize, y: yPosition)
+        platformLeft.position = CGPoint(x: xPosition + platformLeft.size.width - gapSize, y: platformGap )
+        platformRight.position = CGPoint(x: xPosition + gapSize, y: platformGap)
         // scoreNode.position = CGPoint(x: frame.midX, y: platformLeft.position.y - platformLeft.size.height / 2)
 
         let endPosition = frame.maxY + frame.midY
@@ -531,48 +502,17 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             nodeArray.append(node)
             node.run(moveSequence)
         }
-        
         platformCount += 1
-        waitOnPlatforms()
-    }
-
-
-    func startPlatforms() {
-        let create = SKAction.run { [unowned self] in
-            
-            
-//            platformCount += 1
-            }
-            
-        let wait = SKAction.wait(forDuration: 2.0)
-        let seq = SKAction.sequence([create, wait])
-        let runForever = SKAction.repeatForever(seq)
-    
-        run(runForever)
+        
+        // platformMonitor()
     }
     
     
-    func waitOnPlatforms() {
-        print("platformCount: \(platformCount)")
-        if platformCount > 0 {
-             // Dont care about duplicate position platforms
-
-            
-//            print("platformTrigger: \(platformTrigger.count)")
-            if platformTrigger.count > 0 {
-                
-                print("retard")
-                DispatchQueue.global(qos: .background).async {
-                    while self.topPlatform.position.y < (self.frame.midY - self.transitionPlatform.size().height * 3) {
-                        if self.topPlatform.position.y >= (self.frame.midY - self.transitionPlatform.size().height * 3) {
-                            self.createPlatforms(yPosition: self.frame.midY - ((self.transitionPlatform.size().height * 3) * 2))
-                            self.platformArray.append(self.topPlatform)
-                            
-                            break
-                        }
-                    }
-                }
-            }
+    func platformer() {
+        if self.platformCount == 0 {
+            self.createPlatforms()
+            self.createPlatforms()
+            self.createPlatforms()
         }
     }
     
@@ -839,44 +779,20 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 
 
     override func update(_ currentTime: TimeInterval) {
-
-//        print(platformGroup.count)
-    
-    
-        
-//
-//        for node in nodeArray {
-//            if node.name == "platformTrigger" {
-//                if node.position.y >= 50 && node.position.y <= 55 {
-//                    let create = SKAction.run { [unowned self] in
-//                        self.createPlatforms()
-//    //                    platformCount += 1
-//                    }
-//
-//                    run(create)
-//                    return
-//                }
-//            }
-//        }
-
-
-        // increasing game speed incremetally as game progresses to increase challenge
-//        if score == 25 {
-//            physicsWorld.speed = 1.2
-//        } else if score == 50 {
-//            physicsWorld.speed = 1.4
-//        } else if score == 75 {
-//            physicsWorld.speed = 1.5
-//        }
-//
-//        if score == 10 {
-//            plane.colorBlendFactor = 1
-//            plane.color = .orange
-//        } else if score == 20 {
-//            plane.color = .green
-//        }
-
-//        print("\(platformGroup.first?.speed)")
+        if platformCount >= 3 {
+            // print("platformCount: \(platformCount)")
+             // Dont care about duplicate position platforms
+//            print("platformTrigger: \(platformTrigger.count)")
+            // DispatchQueue.global(qos: .background).async {
+            //    while self.topPlatform.position.y < (self.frame.midY - self.transitionPlatform.size().height * 3) {
+            if self.topPlatform.position.y >= (self.frame.midY - self.transitionPlatform.size().height * 3) {
+                print("topPlatform End position: \(topPlatform.position.y)")
+                self.createPlatforms()
+//                         self.platformArray.append(self.topPlatform)
+                // print("called createPlatforms()")
+            }
+        }
+        print(topPlatform.position.y)
     }
 
 
