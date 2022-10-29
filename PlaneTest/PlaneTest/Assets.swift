@@ -11,11 +11,18 @@ import SpriteKit
 
 class Assets {
     static let sharedInstance = Assets()
-    let sprites = SKTextureAtlas(named: "Game Sprites")
+    let gameSprites = SKTextureAtlas(named: "Game Sprites")
+    let uiSprites = SKTextureAtlas(named: "UI Sprites")
     
-    func preloadAssets() {
-        sprites.preload(completionHandler: {
-            print("Sprites preloaded")
+    func preloadGameAssets() {
+        gameSprites.preload(completionHandler: {
+            print(" Game Sprites Preloaded")
+        })
+    }
+    
+    func preloadUIAssets() {
+        uiSprites.preload(completionHandler: {
+            print(" UI Sprites Preloaded")
         })
     }
 }

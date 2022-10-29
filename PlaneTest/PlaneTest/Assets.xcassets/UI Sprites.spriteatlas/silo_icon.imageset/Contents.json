@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "Silo Icon with Label.png",
+      "filename" : "Silo Icon.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Silo Icon with Label@2x.png",
+      "filename" : "Silo Icon@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

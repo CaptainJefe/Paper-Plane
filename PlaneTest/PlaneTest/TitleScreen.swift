@@ -130,15 +130,15 @@ class TitleScreen: SKScene {
         addChild(optionsButton)
         buttonContainer.append(optionsButton)
         
-        worldSelectButton1.size = CGSize(width: worldSelectButton1.texture!.size().width * 2.5, height: worldSelectButton1.texture!.size().height * 2.5)
+        worldSelectButton1.size = CGSize(width: worldSelectButton1.texture!.size().width * 2, height: worldSelectButton1.texture!.size().height * 2)
         worldSelectButton1.alpha = 0
-        worldSelectButton1.position = CGPoint(x: frame.midX * 3, y: frame.maxY * 0.80)
+        worldSelectButton1.position = CGPoint(x: frame.midX * 3, y: frame.maxY * 0.75)
         worldSelectButton1.zPosition = 55
         worldSelectButton1.name = "World 1"
         addChild(worldSelectButton1)
         worldSelectContainer.append(worldSelectButton1)
         
-        worldSelectButton2.size = CGSize(width: worldSelectButton2.texture!.size().width * 2.5, height: worldSelectButton2.texture!.size().height * 2.5)
+        worldSelectButton2.size = CGSize(width: worldSelectButton2.texture!.size().width * 2, height: worldSelectButton2.texture!.size().height * 2)
         worldSelectButton2.alpha = 0
         worldSelectButton2.position = CGPoint(x: worldSelectButton1.position.x, y: worldSelectButton1.position.y - worldSelectButton1.size.height * 1.2)
         worldSelectButton2.zPosition = 55
@@ -146,7 +146,7 @@ class TitleScreen: SKScene {
         addChild(worldSelectButton2)
         worldSelectContainer.append(worldSelectButton2)
         
-        worldSelectButton3.size = CGSize(width: worldSelectButton3.texture!.size().width * 2.5, height: worldSelectButton3.texture!.size().height * 2.5)
+        worldSelectButton3.size = CGSize(width: worldSelectButton3.texture!.size().width * 2, height: worldSelectButton3.texture!.size().height * 2)
         worldSelectButton3.alpha = 0
         worldSelectButton3.position = CGPoint(x: worldSelectButton1.position.x, y: worldSelectButton2.position.y - worldSelectButton1.size.height * 1.2)
         worldSelectButton3.zPosition = 55
@@ -159,7 +159,7 @@ class TitleScreen: SKScene {
     func startGame() {
         if let skView = self.view {
             
-            Assets.sharedInstance.preloadAssets()
+            Assets.sharedInstance.preloadGameAssets()
             
             guard let scene = GameSceneNewNew(fileNamed: "GameSceneNewNew") else { return }
             scene.size = skView.frame.size
@@ -178,7 +178,7 @@ class TitleScreen: SKScene {
         
         closeButton.size = CGSize(width: 48, height: 48)
         closeButton.alpha = 1
-        closeButton.position = CGPoint(x: frame.maxX * 1.9, y: frame.maxY * 0.96)
+        closeButton.position = CGPoint(x: frame.maxX * 1.88, y: frame.maxY * 0.95)
         closeButton.zPosition = 80
         closeButton.name = "Close Button"
         addChild(closeButton)
