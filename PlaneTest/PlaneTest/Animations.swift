@@ -48,7 +48,7 @@ class Animations: SKNode {
     // Expands/enlarges a node for short time. Best used alongside the shrink() method
     func expand(node: SKSpriteNode) {
         
-        let wait = SKAction.wait(forDuration: 0.11)
+//        let wait = SKAction.wait(forDuration: 0.11)
         let expand = SKAction.scale(to: 1.1, duration: 0.075)
         let normal = SKAction.scale(to: 1.0, duration: 0.1)
         let defaultColor = SKAction.run {

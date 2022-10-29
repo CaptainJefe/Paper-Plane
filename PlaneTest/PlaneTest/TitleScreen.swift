@@ -23,6 +23,7 @@ class TitleScreen: SKScene {
     var worldSelectContainer = [SKSpriteNode]()
     var worldSelectButton1 = SKSpriteNode(imageNamed: "Castle Icon")
     var worldSelectButton2 = SKSpriteNode(imageNamed: "Cave Icon")
+    var worldSelectButton3 = SKSpriteNode(imageNamed: "silo_icon")
     
     var musicButton = SKSpriteNode(imageNamed: "Music Button")
     var closeButton = SKSpriteNode(imageNamed: "Close Button")
@@ -44,6 +45,7 @@ class TitleScreen: SKScene {
     
     var hasBeenOpened: Bool = false
     
+    var highScoresLogo: SKSpriteNode!
     var scoreFrame: SKSpriteNode!
     var scoreFrameContainer = [SKSpriteNode]()
     var hsLabel: SKLabelNode!
@@ -130,7 +132,7 @@ class TitleScreen: SKScene {
         
         worldSelectButton1.size = CGSize(width: worldSelectButton1.texture!.size().width * 2.5, height: worldSelectButton1.texture!.size().height * 2.5)
         worldSelectButton1.alpha = 0
-        worldSelectButton1.position = CGPoint(x: frame.midX * 3, y: frame.maxY * 0.65)
+        worldSelectButton1.position = CGPoint(x: frame.midX * 3, y: frame.maxY * 0.80)
         worldSelectButton1.zPosition = 55
         worldSelectButton1.name = "World 1"
         addChild(worldSelectButton1)
@@ -143,11 +145,21 @@ class TitleScreen: SKScene {
         worldSelectButton2.name = "World 2"
         addChild(worldSelectButton2)
         worldSelectContainer.append(worldSelectButton2)
+        
+        worldSelectButton3.size = CGSize(width: worldSelectButton3.texture!.size().width * 2.5, height: worldSelectButton3.texture!.size().height * 2.5)
+        worldSelectButton3.alpha = 0
+        worldSelectButton3.position = CGPoint(x: worldSelectButton1.position.x, y: worldSelectButton2.position.y - worldSelectButton1.size.height * 1.2)
+        worldSelectButton3.zPosition = 55
+        worldSelectButton3.name = "World 3"
+        addChild(worldSelectButton3)
+        worldSelectContainer.append(worldSelectButton3)
     }
     
     
     func startGame() {
         if let skView = self.view {
+            
+            Assets.sharedInstance.preloadAssets()
             
             guard let scene = GameSceneNewNew(fileNamed: "GameSceneNewNew") else { return }
             scene.size = skView.frame.size
@@ -164,9 +176,9 @@ class TitleScreen: SKScene {
     func worldSelect() {
         // worldSelectButton 2 original position: CGPoint(x: frame.midX, y: worldSelectButton1.position.y - worldSelectButton1.position.y / 2)
         
-        closeButton.size = CGSize(width: 64, height: 64)
+        closeButton.size = CGSize(width: 48, height: 48)
         closeButton.alpha = 1
-        closeButton.position = CGPoint(x: frame.midX * 3, y: frame.maxY * 0.9)
+        closeButton.position = CGPoint(x: frame.maxX * 1.9, y: frame.maxY * 0.96)
         closeButton.zPosition = 80
         closeButton.name = "Close Button"
         addChild(closeButton)
@@ -193,7 +205,6 @@ class TitleScreen: SKScene {
     }
     
     
-
     func highScoresMenu() {
         lastMenuOpened = "HighScores"
         
@@ -206,7 +217,7 @@ class TitleScreen: SKScene {
         
         closeButton.size = CGSize(width: 48, height: 48)
         closeButton.alpha = 1
-        closeButton.position = CGPoint(x: -frame.midX, y: frame.maxY * 0.9)
+        closeButton.position = CGPoint(x: -frame.midX, y: frame.maxY * 0.12)
         closeButton.zPosition = 80
         closeButton.name = "Close Button"
         
@@ -216,6 +227,7 @@ class TitleScreen: SKScene {
         
         var timeIncrease: TimeInterval = 0.0
         
+        Animations.shared.fadeAlphaIn(node: highScoresLogo, duration: 0.35, waitTime: 0)
         Animations.shared.fadeAlphaOut(node: logo, duration: 0.5)
         for buttons in buttonContainer { Animations.shared.fadeAlphaOut(node: buttons, duration: 0.5) }
         
@@ -314,6 +326,7 @@ class TitleScreen: SKScene {
             
             Animations.shared.fadeAlphaIn(node: logo, duration: 0.6, waitTime: 0)
             for buttons in buttonContainer { Animations.shared.fadeAlphaIn(node: buttons, duration: 0.6, waitTime: 0) }
+            Animations.shared.fadeAlphaOut(node: highScoresLogo, duration: 0.5)
             for nodes in highScoresUIContainer { Animations.shared.fadeAlphaOut(node: nodes, duration: 0.5) }
             
             setCamera(xPosition: frame.midX)
@@ -361,6 +374,11 @@ class TitleScreen: SKScene {
             if touchedNode.name == "World 2" {
                 Animations.shared.shrink(node: worldSelectButton2)
                 isButtonTouched = "World 2"
+            }
+            
+            if touchedNode.name == "World 3" {
+                Animations.shared.shrink(node: worldSelectButton3)
+                isButtonTouched = "World 3"
             }
             
             if touchedNode.name == "High Scores" {
@@ -422,6 +440,18 @@ class TitleScreen: SKScene {
     
             } else if touchedNode.name != "World 2" && isButtonTouched == "World 2" {
                 Animations.shared.expand(node: worldSelectButton2)
+            }
+            
+            
+            if touchedNode.name == "World 3" && isButtonTouched == "World 3" {
+                world = "classic"
+                theme = "silo"
+                
+                startGame()
+                Animations.shared.expand(node: worldSelectButton3)
+    
+            } else if touchedNode.name != "World 3" && isButtonTouched == "World 3" {
+                Animations.shared.expand(node: worldSelectButton3)
             }
             
             
@@ -496,18 +526,28 @@ class TitleScreen: SKScene {
     }
     
     func scoreList() {
-        let scores = GameplayStats.shared.getScore()!.sorted(by: >)
-        print("Scores: \(scores)")
+        
+        highScoresLogo = SKSpriteNode(imageNamed: "highscores_logo")
+        highScoresLogo.position = CGPoint(x: -frame.midX, y: frame.maxY * 0.88)
+        highScoresLogo.size = CGSize(width: highScoresLogo.size.width * 1.5, height: highScoresLogo.size.height * 1.5)
+        highScoresLogo.zPosition = 80
+        highScoresLogo.alpha = 0
+        addChild(highScoresLogo)
+        
+        let sortedScores = GameplayStats.shared.getScore()?.sorted(by: >)
+        var scoresList = sortedScores ?? [0]
+        
+        print("Scores: \(scoresList)")
 //        var pos = 0
         
-        let scoresArray = [1, 2, 3, 4, 5]
-        let scoresAsString = scoresArray.map(String.init)
+        let scoresArray = [1, 2, 3, 4, 5] // preset array for testing
+        let scoresAsString = scoresList.map(String.init)
 
         // This works, but it doesn't space out the strings in an added position yet
         
         var counter: CGFloat = 0
         
-        for highscore in scoresAsString {
+        for highscore in scoresAsString.prefix(5) { // scoresAsString[0...4] is also a valid call
             scoreFrame = SKSpriteNode(imageNamed: "high_scores_frame")
             scoreFrame.position = CGPoint(x: -self.frame.midX, y: ((frame.maxY - 100) + (counter * -120)) / 1.2)
             scoreFrame.size = CGSize(width: scoreFrame.texture!.size().width * 2.5, height: scoreFrame.texture!.size().height * 2.5)
@@ -517,12 +557,12 @@ class TitleScreen: SKScene {
             addChild(scoreFrame)
             scoreFrameContainer.append(scoreFrame)
             
-            hsLabel = SKLabelNode(fontNamed: "Ariel")
+            hsLabel = SKLabelNode(fontNamed: "Asai-Analogue")
             hsLabel.text = highscore as String
             hsLabel.alpha = 0
-            hsLabel.fontSize = 50
+            hsLabel.fontSize = 65
             hsLabel.fontColor = SKColor.white
-            hsLabel.position = CGPoint(x: -self.frame.maxX / 1.25, y: ((frame.maxY - 121) + (counter * -120)) / 1.2)
+            hsLabel.position = CGPoint(x: -self.frame.maxX / 1.25, y: ((frame.maxY - 120) + (counter * -120)) / 1.2)
             hsLabel.zPosition = 160
             hsLabel.name = "hsLabel"
             addChild(hsLabel)

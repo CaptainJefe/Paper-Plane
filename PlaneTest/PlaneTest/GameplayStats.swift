@@ -14,7 +14,7 @@ let gameGetScore = "getScore"
 let gameScore = "gameScore"
 let gameHighScore = "highScore"
 
-var highScores: [Int] = []
+var highScores: [Int] = [0, 0, 0, 0, 0]
 
 class GameplayStats {
     

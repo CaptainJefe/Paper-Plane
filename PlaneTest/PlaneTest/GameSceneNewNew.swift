@@ -33,8 +33,9 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
     var backgroundSpeed: CGFloat = 1.0 { didSet { for background in backgroundPieces { background.speed = backgroundSpeed } } }
     var backgroundTexture: SKTexture! { didSet { for background in backgroundPieces { background.texture = backgroundTexture } } }
 
-    var skyPieces: [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode()]
-    var skyTexture: SKTexture! { didSet { for sky in skyPieces { sky.texture = skyTexture } } }
+    var cloudPieces: [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode()]
+    var skyTexture: SKTexture!
+    var cloudsTexture: SKTexture! { didSet { for clouds in cloudPieces { clouds.texture = cloudsTexture } } }
 
     var wallPieces: [SKSpriteNode] = [SKSpriteNode(imageNamed: "Wall"), SKSpriteNode(imageNamed: "Wall")]
     var wallPieces2: [SKSpriteNode] = [SKSpriteNode(imageNamed: "Wall"), SKSpriteNode(imageNamed: "Wall")]
@@ -85,8 +86,9 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
     var firstBackground: SKTexture!
     var secondBackground: SKTexture!
     var thirdBackground: SKTexture!
-    var platformTrigger = [SKSpriteNode]() { didSet { topPlatform = platformTrigger.sorted(by: { $0.position.y < $1.position.y})[0] } }
-    var topPlatform: SKSpriteNode!
+    var platformTrigger = [SKSpriteNode]() { didSet { lowestPlatform = platformTrigger.sorted(by: { $0.position.y < $1.position.y})[0]; highestPlatform = platformTrigger.sorted(by: { $0.position.y > $1.position.y})[0]} }
+    var lowestPlatform: SKSpriteNode!
+    var highestPlatform: SKSpriteNode!
     
     var firstPlatform: SKTexture! { didSet { firstPlatformSize = firstPlatform.size() } }
     var secondPlatform: SKTexture!
@@ -102,12 +104,16 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
     var noClip = true { didSet { noClipLabel.text = "Collision: \(!noClip)" } }
 
     var initialPlatforms = true
+    
+    var increaseWorldSpeed: Int = 0
 
     override func didMove(to view: SKView) {
+        
+        print("When lowestPlatform is greater than this point \((self.frame.midY / 2) - self.transitionPlatform.size().height * 3)")
         platformGap = frame.midY - (((transitionPlatform.size().height * 3) * CGFloat(min(platformCount,2))))
-        setTextures(currentStage: 1)
         physicsWorld.speed = 1.0
-
+        
+        initiateTextures()
         createPlane()
         createLabels()
         createButtons()
@@ -115,7 +121,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
         createBackground()
         createSky()
         platformer()
-        print("tran plat: \(transitionPlatform.size().height)")
+//        print("tran plat: \(transitionPlatform.size().height)")
 //        createWalls()
 //        startPlatforms()
         planeMode()
@@ -145,15 +151,14 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
 
-        print(frame.width)
-        print(frame.height)
-        print(" maxY when topPlatform \(self.frame.midY - self.transitionPlatform.size().height * 3)")
+//        print(frame.width)
+//        print(frame.height)
+//        print(" maxY when lowestPlatform \(self.frame.midY - self.transitionPlatform.size().height * 3)")
 //        print("transition size \(transitionPlatform.size())")
     }
 
 
-    func setTextures(currentStage: Int) {
-        stage = currentStage
+    func initiateTextures() {
         // perhaps two or three switch cases which will read which properties are set to which then go down the list and pick which texture fits within those parameters. e.g. World? -> Theme? -> Stage? : World gives you the asset catelog for the particular world | Theme gives you the asset catelog within that chosen world | Stage gives you the sizes for the platforms for any given set theme.
 
 
@@ -166,8 +171,8 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 
         switch theme {
         case "castle":
-            firstBackground = SKTexture(imageNamed: "castle_background_1")
-            secondBackground = SKTexture(imageNamed: "castle_background_2")
+            firstBackground = SKTexture(imageNamed: "castle_background_2")
+            secondBackground = SKTexture(imageNamed: "castle_background_1")
             thirdBackground = SKTexture(imageNamed: "castle_background_3")
 
             firstPlatform = SKTexture(imageNamed: "desert_platform_1")
@@ -175,10 +180,11 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             thirdPlatform = SKTexture(imageNamed: "desert_platform_3")
             transitionPlatform = SKTexture(imageNamed: "desert_transition_platform")
 
-            castleSky = SKTexture(imageNamed: "sky_background")
+            skyTexture = SKTexture(imageNamed: "sky_background_day")
+            cloudsTexture = SKTexture(imageNamed: "clouds_day")
 
         case "cave":
-            firstBackground = SKTexture(imageNamed: "cave_background_2")
+            firstBackground = SKTexture(imageNamed: "cave_background_1")
             secondBackground = SKTexture(imageNamed: "cave_background_2")
             thirdBackground = SKTexture(imageNamed: "cave_background_3")
 
@@ -187,43 +193,52 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             thirdPlatform = SKTexture(imageNamed: "desert_platform_3")
             transitionPlatform = SKTexture(imageNamed: "desert_transition_platform")
 
-            desertSky = SKTexture(imageNamed: "sky_background")
+            skyTexture = SKTexture(imageNamed: "sky_background")
             
-        case "reactor":
-            firstBackground = SKTexture(imageNamed: "desert_background_1")
-            secondBackground = SKTexture(imageNamed: "desert_background_2")
-            thirdBackground = SKTexture(imageNamed: "desert_background_3")
+        case "silo":
+            firstBackground = SKTexture(imageNamed: "silo_background_1")
+            secondBackground = SKTexture(imageNamed: "silo_background_2")
+            thirdBackground = SKTexture(imageNamed: "silo_background_1")
 
             firstPlatform = SKTexture(imageNamed: "desert_platform_1")
             secondPlatform = SKTexture(imageNamed: "desert_platform_2")
             thirdPlatform = SKTexture(imageNamed: "desert_platform_3")
             transitionPlatform = SKTexture(imageNamed: "desert_transition_platform")
 
-            desertSky = SKTexture(imageNamed: "sky_background")
+            skyTexture = SKTexture(imageNamed: "sky_background_night")
+            cloudsTexture = SKTexture(imageNamed: "clouds_night")
 
         default:
             break
         }
+        
+        setBackground(currentStage: 1)
+        setPlatforms(currentStage: 1)
+    }
 
-
-        switch stage {
+    func setPlatforms(currentStage: Int) {
+        switch currentStage {
         case 1:
-            backgroundTexture = firstBackground
             platformTexture = firstPlatform
-            skyTexture = castleSky
-
         case 2:
-            backgroundTexture = secondBackground
             platformTexture = secondPlatform
-            skyTexture = castleSky
-
         case 3:
-            backgroundTexture = thirdBackground
             platformTexture = thirdPlatform
-            skyTexture = castleSky
-
         case 0:
             platformTexture = transitionPlatform
+        default:
+            break
+        }
+    }
+    
+    func setBackground(currentStage: Int) {
+        switch currentStage {
+        case 1:
+            backgroundTexture = firstBackground
+        case 2:
+            backgroundTexture = secondBackground
+        case 3:
+            backgroundTexture = thirdBackground
         default:
             break
         }
@@ -264,7 +279,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             plane.speed = 7
             plane.run(repeatLeft)
 
-            backgroundSpeed = 1
+            backgroundSpeed = 0.3
             wallSpeed = 1
             platformSpeed = 0.6
 
@@ -273,7 +288,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             plane.speed = 5
             plane.run(repeatLeft)
 
-            backgroundSpeed = 1.3
+            backgroundSpeed = 0.6
             wallSpeed = 1.3
             platformSpeed = 0.9
 
@@ -282,7 +297,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             plane.speed = 3
             plane.run(repeatLeft)
 
-            backgroundSpeed = 1.6
+            backgroundSpeed = 0.9
             wallSpeed = 1.6
             platformSpeed = 1.3
 
@@ -291,7 +306,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             plane.speed = 1
             plane.run(repeatLeft)
 
-            backgroundSpeed = 1.8
+            backgroundSpeed = 1.1
             wallSpeed = 1.8
             platformSpeed = 1.5
 
@@ -302,7 +317,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 //            plane.run(loop)
             plane.run(repeatDown)
 
-            backgroundSpeed = 2.2
+            backgroundSpeed = 1.3
             wallSpeed = 2.2
             platformSpeed = 1.8
 
@@ -311,7 +326,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             plane.speed = 4
             plane.run(repeatRight)
 
-            backgroundSpeed = 1.8
+            backgroundSpeed = 1.1
             wallSpeed = 1.8
             platformSpeed = 1.5
 
@@ -320,7 +335,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             plane.speed = 5
             plane.run(repeatRight)
 
-            backgroundSpeed = 1.6
+            backgroundSpeed = 0.9
             wallSpeed = 1.6
             platformSpeed = 1.3
 
@@ -329,7 +344,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             plane.speed = 6
             plane.run(repeatRight)
 
-            backgroundSpeed = 1.3
+            backgroundSpeed = 0.6
             wallSpeed = 1.3
             platformSpeed = 0.9
 
@@ -338,7 +353,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             plane.speed = 8
             plane.run(repeatRight)
 
-            backgroundSpeed = 1
+            backgroundSpeed = 0.3
             wallSpeed = 1
             platformSpeed = 0.6
 
@@ -411,46 +426,64 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
     }
 
     func createSky() {
+        let sky = SKSpriteNode()
+        sky.texture = skyTexture
+        sky.position = CGPoint(x: frame.midX, y: frame.midY)
+        sky.size = CGSize(width: frame.size.width, height: frame.size.height)
+        sky.zPosition = -30
+        addChild(sky)
+        
         for i in 0 ... 1 {
 
-            let sky = skyPieces[i]
-            sky.texture = skyTexture
-            sky.anchorPoint = CGPoint(x: 0, y: 0)
-            sky.zPosition = -25
-            sky.size = CGSize(width: frame.size.width, height: frame.size.width * 2.5)
+            let clouds = cloudPieces[i]
+            clouds.texture = cloudsTexture
+            clouds.anchorPoint = CGPoint(x: 0, y: 0)
+            clouds.zPosition = -25
+            clouds.size = CGSize(width: frame.size.width, height: frame.size.width * 2.5)
 
-            sky.position = CGPoint(x: sky.size.width + (-sky.size.width) + (-sky.size.width * CGFloat(i)), y: 0)
+            clouds.position = CGPoint(x: sky.size.width + (-sky.size.width) + (-sky.size.width * CGFloat(i)), y: 0)
 
-            self.addChild(sky)
-            nodeArray.append(sky)
+            self.addChild(clouds)
+            nodeArray.append(clouds)
 
-            let scrollSideways = SKAction.moveBy(x: sky.size.width, y: 0, duration: 22)
-            let scrollReset = SKAction.moveBy(x: -sky.size.width, y: 0, duration: 0)
+            let scrollSideways = SKAction.moveBy(x: clouds.size.width, y: 0, duration: 22)
+            let scrollReset = SKAction.moveBy(x: -clouds.size.width, y: 0, duration: 0)
             let scrollLoop = SKAction.sequence([scrollSideways, scrollReset])
             let scrollForever = SKAction.repeatForever(scrollLoop)
 
-            sky.run(scrollForever)
+            clouds.run(scrollForever)
         }
     }
     
     
-    func createPlatforms() {
+    func createPlatforms(yPosition: CGFloat) {
    
-        let min = CGFloat(frame.width / 12)
-        let max = CGFloat(frame.width / 3)
+        let min = CGFloat(frame.width / 3 - (frame.width / 8))
+        let max = CGFloat(frame.width / 6)
         var xPosition = CGFloat.random(in: -min ... max)
+        
+//        print("min \(min)")
+//        print("max \(max)")
+//        print("xPosition \(xPosition)")
+//        print("frame.x \(frame.minX)")
 
 
         if platformCount >= 19 && platformCount < 30 {
-            setTextures(currentStage: 0)
+            setPlatforms(currentStage: 0)
             xPosition = frame.width * 0.125
         } else if platformCount == 30 {
-            setTextures(currentStage: 2)
-        } else if platformCount >= 50 && platformCount < 60 {
-            setTextures(currentStage: 0)
-            xPosition = 184
+            setPlatforms(currentStage: 2)
+        } else if platformCount >= 49 && platformCount < 60 {
+            setPlatforms(currentStage: 0)
+            xPosition = frame.width * 0.125
         } else if platformCount == 60 {
-            setTextures(currentStage: 3)
+            setPlatforms(currentStage: 3)
+        }
+        
+        if score == 30 {
+            setBackground(currentStage: 2)
+        } else if score == 60 {
+            setBackground(currentStage: 3)
         }
 
 
@@ -474,16 +507,24 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
         platformRight.zPosition = 20
         platformRight.name = "right_platform"
         platformRight.speed = platformSpeed
+        
+        let scoreNode = SKSpriteNode(color: UIColor.clear, size: CGSize(width: frame.width, height: firstPlatform.size().height))
+        scoreNode.physicsBody = SKPhysicsBody(rectangleOf: scoreNode.size)
+        scoreNode.physicsBody?.isDynamic = false
+        scoreNode.zPosition = 100
+        scoreNode.name = "scoreDetect"
+        scoreNode.speed = platformSpeed
 
-        let newNodes: Set<SKSpriteNode> = [platformLeft, platformRight]
+
+        let newNodes: Set<SKSpriteNode> = [platformLeft, platformRight, scoreNode]
         for node in newNodes {
             platformGroup.insert(node)
         }
 
         let gapSize: CGFloat = -frame.size.width / 6
-        platformLeft.position = CGPoint(x: xPosition + platformLeft.size.width - gapSize, y: platformGap )
-        platformRight.position = CGPoint(x: xPosition + gapSize, y: platformGap)
-        // scoreNode.position = CGPoint(x: frame.midX, y: platformLeft.position.y - platformLeft.size.height / 2)
+        platformLeft.position = CGPoint(x: xPosition + platformLeft.size.width - gapSize, y: yPosition )
+        platformRight.position = CGPoint(x: xPosition + gapSize, y: yPosition)
+         scoreNode.position = CGPoint(x: frame.midX, y: platformLeft.position.y)
 
         let endPosition = frame.maxY + frame.midY
 
@@ -503,16 +544,30 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             node.run(moveSequence)
         }
         platformCount += 1
+        print("platform position \(platformLeft.position.y)")
         
-        // platformMonitor()
+        increaseWorldSpeed += 1
+        if increaseWorldSpeed == 10 {
+            if scene!.speed >= 1.75 {
+                scene?.speed = scene!.speed + 0.05
+                increaseWorldSpeed = 0
+                print("Game Speed: \(scene!.speed)")
+                if scene!.speed > 1.75 {
+                    scene?.speed = 1.75
+                }
+            }
+        }
+        
+        print(platformCount)
+//         platformMonitor()
     }
     
     
     func platformer() {
         if self.platformCount == 0 {
-            self.createPlatforms()
-            self.createPlatforms()
-            self.createPlatforms()
+            self.createPlatforms(yPosition: platformGap)
+            self.createPlatforms(yPosition: platformGap)
+            self.createPlatforms(yPosition: platformGap)
         }
     }
     
@@ -721,17 +776,17 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
 //        print("collision")
 
-        // if contact.bodyA.node?.name == "scoreDetect" || contact.bodyB.node?.name == "scoreDetect" {
-        //     if contact.bodyA.node == plane {
-        //         contact.bodyB.node?.removeFromParent()
-        //     } else {
-        //         contact.bodyA.node?.removeFromParent()
-        //     }
+         if contact.bodyA.node?.name == "scoreDetect" || contact.bodyB.node?.name == "scoreDetect" {
+             if contact.bodyA.node == plane {
+                 contact.bodyB.node?.removeFromParent()
+             } else {
+                 contact.bodyA.node?.removeFromParent()
+             }
 
-        //     score += 1
+             score += 1
 
-        //     return
-        // }
+             return
+         }
 
 //        if contact.bodyA.node?.name == "platformTrigger" || contact.bodyB.node?.name == "platformTrigger" {
 //            if contact.bodyA.node?.name == "spawn" || contact.bodyB.node?.name == "spawn" {
@@ -785,14 +840,18 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 //            print("platformTrigger: \(platformTrigger.count)")
             // DispatchQueue.global(qos: .background).async {
             //    while self.topPlatform.position.y < (self.frame.midY - self.transitionPlatform.size().height * 3) {
-            if self.topPlatform.position.y >= (self.frame.midY - self.transitionPlatform.size().height * 3) {
-                print("topPlatform End position: \(topPlatform.position.y)")
-                self.createPlatforms()
+            if self.lowestPlatform.position.y >= ((self.frame.midY / 1.5) - self.transitionPlatform.size().height * 3) {
+                
+                self.createPlatforms(yPosition: lowestPlatform.position.y - (transitionPlatform.size().height * 3 - firstPlatform.size().height / 2))
+                
 //                         self.platformArray.append(self.topPlatform)
                 // print("called createPlatforms()")
             }
+            
+            if highestPlatform.position.y >= plane.position.y {
+                score += 1
+            }
         }
-        print(topPlatform.position.y)
     }
 
 
