@@ -109,9 +109,17 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 
     override func didMove(to view: SKView) {
         
+        // add a transparent bar at the top for UI elements
+        let topBar = SKSpriteNode()
+        topBar.size = CGSize(width: frame.width, height: frame.height / 10)
+        topBar.position = CGPoint(x: frame.midX, y: frame.maxY - (topBar.size.height / 2))
+        topBar.color = .black
+        topBar.alpha = 0.6
+        topBar.zPosition = 10
+//        addChild(topBar)
+        
         print("When lowestPlatform is greater than this point \((self.frame.midY / 2) - self.transitionPlatform.size().height * 3)")
         platformGap = frame.midY - (((transitionPlatform.size().height * 3) * CGFloat(min(platformCount,2))))
-        physicsWorld.speed = 1.0
         
         initiateTextures()
         createPlane()
@@ -137,11 +145,10 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
         toggleNoClip.name = "noClip"
         addChild(toggleNoClip)
 
-        noClipLabel = SKLabelNode()
+        noClipLabel = SKLabelNode(fontNamed: "Paper Plane Font")
         noClipLabel.position = CGPoint(x: frame.midX, y: frame.minY + 50)
         noClipLabel.zPosition = 200
-        noClipLabel.fontSize = 24
-        noClipLabel.fontName = "Helvetica"
+        noClipLabel.fontSize = 30
         noClipLabel.text = "Collision: \(!noClip)"
         addChild(noClipLabel)
 
@@ -155,6 +162,17 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 //        print(frame.height)
 //        print(" maxY when lowestPlatform \(self.frame.midY - self.transitionPlatform.size().height * 3)")
 //        print("transition size \(transitionPlatform.size())")
+    }
+    
+    func animateBackground(texture: SKTexture) {
+        let fadeOut = SKAction.fadeOut(withDuration: 0.4)
+        let fadeIn = SKAction.fadeIn(withDuration: 0.4)
+        let setTexture = SKAction.run {
+            self.backgroundTexture = texture
+        }
+        let seq = SKAction.sequence([fadeOut, setTexture, fadeIn])
+        
+        run(seq)
     }
 
 
@@ -179,11 +197,11 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             secondPlatform = SKTexture(imageNamed: "desert_platform_2")
             thirdPlatform = SKTexture(imageNamed: "desert_platform_3")
             transitionPlatform = SKTexture(imageNamed: "desert_transition_platform")
-
+            
             skyTexture = SKTexture(imageNamed: "sky_background_day")
             cloudsTexture = SKTexture(imageNamed: "clouds_day")
 
-        case "cave":
+        case "chasm":
             firstBackground = SKTexture(imageNamed: "cave_background_1")
             secondBackground = SKTexture(imageNamed: "cave_background_2")
             thirdBackground = SKTexture(imageNamed: "cave_background_3")
@@ -193,7 +211,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             thirdPlatform = SKTexture(imageNamed: "desert_platform_3")
             transitionPlatform = SKTexture(imageNamed: "desert_transition_platform")
 
-            skyTexture = SKTexture(imageNamed: "sky_background")
+            skyTexture = SKTexture(imageNamed: "sky_background_night")
             
         case "silo":
             firstBackground = SKTexture(imageNamed: "silo_background_1")
@@ -237,6 +255,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             backgroundTexture = firstBackground
         case 2:
             backgroundTexture = secondBackground
+//            animateBackground(texture: secondBackground)
         case 3:
             backgroundTexture = thirdBackground
         default:
@@ -384,14 +403,14 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 
 
     func createLabels() {
-        scoreLabel = SKLabelNode(fontNamed: "Asai-Analogue")
+        scoreLabel = SKLabelNode(fontNamed: "Paper Plane Font") // Asai-Analogue
         scoreLabel.text = "\(score)"
-        scoreLabel.position = CGPoint(x: frame.midX, y: frame.maxY - 120)
-        scoreLabel.fontSize = 150
+        scoreLabel.position = CGPoint(x: frame.midX, y: frame.maxY * 0.95)
+        scoreLabel.fontSize = 60
         scoreLabel.zPosition = 220
         addChild(scoreLabel)
 
-        label = SKLabelNode(fontNamed: "")
+        label = SKLabelNode(fontNamed: "Paper Plane Font")
         label.text = "Mode: \(mode)"
         label.position = CGPoint(x: 660, y: 1280)
         label.horizontalAlignmentMode = .right
@@ -404,13 +423,17 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 
         for i in 0 ... 1 {
 
+            // use anchorPoint (0, 0) with old background.position -- old anchor/position doesn't set the top of BG at the top of the scene
             let background = backgroundPieces[i]
             background.texture = backgroundTexture
-            background.anchorPoint = CGPoint(x: 0, y: 0)
+            background.anchorPoint = CGPoint(x: 0.5, y: 0.5)
             background.zPosition = -5
             background.size = CGSize(width: frame.size.width, height: frame.size.width * 2.5)
 
-            background.position = CGPoint(x: 0, y: background.size.height + (-background.size.height) + (-background.size.height * CGFloat(i)))
+            
+            background.position = CGPoint(x: view!.center.x, y: view!.center.y + background.size.height + (-background.size.height) + (-background.size.height * CGFloat(i)))
+            
+//            background.position = CGPoint(x: 0, y: background.size.height + (-background.size.height) + (-background.size.height * CGFloat(i)))
 
             self.addChild(background)
             nodeArray.append(background)
@@ -458,8 +481,8 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
     
     func createPlatforms(yPosition: CGFloat) {
    
-        let min = CGFloat(frame.width / 3 - (frame.width / 8))
-        let max = CGFloat(frame.width / 6)
+        let min = CGFloat(frame.width / 6)
+        let max = CGFloat(frame.width / 3)
         var xPosition = CGFloat.random(in: -min ... max)
         
 //        print("min \(min)")
@@ -524,7 +547,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
         let gapSize: CGFloat = -frame.size.width / 6
         platformLeft.position = CGPoint(x: xPosition + platformLeft.size.width - gapSize, y: yPosition )
         platformRight.position = CGPoint(x: xPosition + gapSize, y: yPosition)
-         scoreNode.position = CGPoint(x: frame.midX, y: platformLeft.position.y)
+        scoreNode.position = CGPoint(x: frame.midX, y: platformLeft.position.y)
 
         let endPosition = frame.maxY + frame.midY
 
@@ -543,14 +566,14 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             nodeArray.append(node)
             node.run(moveSequence)
         }
+        
         platformCount += 1
         print("platform position \(platformLeft.position.y)")
         
         increaseWorldSpeed += 1
-        if increaseWorldSpeed == 10 {
-            if scene!.speed >= 1.75 {
+        if increaseWorldSpeed % 10 == 0 {
+            if scene!.speed <= 1.75 {
                 scene?.speed = scene!.speed + 0.05
-                increaseWorldSpeed = 0
                 print("Game Speed: \(scene!.speed)")
                 if scene!.speed > 1.75 {
                     scene?.speed = 1.75
@@ -716,6 +739,8 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 
 
     func gameOver() {
+        childNode(withName: "continueLabel")?.removeFromParent()
+        
         gameOverWindow.size = CGSize(width: 1, height: 1)
         gameOverWindow.alpha = 1
         gameOverWindow.zPosition = 170
@@ -731,11 +756,11 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
         restartButton.position = CGPoint(x: gameOverWindow.frame.midX - 75, y: gameOverWindow.frame.midY - 75)
         restartButton.name = "restartButton"
 
-        finalScoreLabel = SKLabelNode(fontNamed: "Asai-Analogue")
+        finalScoreLabel = SKLabelNode(fontNamed: "Paper Plane Font")
         finalScoreLabel.text = "Score"
         finalScoreLabel.color = .darkGray
         finalScoreLabel.fontSize = 70
-        finalScoreLabel.position = CGPoint(x: gameOverWindow.frame.midX, y: gameOverWindow.frame.maxY * 1.2)
+        finalScoreLabel.position = CGPoint(x: gameOverWindow.frame.midX, y: gameOverWindow.frame.maxY * 1.27)
         finalScoreLabel.zPosition = 210
 
         let scalePrelim = SKAction.scale(to: CGSize(width: 1, height: 1), duration: 0)
@@ -744,7 +769,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 
         let scaleSeq = SKAction.sequence([scalePrelim, scaleMenuButtonsUp])
 
-        let moveScore = SKAction.move(to: CGPoint(x: gameOverWindow.frame.midX, y: gameOverWindow.frame.midY + 10), duration: 1.6)
+        let moveScore = SKAction.move(to: CGPoint(x: gameOverWindow.frame.midX, y: gameOverWindow.frame.maxY * 1.15), duration: 1.6)
         let pulseUp = SKAction.scale(to: 2.0, duration: 0.8)
         let pulseDown = SKAction.scale(to: 1, duration: 0.8)
 
@@ -754,6 +779,8 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
         if gameState == 1 {
 
             GameplayStats.shared.setScore(score)
+            
+            scene!.speed = 1.00
 
             addChild(gameOverWindow)
             addChild(homeButton)
@@ -810,11 +837,31 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             if contact.bodyA.node?.name == "platformTrigger" || contact.bodyB.node?.name == "platformTrigger" {
                 return
             }
+            
             if let particles = SKEmitterNode(fileNamed: "DestroyPlane") {
                 particles.position = plane.position
                 particles.zPosition = 50
                 addChild(particles)
             }
+            
+            let continueLabel = SKLabelNode(fontNamed: "Paper Plane Font")
+            continueLabel.position = CGPoint(x: frame.midX, y: frame.maxY * 0.65)
+            continueLabel.fontSize = 45
+            continueLabel.text = "Tap to continue"
+            continueLabel.color = .black
+            continueLabel.alpha = 0
+            continueLabel.zPosition = 70
+            continueLabel.name = "continueLabel"
+            addChild(continueLabel)
+            
+            let fadeAlphaTo = SKAction.fadeAlpha(to: 0.5, duration: 1)
+            let fadeIn = SKAction.fadeIn(withDuration: 1.5)
+            let wait = SKAction.wait(forDuration: 1.2)
+            let fadeOut = SKAction.fadeOut(withDuration: 1.5)
+            let fadeInFadeOut = SKAction.sequence([fadeIn, wait, fadeOut])
+            let repeatForever = SKAction.repeatForever(fadeInFadeOut)
+            
+            continueLabel.run(repeatForever)
 
             plane.removeFromParent()
             backgroundSpeed = 0

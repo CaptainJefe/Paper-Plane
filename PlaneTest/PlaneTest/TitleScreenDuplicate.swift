@@ -1,13 +1,14 @@
+////
+////  TitleScreen.swift
+////  PlaneTest
+////
+////  Created by Cade Williams on 10/14/20.
+////  Copyright © 2020 Cade Williams. All rights reserved.
+////
 //
-//  TitleScreen.swift
-//  PlaneTest
-//
-//  Created by Cade Williams on 10/14/20.
-//  Copyright © 2020 Cade Williams. All rights reserved.
-//
-
 //import SpriteKit
 //import UIKit
+//import SceneKit
 //
 //var isMusicMuted = true
 //
@@ -19,15 +20,13 @@
 //    var optionsButton = SKSpriteNode(imageNamed: "Options Button")
 //    var highScoresButton = SKSpriteNode(imageNamed: "High Scores Button")
 //    
+//    var worldSelectContainer = [SKSpriteNode]()
 //    var worldSelectButton1 = SKSpriteNode(imageNamed: "Castle Icon")
 //    var worldSelectButton2 = SKSpriteNode(imageNamed: "Cave Icon")
+//    var worldSelectButton3 = SKSpriteNode(imageNamed: "silo_icon")
 //    
 //    var musicButton = SKSpriteNode(imageNamed: "Music Button")
 //    var closeButton = SKSpriteNode(imageNamed: "Close Button")
-//    
-//    var worldSelectWindow = SKSpriteNode(imageNamed: "High Scores Window")
-//    var highScoresWindow = SKSpriteNode(imageNamed: "High Scores Window")
-//    var optionsWindow = SKSpriteNode(imageNamed: "Options Window")
 //    
 //    var lastMenuOpened: String!
 //    
@@ -37,29 +36,57 @@
 //    var smallButtonSize = CGSize(width: 160, height: 160)
 //    
 //    var isButtonTouched: String!
-//    
-//    var buttonContainer = [SKSpriteNode]()
-//    
+//
 //    var hasBeenOpened: Bool = false
 //    
+//    var highScoresLabel: SKSpriteNode!
+//    var scoreFrame: SKSpriteNode!
+//    var scoreFrameContainer = [SKSpriteNode]()
 //    var hsLabel: SKLabelNode!
+//    var hsNumberLabel: SKLabelNode!
+//    var separator: SKSpriteNode!
+//    
 //    var labelContainer = [SKLabelNode]()
+//    var mainUIContainer = [SKNode]()
+//    var highScoresUIContainer = [SKNode]()
+//    var optionsUIContainer = [SKNode]()
+//    
+//    var sceneCamera = SKCameraNode()
+//    var cameraFocusNode: SKSpriteNode!
+//    
 //    
 //    override func didMove(to view: SKView) {
+//        
+//        cameraFocusNode = SKSpriteNode()
+//        cameraFocusNode.position = CGPoint(x: frame.midX, y: frame.midY)
+//        cameraFocusNode.size = CGSize(width: 1, height: 1)
+//        cameraFocusNode.alpha = 0
+//        addChild(cameraFocusNode)
+//        
+//        self.camera = sceneCamera
+//        
 //        createButtons()
-////        scoreList()
+//        createHighScores()
+//        createOptions()
 //        
 //        background = SKSpriteNode(imageNamed: "Title Screen BG")
-//        background.size = CGSize(width: frame.size.width, height: frame.size.width * 2.5)
-//        background.position = CGPoint(x: frame.size.width, y: frame.size.height)
-//        background.anchorPoint = CGPoint(x: 1, y: 1)
+//        background.size = CGSize(width: frame.size.height * 1.5, height: frame.size.height)
+//        background.position = CGPoint(x: view.center.x, y: view.center.y)
+//        background.anchorPoint = CGPoint(x: 0.5, y: 0.5)
 //        background.zPosition = -10
 //        addChild(background)
+//        mainUIContainer.append(logo)
 //        
 //        logo.size = CGSize(width: logo.size.width * 2.5, height: logo.size.height * 2.5)
 //        logo.position = CGPoint(x: frame.midX, y: frame.maxY / 1.4)
 //        addChild(logo)
 //    }
+//    
+//    func setCamera(xPosition: CGFloat) {
+//        let moveTo = SKAction.move(to: CGPoint(x: xPosition, y: frame.midY), duration: 0.40)
+//        cameraFocusNode.run(moveTo)
+//    }
+//    
 //    
 //    func addBlur(node: SKSpriteNode) {
 //        let blurNode = SKEffectNode()
@@ -71,6 +98,7 @@
 //        self.addChild(blurNode)
 //        node.removeFromParent()
 //        blurNode.addChild(node)
+//        blurNode.name = "blur"
 //        
 //        blurNode.run(SKAction.customAction(withDuration: 0.10, actionBlock: { (node: SKNode, elapsedTime: CGFloat) in
 //            blurNode.filter = CIFilter(name: "CIGaussianBlur", parameters: ["inputRadius": elapsedTime * 30])
@@ -78,75 +106,22 @@
 //    }
 //    
 //    
-//    func shrink(node: SKSpriteNode) {
-//        let shrink = SKAction.scale(to: 0.75, duration: 0.1)
-//        let fade = SKAction.run {
-//            node.colorBlendFactor = 0.35
-//        }
-//        let sequence = SKAction.sequence([shrink, fade])
-//        
-//        node.run(sequence)
-//    }
-//    
-//    
-//    func expand(node: SKSpriteNode) {
-//        
-//        let wait = SKAction.wait(forDuration: 0.11)
-//        let expand = SKAction.scale(to: 1.1, duration: 0.075)
-//        let normal = SKAction.scale(to: 1.0, duration: 0.1)
-//        let defaultColor = SKAction.run {
-//            node.alpha = 1
-//            node.colorBlendFactor = 0
-//        }
-//        let sequence = SKAction.sequence([expand, defaultColor, normal])
-//        
-//        node.run(sequence)
-//    }
-//    
-//    func rotateCW(node: SKSpriteNode) {
-//        let rotateCW = SKAction.rotate(byAngle: -.pi, duration: 0.4)
-//        
-//        node.run(rotateCW)
-//    }
-//    
-//    func rotateCCW(node: SKSpriteNode) {
-//        let rotateCCW = SKAction.rotate(byAngle: .pi, duration: 0.4)
-//        
-//        node.run(rotateCCW)
-//    }
-//    
-//    
-//    func moveUIX(node: SKSpriteNode, duration: TimeInterval) {
-//        let nodePositionX = node.position.x
-//        
-//        let moveNode = SKAction.move(to: CGPoint(x: -nodePositionX, y: node.position.y), duration: duration)
-//        node.run(moveNode)
-//    }
-//    
-//    func moveUIY(node: SKSpriteNode, duration: TimeInterval) {
-//        let nodePositionY = node.position.y
-//        
-//        let moveNode = SKAction.move(to: CGPoint(x: node.position.x, y: -nodePositionY), duration: duration)
-//        node.run(moveNode)
-//    }
-//    
-//    
 //    func createButtons() {
-//        playButton.size = CGSize(width: frame.size.width / 2, height: frame.size.width / 4)
+//        playButton.size = CGSize(width: 192, height: 84) // // non number size is CGSize(width: frame.size.width / 2, height: frame.size.width / 4)
 //        playButton.position = CGPoint(x: frame.midX, y: frame.midY / 1.1)
 //        playButton.colorBlendFactor = 0
 //        playButton.zPosition = 10
 //        playButton.name = "Play"
 //        addChild(playButton)
-//        buttonContainer.append(playButton)
+//        mainUIContainer.append(playButton)
 //        
-//        highScoresButton.size = CGSize(width: frame.size.width / 2, height: frame.size.width / 4)
+//        highScoresButton.size = CGSize(width: 192, height: 84) // non number size is CGSize(width: frame.size.width / 2, height: frame.size.width / 4)
 //        highScoresButton.position = CGPoint(x: playButton.position.x, y: playButton.position.y - 130)
 //        highScoresButton.colorBlendFactor = 0
 //        highScoresButton.zPosition = 10
 //        highScoresButton.name = "High Scores"
 //        addChild(highScoresButton)
-//        buttonContainer.append(highScoresButton)
+//        mainUIContainer.append(highScoresButton)
 //        
 //        optionsButton.size = CGSize(width: frame.size.width / 4, height: frame.size.width / 4)
 //        optionsButton.position = CGPoint(x: frame.maxX - (frame.size.width * 0.10), y: frame.minY + (frame.size.height * 0.05))
@@ -154,14 +129,56 @@
 //        optionsButton.zPosition = 10
 //        optionsButton.name = "Options"
 //        addChild(optionsButton)
-//        buttonContainer.append(optionsButton)
+//        mainUIContainer.append(optionsButton)
+//        
+//        worldSelectButton1.size = CGSize(width: worldSelectButton1.texture!.size().width * 2, height: worldSelectButton1.texture!.size().height * 2)
+//        worldSelectButton1.alpha = 0
+//        worldSelectButton1.position = CGPoint(x: frame.midX * 3, y: frame.maxY * 0.75)
+//        worldSelectButton1.zPosition = 55
+//        worldSelectButton1.name = "World 1"
+//        addChild(worldSelectButton1)
+//        worldSelectContainer.append(worldSelectButton1)
+//        
+//        worldSelectButton2.size = CGSize(width: worldSelectButton2.texture!.size().width * 2, height: worldSelectButton2.texture!.size().height * 2)
+//        worldSelectButton2.alpha = 0
+//        worldSelectButton2.position = CGPoint(x: worldSelectButton1.position.x, y: worldSelectButton1.position.y - worldSelectButton1.size.height * 1.2)
+//        worldSelectButton2.zPosition = 55
+//        worldSelectButton2.name = "World 2"
+//        addChild(worldSelectButton2)
+//        worldSelectContainer.append(worldSelectButton2)
+//        
+//        worldSelectButton3.size = CGSize(width: worldSelectButton3.texture!.size().width * 2, height: worldSelectButton3.texture!.size().height * 2)
+//        worldSelectButton3.alpha = 0
+//        worldSelectButton3.position = CGPoint(x: worldSelectButton1.position.x, y: worldSelectButton2.position.y - worldSelectButton1.size.height * 1.2)
+//        worldSelectButton3.zPosition = 55
+//        worldSelectButton3.name = "World 3"
+//        addChild(worldSelectButton3)
+//        worldSelectContainer.append(worldSelectButton3)
 //    }
 //    
 //    
-//    func startGame() {
+////    func startGame() {
+////        if let skView = self.view {
+////
+////            Assets.sharedInstance.preloadGameAssets()
+////
+////            guard let scene = GameSceneNewNew(fileNamed: "GameSceneNewNew") else { return }
+////            scene.size = skView.frame.size
+////
+////            let transition = SKTransition.fade(withDuration: 1.5)
+////
+////            scene.scaleMode = .aspectFill
+////
+////            skView.presentScene(scene, transition: transition)
+////        }
+////    }
+//    
+//    func worldSelectMenu() {
 //        if let skView = self.view {
 //            
-//            guard let scene = GameSceneNew(fileNamed: "GameSceneNew") else { return }
+//            Assets.sharedInstance.preloadGameAssets()
+//            
+//            guard let scene = WorldSelect(fileNamed: "WorldSelect") else { return }
 //            scene.size = skView.frame.size
 //            
 //            let transition = SKTransition.fade(withDuration: 1.5)
@@ -171,206 +188,288 @@
 //            skView.presentScene(scene, transition: transition)
 //        }
 //    }
+//
 //    
-//    // World Select Window as well as World Select Buttons
-//    
-//    func worldSelect(isOpen: Bool) {
+//    func worldSelect() {
 //        // worldSelectButton 2 original position: CGPoint(x: frame.midX, y: worldSelectButton1.position.y - worldSelectButton1.position.y / 2)
-//        
-////        guard isOpen == true else { return }
-//        print(hasBeenOpened)
-//        
-//        
-//        worldSelectButton1.size = CGSize(width: worldSelectButton1.texture!.size().width * 2.5, height: worldSelectButton1.texture!.size().height * 2.5)
-//        worldSelectButton1.alpha = 1
-//        worldSelectButton1.position = CGPoint(x: frame.midX, y: -frame.maxY * 0.65)
-//        worldSelectButton1.zPosition = 55
-//        worldSelectButton1.name = "World 1"
-//        
-//        worldSelectButton2.size = CGSize(width: worldSelectButton2.texture!.size().width * 2.5, height: worldSelectButton2.texture!.size().height * 2.5)
-//        worldSelectButton2.alpha = 1
-//        worldSelectButton2.position = CGPoint(x: frame.midX, y: worldSelectButton1.position.y + worldSelectButton1.size.height * 1.2)
-//        worldSelectButton2.zPosition = 55
-//        worldSelectButton2.name = "World 2"
-//        
-//        closeButton.size = CGSize(width: 64, height: 64)
-//        closeButton.alpha = 1
-//        closeButton.position = CGPoint(x: frame.midX, y: frame.maxY * 0.9)
-//        closeButton.zPosition = 55
-//        closeButton.name = "Close Button"
-//        
-//        hasBeenOpened = false // terrible solution to node sizes being multiplied from each time the method is called
-//        
-////        let moveButton1 = SKAction.move(to: CGPoint(x: frame.midX, y: frame.maxY / 1.5), duration: 0.25)
-////        let moveButton2 = SKAction.move(to: CGPoint(x: frame.midX, y: (frame.maxY / 1.5) - (frame.maxY / 1.5) / 2), duration: 0.25)
-////
-////        let scalePrelim = SKAction.scale(to: CGSize(width: 1, height: 1), duration: 0)
-////        let scaleMenuUp = SKAction.scale(to: CGSize(width: 512, height: 1024), duration: 0.1)
-////
-////        let menuSequence = SKAction.sequence([scalePrelim, scaleMenuUp])
-//
-//        if isOpen == true {
-//            addChild(closeButton)
-//            addChild(worldSelectButton1)
-//            addChild(worldSelectButton2)
-//            
-//            
-////            worldSelectButton1.run(moveButton1)
-////            worldSelectButton2.run(moveButton2)
-//            
-//            moveUIY(node: worldSelectButton1, duration: 0.25)
-//            moveUIY(node: worldSelectButton2, duration: 0.25)
-//            
-//            moveUIX(node: logo, duration: 0.25)
-//            moveUIX(node: playButton, duration: 0.25)
-//            moveUIX(node: highScoresButton, duration: 0.25)
-//            moveUIX(node: optionsButton, duration: 0.25)
-//            
-//            
-////            logo.isHidden = true
-////            playButton.isHidden = true
-////            highScoresButton.isHidden = true
-////            optionsButton.isHidden = true
-//            addBlur(node: background)
-//            lastMenuOpened = "WorldSelect"
-//            
-////            highScoresWindow.run(menuSequence)
-////            closeButton.run(scaleSeq)
-//        } else if isOpen == false {
-//            guard lastMenuOpened == "WorldSelect" else { return }
-//            
-//            worldSelectButton1.removeFromParent()
-//            worldSelectButton2.removeFromParent()
-//            closeButton.removeFromParent()
-//            background.removeFromParent()
-//            addChild(background)
-//            
-//            logo.isHidden = false
-//            playButton.isHidden = false
-//            highScoresButton.isHidden = false
-//            optionsButton.isHidden = false
-//            
-//            moveUIY(node: worldSelectButton1, duration: 0.25)
-//            moveUIY(node: worldSelectButton2, duration: 0.25)
-//            
-//            moveUIX(node: logo, duration: 0.25)
-//            moveUIX(node: playButton, duration: 0.25)
-//            moveUIX(node: highScoresButton, duration: 0.25)
-//            moveUIX(node: optionsButton, duration: 0.25)
-//        }
-//    }
-//    
-//
-//    func highScoresMenu(isOpen: Bool) {
-//        
-//        highScoresWindow.size = CGSize(width: highScoresWindow.size.width, height: highScoresWindow.size.height)
-//        highScoresWindow.setScale(1.7)
-//        highScoresWindow.alpha = 1
-//        highScoresWindow.color = .green
-//        highScoresWindow.position = CGPoint(x: frame.midX, y: frame.midY)
-//        highScoresWindow.zPosition = 50
 //        
 //        closeButton.size = CGSize(width: 48, height: 48)
 //        closeButton.alpha = 1
-//        closeButton.position = CGPoint(x: highScoresWindow.frame.maxX - 10, y: highScoresWindow.frame.maxY - 10)
-//        closeButton.zPosition = 55
+//        closeButton.position = CGPoint(x: frame.maxX * 1.88, y: frame.maxY * 0.95)
+//        closeButton.zPosition = 80
 //        closeButton.name = "Close Button"
+//        addChild(closeButton)
 //        
-//        let scalePrelim = SKAction.scale(to: CGSize(width: 1, height: 1), duration: 0)
-//        let scaleMenuUp = SKAction.scale(to: CGSize(width: highScoresWindow.size.width, height: highScoresWindow.size.height), duration: 0.065)
-//        let fadeIn = SKAction.fadeAlpha(to: 0.55, duration: 0.065)
+//        setCamera(xPosition: frame.midX * 3)
 //        
-//        let menuSequence = SKAction.sequence([scalePrelim, scaleMenuUp])
+//        var timeIncrease: TimeInterval = 0.0
 //        
-//        var scores = GameplayStats.shared.getScore()?.sorted(by: >)
+//        for node in mainUIContainer { Animations.shared.fadeAlphaOut(node: node, duration: 0.25) }
+//        for wsButton in worldSelectContainer { Animations.shared.fadeAlphaIn(node: wsButton, duration: 0.25, waitTime: 0.2 + timeIncrease); timeIncrease += 0.15 }
+//        
+////        Animations.shared.moveUIX(node: worldSelectButton1, duration: 0.25)
+////        Animations.shared.moveUIX(node: worldSelectButton2, duration: 0.25)
+////
+////        Animations.shared.moveUIX(node: logo, duration: 0.25)
+////        Animations.shared.moveUIX(node: playButton, duration: 0.25)
+////        Animations.shared.moveUIX(node: highScoresButton, duration: 0.25)
+////        Animations.shared.moveUIX(node: optionsButton, duration: 0.25)
+//        
+////        addBlur(node: background)
+//        
+//        lastMenuOpened = "WorldSelect"
+//    }
+//    
+//    func createHighScores() {
+//        
+//        highScoresLabel = SKSpriteNode(imageNamed: "highscores_label")
+//        highScoresLabel.position = CGPoint(x: frame.midX, y: frame.maxY * 0.88)
+//        highScoresLabel.size = CGSize(width: highScoresLabel.size.width * 1.2, height: highScoresLabel.size.height * 1.2)
+//        highScoresLabel.zPosition = 80
+//        highScoresLabel.alpha = 0
+//        addChild(highScoresLabel)
+//        
+//        let sortedScores = GameplayStats.shared.getScore()?.sorted(by: >)
+//        var scoresList = sortedScores ?? [Int](repeating: 0, count: 10)
+//        let scoresAsString = scoresList.map(String.init)
+//        
+//        print("Scores: \(scoresList)")
+////        var pos = 0
+//        
+//        let scoresArray = [Int](repeating: 0, count: 10) // preset array for testing
 //        
 //        
-//        if isOpen == true {
-//            addChild(highScoresWindow)
-//            addChild(closeButton)
-//            
-//            logo.isHidden = true
-//            playButton.isHidden = true
-//            highScoresButton.isHidden = true
-//            optionsButton.isHidden = true
-//            
-//            highScoresWindow.run(menuSequence)
-//            scoreList()
-//            
-//            lastMenuOpened = "HighScores"
-//            
-//            
-//            
+//        print(scoresAsString)
 //
-////            closeButton.run(scaleSeq)
-//        } else if isOpen == false {
-//            guard lastMenuOpened == "HighScores" else { return }
-//            highScoresWindow.removeFromParent()
-//            closeButton.removeFromParent()
+//        // This works, but it doesn't space out the strings in an added position yet
+//        
+//        var counter: CGFloat = 0
+//        var counter2: Int = 0 // counter doesn't compile (takes too long) when set as an Int. This is a temp solution
+//        
+//        for highscore in scoresAsString.prefix(10) { // scoresAsString[0...4] is also a valid call
+//            scoreFrame = SKSpriteNode(imageNamed: "high_scores_frame")
+//            scoreFrame.position = CGPoint(x: self.frame.midX, y: ((frame.maxY - 100) + (counter * -120)) / 1.2)
+//            scoreFrame.size = CGSize(width: scoreFrame.texture!.size().width * 2.5, height: scoreFrame.texture!.size().height * 2.5)
+//            scoreFrame.alpha = 1
+//            scoreFrame.zPosition = 150
+//            scoreFrame.name = "scoreFrame"
+////            addChild(scoreFrame)
+//            scoreFrameContainer.append(scoreFrame)
 //            
+//            hsLabel = SKLabelNode(fontNamed: "Paper Plane Font")
+//            hsLabel.text = highscore as String
+//            hsLabel.alpha = 0
+//            hsLabel.fontSize = 40
+//            hsLabel.fontColor = SKColor.white
+//            hsLabel.position = CGPoint(x: self.frame.maxX * 0.8, y: ((frame.maxY) + (counter * -75)) / 1.25)
+//            hsLabel.zPosition = 160
+//            hsLabel.name = "hsLabel"
+//            addChild(hsLabel)
+//            labelContainer.append(hsLabel)
 //            
-//            logo.isHidden = false
-//            playButton.isHidden = false
-//            highScoresButton.isHidden = false
-//            optionsButton.isHidden = false
+//            hsNumberLabel = SKLabelNode(fontNamed: "Paper Plane Font")
+//            hsNumberLabel.text = "\(counter2 + 1)."
+//            hsNumberLabel.alpha = 0
+//            hsNumberLabel.fontSize = 40
+//            hsNumberLabel.fontColor = .white
+//            hsNumberLabel.position = CGPoint(x: self.frame.maxX * 0.2, y: hsLabel.position.y)
+//            hsNumberLabel.zPosition = 160
+//            hsNumberLabel.name = "hsNumberLabel"
+//            addChild(hsNumberLabel)
+//            labelContainer.append(hsNumberLabel)
 //            
-//            for label in labelContainer {
-//                label.removeFromParent()
-//            }
+//            separator = SKSpriteNode(imageNamed: "Separator")
+//            separator.position = CGPoint(x: self.frame.midX, y: hsLabel.position.y - 40)
+//            separator.size = CGSize(width: frame.width / 1.2, height: separator.size.height)
+//            separator.alpha = 0
+//            separator.colorBlendFactor = 0.5
+//            addChild(separator)
+//            highScoresUIContainer.append(separator)
+//            
+//            highScoresUIContainer.append(scoreFrame)
+//            highScoresUIContainer.append(hsLabel)
+//            highScoresUIContainer.append(hsNumberLabel)
+//            highScoresUIContainer.append(separator)
+//            counter += 1
+//            counter2 += 1
 //        }
 //    }
 //    
 //    
-//    func optionsMenu(isOpen: Bool) {
-//        optionsWindow.size = CGSize(width: frame.size.width * 0.8, height: frame.size.width * 0.8)
-//        optionsWindow.alpha = 1
-//        optionsWindow.color = .green
-//        optionsWindow.position = CGPoint(x: frame.midX, y: frame.midY)
-//        optionsWindow.zPosition = 50
+//    func showHighScoresMenu() {
+//        lastMenuOpened = "HighScores"
 //        
-//        musicButton.size = CGSize(width: 96, height: 96)
-//        musicButton.alpha = 1
-//        musicButton.position = CGPoint(x: optionsWindow.frame.midX, y: optionsWindow.frame.midY)
+//        closeButton.size = CGSize(width: 48, height: 48)
+//        closeButton.alpha = 0
+//        closeButton.position = CGPoint(x: frame.maxX * 0.9, y: frame.maxY * 0.95)
+//        closeButton.zPosition = 80
+//        closeButton.name = "Close Button"
+//        highScoresUIContainer.append(closeButton)
+//        
+//        var timeIncrease: TimeInterval = 0.0
+//        
+//        let fadeOutMainUI = SKAction.run { [unowned self] in
+//            for node in self.mainUIContainer { Animations.shared.fadeAlphaOut(node: node, duration: 0.25) }
+//        }
+//            
+//        let wait = SKAction.wait(forDuration: 0.3)
+//        
+//        let fadeInScores = SKAction.run { [unowned self] in
+//            Animations.shared.fadeAlphaIn(node: self.highScoresLabel, duration: 0.3, waitTime: 0)
+//            for node in self.highScoresUIContainer {
+//                Animations.shared.fadeAlphaIn(node: node, duration: 0.4, waitTime: 0.15 + timeIncrease); timeIncrease += 0.025
+//            }
+//        }
+//        
+//        let sequence = SKAction.sequence([fadeOutMainUI, wait, fadeInScores])
+//        let dimBG = SKAction.colorize(with: .darkGray, colorBlendFactor: 0.75, duration: 0.6)
+//        
+//        run(sequence)
+//        Animations.shared.colorize(node: background, color: .darkGray, colorBlendFactor: 0.75, duration: 0.6)
+//        
+//        addChild(closeButton)
+//    }
+//    
+//    
+//    
+////    func highScoresMenu() {
+////        lastMenuOpened = "HighScores"
+////
+////        closeButton.size = CGSize(width: 48, height: 48)
+////        closeButton.alpha = 1
+////        closeButton.position = CGPoint(x: -frame.midX, y: frame.maxY * 0.12)
+////        closeButton.zPosition = 80
+////        closeButton.name = "Close Button"
+////
+////        setCamera(xPosition: -frame.midX)
+////
+////        var timeIncrease: TimeInterval = 0.0
+////
+////        Animations.shared.fadeAlphaIn(node: highScoresLabel, duration: 0.35, waitTime: 0)
+////        Animations.shared.fadeAlphaOut(node: logo, duration: 0.5)
+////        for buttons in mainUIContainer { Animations.shared.fadeAlphaOut(node: buttons, duration: 0.5) }
+////
+////        for nodes in highScoresUIContainer {
+////            Animations.shared.fadeAlphaIn(node: nodes, duration: 0.25, waitTime: 0.25 + timeIncrease); timeIncrease += 0.05
+////        }
+////
+////        addChild(closeButton)
+////    }
+//    
+//    func createOptions() {
+//        
+//        musicButton.size = CGSize(width: 64, height: 64)
+//        musicButton.alpha = 0
+//        musicButton.position = CGPoint(x: frame.midX / 3, y: frame.maxY * 0.75)
 //        musicButton.zPosition = 55
 //        musicButton.name = "Music Button"
+//        addChild(musicButton)
+//        optionsUIContainer.append(musicButton)
+//        
+//        let musicLabel = SKLabelNode(fontNamed: "Paper Plane Font")
+//        musicLabel.text = "Music"
+//        musicLabel.position = CGPoint(x: frame.midX, y: musicButton.position.y)
+//        musicLabel.fontSize = 48
+//        musicLabel.alpha = 0
+//        addChild(musicLabel)
+//        optionsUIContainer.append(musicLabel)
 //        
 //        if isMusicMuted == false {
 //            musicButton.texture = SKTexture(imageNamed: "Music Button")
 //        } else if isMusicMuted == true {
 //            musicButton.texture = SKTexture(imageNamed: "Music Button Muted")
 //        }
+//    }
+//    
+//    
+//    func showOptionsMenu() {
+//        lastMenuOpened = "Options"
 //        
 //        closeButton.size = CGSize(width: 48, height: 48)
-//        closeButton.alpha = 1
-//        closeButton.position = CGPoint(x: optionsWindow.frame.maxX * 0.98, y: optionsWindow.frame.maxY)
-//        closeButton.zPosition = 55
+//        closeButton.alpha = 0
+//        closeButton.position = CGPoint(x: frame.maxX * 0.90, y: frame.maxY * 0.95)
+//        closeButton.zPosition = 80
 //        closeButton.name = "Close Button"
+//        addChild(closeButton)
+//        optionsUIContainer.append(closeButton)
 //        
-//        let scalePrelim = SKAction.scale(to: CGSize(width: 1, height: 1), duration: 0)
-//        let scaleMenuUp = SKAction.scale(to: CGSize(width: frame.size.width * 0.8, height: frame.size.width * 0.8), duration: 0.065)
-//        let scaleButtonsUp = SKAction.scale(to: CGSize(width: 96, height: 96), duration: 0.065)
+//        let fadeOutMainUI = SKAction.run { [unowned self] in
+//            for node in self.mainUIContainer { Animations.shared.fadeAlphaOut(node: node, duration: 0.25) }
+//        }
+//            
+//        let wait = SKAction.wait(forDuration: 0.3)
 //        
-//        let scaleSeq = SKAction.sequence([scalePrelim, scaleButtonsUp])
-//        let menuSequence = SKAction.sequence([scalePrelim, scaleMenuUp])
+//        let fadeInOptions = SKAction.run { [unowned self] in
+//            for node in self.optionsUIContainer {
+//                Animations.shared.fadeAlphaIn(node: node, duration: 0.4, waitTime: 0)
+//            }
+//        }
 //        
-//        if isOpen == true {
-//            addChild(optionsWindow)
-//            addChild(closeButton)
-//            addChild(musicButton)
+//        let sequence = SKAction.sequence([fadeOutMainUI, wait, fadeInOptions])
+//        let dimBG = SKAction.colorize(with: .darkGray, colorBlendFactor: 0.75, duration: 0.6)
+//        
+//        run(sequence)
+//        background.run(dimBG)
+//    }
+//    
+//    
+//    func closeMenu() {
+//        
+//        switch lastMenuOpened {
+//        case "WorldSelect":
+//            closeButton.removeFromParent()
+//            background.removeFromParent()
+//            childNode(withName: "blur")?.removeFromParent() // blurNode from addBlur() was never being removed, only its child node: background
+//            addChild(background)
 //            
-//            optionsWindow.run(menuSequence)
-//            musicButton.run(scaleSeq)
-////            closeButton.run(scaleSeq)
-//            lastMenuOpened = "Options"
+//            Animations.shared.fadeAlphaIn(node: logo, duration: 0.6, waitTime: 0)
+//            for buttons in mainUIContainer { Animations.shared.fadeAlphaIn(node: buttons, duration: 0.6, waitTime: 0) }
+//            for wsButton in worldSelectContainer { Animations.shared.fadeAlphaOut(node: wsButton, duration: 0.5) }
 //            
-//        } else if isOpen == false {
-//            guard lastMenuOpened == "Options" else { return }
+//            setCamera(xPosition: frame.midX)
 //            
-//            optionsWindow.removeFromParent()
-//            musicButton.removeFromParent()
+//        case "HighScores":
+//            
 //            closeButton.removeFromParent()
 //            
-//            rotateCCW(node: optionsButton)
+//            let fadeOutScores = SKAction.run { [unowned self] in
+//                Animations.shared.fadeAlphaOut(node: highScoresLabel, duration: 0.25)
+//                for nodes in highScoresUIContainer { Animations.shared.fadeAlphaOut(node: nodes, duration: 0.25) }
+//            }
+//            let wait = SKAction.wait(forDuration: 0.4)
+//            
+//            let fadeInMainMenu = SKAction.run { [unowned self] in
+//                for node in mainUIContainer { Animations.shared.fadeAlphaIn(node: node, duration: 0.35, waitTime: 0) }
+//            }
+//            
+//            let sequence = SKAction.sequence([fadeOutScores, wait, fadeInMainMenu])
+//            let undimBG = SKAction.colorize(with: .darkGray, colorBlendFactor: 0.0, duration: 0.6)
+//            
+//            run(sequence)
+//            background.run(undimBG)
+//            
+//        case "Options":
+//            
+//            closeButton.removeFromParent()
+//            
+//            let fadeOutOptions = SKAction.run { [unowned self] in
+//                for nodes in optionsUIContainer { Animations.shared.fadeAlphaOut(node: nodes, duration: 0.25) }
+//            }
+//            let wait = SKAction.wait(forDuration: 0.4)
+//            
+//            let fadeInMainMenu = SKAction.run { [unowned self] in
+//                for node in mainUIContainer { Animations.shared.fadeAlphaIn(node: node, duration: 0.35, waitTime: 0) }
+//            }
+//            
+//            let sequence = SKAction.sequence([fadeOutOptions, wait, fadeInMainMenu])
+//            let undimBG = SKAction.colorize(with: .darkGray, colorBlendFactor: 0.0, duration: 0.6)
+//            
+//            run(sequence)
+//            background.run(undimBG)
+//            
+//            Animations.shared.rotateCCW(node: optionsButton)
+//        default:
+//            break
 //        }
 //    }
 //    
@@ -382,44 +481,49 @@
 //            
 ////            guard isButtonTouched == false else { return }
 //            
-////            for node in buttonContainer {
+////            for node in mainUIContainer {
 ////                if node.name == "Play" || node.name == "Options" {
 ////                    shrink(node: node)
 ////                }
 ////            }
 //            
 //            if touchedNode.name == "Play" {
-//                shrink(node: playButton)
+//                Animations.shared.shrink(node: playButton)
 //                isButtonTouched = "Play"
 //            }
 //            
 //            if touchedNode.name == "World 1" {
-//                shrink(node: worldSelectButton1)
+//                Animations.shared.shrink(node: worldSelectButton1)
 //                isButtonTouched = "World 1"
 //            }
 //            
 //            if touchedNode.name == "World 2" {
-//                shrink(node: worldSelectButton2)
+//                Animations.shared.shrink(node: worldSelectButton2)
 //                isButtonTouched = "World 2"
 //            }
 //            
+//            if touchedNode.name == "World 3" {
+//                Animations.shared.shrink(node: worldSelectButton3)
+//                isButtonTouched = "World 3"
+//            }
+//            
 //            if touchedNode.name == "High Scores" {
-//                shrink(node: highScoresButton)
+//                Animations.shared.shrink(node: highScoresButton)
 //                isButtonTouched = "High Scores"
 //            }
 //            
 //            if touchedNode.name == "Options" {
-//                rotateCW(node: optionsButton)
+//                Animations.shared.rotateCW(node: optionsButton)
 //                isButtonTouched = "Options"
 //            }
 //            
 //            if touchedNode.name == "Music Button" {
-//                shrink(node: musicButton)
+//                Animations.shared.shrink(node: musicButton)
 //                isButtonTouched = "Music Button"
 //            }
 //            
 //            if touchedNode.name == "Close Button" {
-//                shrink(node: closeButton)
+//                Animations.shared.shrink(node: closeButton)
 //                isButtonTouched = "Close Button"
 //            }
 //        }
@@ -432,10 +536,22 @@
 //            let touchedNode = atPoint(location)
 //            
 //            if touchedNode.name == "Play" && isButtonTouched == "Play" {
-//                worldSelect(isOpen: true)
-//                expand(node: playButton)
+//                
+//                let expand = SKAction.run { [unowned self] in
+//                    Animations.shared.expand(node: playButton)
+//                }
+//                let wait = SKAction.wait(forDuration: 0.075)
+//                let openWorldSelect = SKAction.run { [unowned self] in
+//                    worldSelectMenu()
+//                }
+//                let sequence = SKAction.sequence([expand, wait, openWorldSelect])
+//                
+//                run(sequence)
+//                
+//                for node in mainUIContainer { node.isUserInteractionEnabled = true }
+//                
 //            } else if touchedNode.name != "Play" && isButtonTouched == "Play" {
-//                expand(node: playButton)
+//                Animations.shared.expand(node: playButton)
 //            }
 //            
 //            
@@ -443,11 +559,11 @@
 //                world = "classic"
 //                theme = "castle"
 //                
-//                startGame()
-//                expand(node: worldSelectButton1)
+////                startGame()
+//                Animations.shared.expand(node: worldSelectButton1)
 //    
 //            } else if touchedNode.name != "World 1" && isButtonTouched == "World 1" {
-//                expand(node: worldSelectButton1)
+//                Animations.shared.expand(node: worldSelectButton1)
 //            }
 //            
 //            
@@ -455,37 +571,49 @@
 //                world = "classic"
 //                theme = "cave"
 //                
-//                startGame()
-//                expand(node: worldSelectButton2)
+////                startGame()
+//                Animations.shared.expand(node: worldSelectButton2)
 //    
 //            } else if touchedNode.name != "World 2" && isButtonTouched == "World 2" {
-//                expand(node: worldSelectButton2)
+//                Animations.shared.expand(node: worldSelectButton2)
+//            }
+//            
+//            
+//            if touchedNode.name == "World 3" && isButtonTouched == "World 3" {
+//                world = "classic"
+//                theme = "silo"
+//                
+////                startGame()
+//                Animations.shared.expand(node: worldSelectButton3)
+//    
+//            } else if touchedNode.name != "World 3" && isButtonTouched == "World 3" {
+//                Animations.shared.expand(node: worldSelectButton3)
 //            }
 //            
 //            
 //            if touchedNode.name == "High Scores" && isButtonTouched == "High Scores" {
-//                highScoresMenu(isOpen: true)
-//                expand(node: highScoresButton)
-//                for node in buttonContainer { node.isUserInteractionEnabled = true }
+//                showHighScoresMenu()
+//                Animations.shared.expand(node: highScoresButton)
+//                for node in mainUIContainer { node.isUserInteractionEnabled = true }
 //                
 //            } else if touchedNode.name != "High Scores" && isButtonTouched == "High Scores" {
-//                expand(node: highScoresButton)
+//                Animations.shared.expand(node: highScoresButton)
 //            }
 //            
 //            
 //            if touchedNode.name == "Options" && isButtonTouched == "Options" {
-//                optionsMenu(isOpen: true)
+//                showOptionsMenu()
 //                lastMenuOpened = "Options"
-//                for node in buttonContainer { node.isUserInteractionEnabled = true }
+//                for node in mainUIContainer { node.isUserInteractionEnabled = true }
 //                
 //            } else if touchedNode.name != "Options" && isButtonTouched == "Options" {
-//                rotateCCW(node: optionsButton)
+//                Animations.shared.rotateCCW(node: optionsButton)
 //            }
 //            
 //            
 //            if touchedNode.name == "Music Button" && isButtonTouched == "Music Button" {
 //                isMusicMuted.toggle()
-//                expand(node: musicButton)
+//                Animations.shared.expand(node: musicButton)
 //                
 //                if isMusicMuted == false {
 //                    musicButton.texture = SKTexture(imageNamed: "Music Button")
@@ -494,27 +622,22 @@
 //                }
 //                
 //            } else if touchedNode.name != "Music Button" && isButtonTouched == "Music Button" {
-//                expand(node: musicButton)
+//                Animations.shared.expand(node: musicButton)
 //            }
 //            
 //            
 //            if touchedNode.name == "Close Button" && isButtonTouched == "Close Button" {
-//                optionsMenu(isOpen: false)
-//                highScoresMenu(isOpen: false) // may be buggy\
-//                worldSelect(isOpen: false) // button sizes multiply in size because function is being called more than once. Find another way to do it or where calling it more than once won't multiply node sizes over and over again.
-//                expand(node: closeButton)
+//                closeMenu()
+//                Animations.shared.expand(node: closeButton)
 //                
 //                lastMenuOpened = ""
 //                
-//                for node in buttonContainer { node.isUserInteractionEnabled = false }
+//                for node in mainUIContainer { node.isUserInteractionEnabled = false }
 //            } else if touchedNode.name != "Close Button" && isButtonTouched == "Close Button" {
-//                expand(node: closeButton)
+//                Animations.shared.expand(node: closeButton)
 //            }
 //            
-//            
 //            isButtonTouched = ""
-////            expand(node: playButton)
-////            expand(node: optionsButton)
 //        }
 //    }
 //    
@@ -528,7 +651,7 @@
 //    
 //    
 //    override func update(_ currentTime: TimeInterval) {
-//        
+//        sceneCamera.position = cameraFocusNode.position
 ////        print(buttonIsPressed)
 ////        print(optionsButton.isUserInteractionEnabled)
 //    }
@@ -537,31 +660,5 @@
 //    deinit {
 //        print("All Good")
 //    }
-//    
-//    func scoreList() {
-//        let scores = GameplayStats.shared.getScore()!.sorted(by: >) as? [Int]
-//        print("Scores: \([scores])")
-//        var pos = 0
-//        
-//        let scoreArray = [1, 2, 3, 4, 5]
-//        let scoresAsString = scoreArray.map(String.init)
-//
-//        // This works, but it doesn't space out the strings in an added position yet
-//        
-//        for highscore in scoresAsString {
-//            hsLabel = SKLabelNode(fontNamed: "Times New Roman")
-//            hsLabel.text = highscore as String
-//            hsLabel.fontSize = 50
-//            hsLabel.fontColor = SKColor.white
-//            hsLabel.position = CGPoint(x: self.frame.midX, y: (frame.maxY - 50) / 1.1)
-//            hsLabel.zPosition = 1000
-//            hsLabel.name = "hsLabel"
-//            self.addChild(hsLabel)
-//            labelContainer.append(hsLabel)
-//        }
-////
-//        
-//    }
-//    
-//    
 //}
+//

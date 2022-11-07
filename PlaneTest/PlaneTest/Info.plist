@@ -25,6 +25,7 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>Asai-Analogue.ttf</string>
+		<string>Paper Plane Font.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>Main</string>

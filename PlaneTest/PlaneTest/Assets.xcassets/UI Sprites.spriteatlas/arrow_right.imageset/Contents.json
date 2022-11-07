@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "highscores_logo.png",
+      "filename" : "arrow_right.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "highscores_logo@2x.png",
+      "filename" : "arrow_right@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

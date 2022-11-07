@@ -14,12 +14,14 @@ let gameGetScore = "getScore"
 let gameScore = "gameScore"
 let gameHighScore = "highScore"
 
-var highScores: [Int] = [0, 0, 0, 0, 0]
+var highScores = [Int?](repeating: 0, count: 10)
 
 class GameplayStats {
     
     private init() {}
     static let shared = GameplayStats()
+    
+    
     
     func setScore(_ value: Int) {
     

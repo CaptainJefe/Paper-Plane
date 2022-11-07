@@ -15,6 +15,9 @@
 		D6925D2125D284EE00D6AA90 /* ObjectProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6925D2025D284EE00D6AA90 /* ObjectProperties.swift */; };
 		D6974235259C4C58006F6049 /* Asai-Analogue.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6974234259C4C58006F6049 /* Asai-Analogue.ttf */; };
 		D69BFEAF25AD79D500B99E91 /* GameScene Backup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */; };
+		D6A513E62913534F0098F2DD /* WorldSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513E52913534F0098F2DD /* WorldSelect.swift */; };
+		D6A513E8291353660098F2DD /* WorldSelect.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6A513E7291353660098F2DD /* WorldSelect.sks */; };
+		D6A513EC2914D3E70098F2DD /* Paper Plane Font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */; };
 		D6AD9B3A24EFBAA000503775 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AD9B3924EFBAA000503775 /* AppDelegate.swift */; };
 		D6AD9B3C24EFBAA000503775 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6AD9B3B24EFBAA000503775 /* GameScene.sks */; };
 		D6AD9B4024EFBAA000503775 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AD9B3F24EFBAA000503775 /* GameScene.swift */; };
@@ -43,6 +46,9 @@
 		D6925D2025D284EE00D6AA90 /* ObjectProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectProperties.swift; sourceTree = "<group>"; };
 		D6974234259C4C58006F6049 /* Asai-Analogue.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Asai-Analogue.ttf"; sourceTree = "<group>"; };
 		D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameScene Backup.swift"; sourceTree = "<group>"; };
+		D6A513E52913534F0098F2DD /* WorldSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSelect.swift; sourceTree = "<group>"; };
+		D6A513E7291353660098F2DD /* WorldSelect.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = WorldSelect.sks; sourceTree = "<group>"; };
+		D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Paper Plane Font.ttf"; sourceTree = "<group>"; };
 		D6AD9B3624EFBAA000503775 /* PlaneTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlaneTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6AD9B3924EFBAA000503775 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D6AD9B3B24EFBAA000503775 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -78,6 +84,7 @@
 		D6974233259C4C41006F6049 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */,
 				D6E06BAD25C95168005FAC98 /* Paper Plane.mp3 */,
 				D6974234259C4C58006F6049 /* Asai-Analogue.ttf */,
 			);
@@ -103,27 +110,29 @@
 		D6AD9B3824EFBAA000503775 /* PlaneTest */ = {
 			isa = PBXGroup;
 			children = (
-				D6EED41C28E15CFD00A7F703 /* SKSmoothCameraNode.swift */,
+				D6AD9B3924EFBAA000503775 /* AppDelegate.swift */,
+				D6AD9B4124EFBAA000503775 /* GameViewController.swift */,
+				D68007642537E8DA0090D16D /* TitleScreen.swift */,
+				D68007692537F2CE0090D16D /* TitleScreen.sks */,
+				D6A513E52913534F0098F2DD /* WorldSelect.swift */,
+				D6A513E7291353660098F2DD /* WorldSelect.sks */,
 				D6EED41628DF40AF00A7F703 /* GameSceneNewNew.swift */,
 				D6EED41828DF458000A7F703 /* GameSceneNewNew.sks */,
-				D6AD9B3924EFBAA000503775 /* AppDelegate.swift */,
-				D68007642537E8DA0090D16D /* TitleScreen.swift */,
-				D6EED41428DDBA7500A7F703 /* TitleScreenDuplicate.swift */,
-				D68007692537F2CE0090D16D /* TitleScreen.sks */,
 				D6AD9B3F24EFBAA000503775 /* GameScene.swift */,
 				D6AD9B3B24EFBAA000503775 /* GameScene.sks */,
 				D6EED40E28D5835900A7F703 /* GameSceneNew.swift */,
 				D6EED41028D58A8700A7F703 /* GameSceneNew.sks */,
-				D6EED41228D6DCBC00A7F703 /* Animations.swift */,
-				D6925D2025D284EE00D6AA90 /* ObjectProperties.swift */,
-				D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */,
-				D6AD9B4124EFBAA000503775 /* GameViewController.swift */,
-				D6B2F13E290DB04C0054D747 /* Assets.swift */,
 				D60153C227AE86340076CF76 /* GameplayStats.swift */,
+				D6EED41228D6DCBC00A7F703 /* Animations.swift */,
+				D6B2F13E290DB04C0054D747 /* Assets.swift */,
+				D6925D2025D284EE00D6AA90 /* ObjectProperties.swift */,
 				D6EED41A28E04CFB00A7F703 /* Temp Test Code.swift */,
+				D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */,
+				D6EED41C28E15CFD00A7F703 /* SKSmoothCameraNode.swift */,
+				D6EED41428DDBA7500A7F703 /* TitleScreenDuplicate.swift */,
+				D6800753252AE6100090D16D /* DestroyPlane.sks */,
 				D6AD9B4624EFBAA000503775 /* Assets.xcassets */,
 				D6800754252AE6100090D16D /* Assets.xcassets */,
-				D6800753252AE6100090D16D /* DestroyPlane.sks */,
 				D6AD9B4324EFBAA000503775 /* Main.storyboard */,
 				D6AD9B4824EFBAA000503775 /* LaunchScreen.storyboard */,
 				D6AD9B4B24EFBAA000503775 /* Info.plist */,
@@ -191,12 +200,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6AD9B4524EFBAA000503775 /* Main.storyboard in Resources */,
+				D6A513E8291353660098F2DD /* WorldSelect.sks in Resources */,
 				D6AD9B3C24EFBAA000503775 /* GameScene.sks in Resources */,
 				D6EED41928DF458000A7F703 /* GameSceneNewNew.sks in Resources */,
 				D680076A2537F2CE0090D16D /* TitleScreen.sks in Resources */,
 				D6EED41128D58A8700A7F703 /* GameSceneNew.sks in Resources */,
 				D6AD9B4724EFBAA000503775 /* Assets.xcassets in Resources */,
 				D6974235259C4C58006F6049 /* Asai-Analogue.ttf in Resources */,
+				D6A513EC2914D3E70098F2DD /* Paper Plane Font.ttf in Resources */,
 				D6AD9B4A24EFBAA000503775 /* LaunchScreen.storyboard in Resources */,
 				D6E06BAE25C95168005FAC98 /* Paper Plane.mp3 in Resources */,
 				D6800756252AE6100090D16D /* Assets.xcassets in Resources */,
@@ -217,6 +228,7 @@
 				D60153C327AE86340076CF76 /* GameplayStats.swift in Sources */,
 				D6AD9B4224EFBAA000503775 /* GameViewController.swift in Sources */,
 				D6EED41D28E15CFD00A7F703 /* SKSmoothCameraNode.swift in Sources */,
+				D6A513E62913534F0098F2DD /* WorldSelect.swift in Sources */,
 				D6EED41328D6DCBC00A7F703 /* Animations.swift in Sources */,
 				D69BFEAF25AD79D500B99E91 /* GameScene Backup.swift in Sources */,
 				D6B2F13F290DB04C0054D747 /* Assets.swift in Sources */,

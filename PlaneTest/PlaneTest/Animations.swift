@@ -34,6 +34,12 @@ class Animations: SKNode {
         }))
     }
     
+    // Colorizes a SKNode -- Primarily used to darken/dim
+    func colorize(node: SKNode, color: UIColor, colorBlendFactor: CGFloat, duration: TimeInterval) {
+        let colorize = SKAction.colorize(with: color, colorBlendFactor: colorBlendFactor, duration: duration)
+        node.run(colorize)
+    }
+    
     // Shrinks a node for a short time. Best used alongside the expand() method
     func shrink(node: SKSpriteNode) {
         let shrink = SKAction.scale(to: 0.75, duration: 0.1)
@@ -44,6 +50,7 @@ class Animations: SKNode {
         
         node.run(sequence)
     }
+    
     
     // Expands/enlarges a node for short time. Best used alongside the shrink() method
     func expand(node: SKSpriteNode) {
