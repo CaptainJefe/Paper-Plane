@@ -98,10 +98,12 @@ class Animations: SKNode {
     }
     
     // Fades a nodes alpha value to 0 over a duration
-    func fadeAlphaOut(node: SKNode, duration: TimeInterval) {
+    func fadeAlphaOut(node: SKNode, duration: Double, waitTime: Double) {
+        let wait = SKAction.wait(forDuration: waitTime)
         let fadeOut = SKAction.fadeOut(withDuration: duration)
+        let seq = SKAction.sequence([wait, fadeOut])
         
-        node.run(fadeOut)
+        node.run(seq)
     }
     
     // Fades a nodes alpha value to 1 over a duration
@@ -120,5 +122,28 @@ class Animations: SKNode {
         let menuSequence = SKAction.sequence([scalePrelim, scaleMenuUp])
         
         node.run(menuSequence)
+    }
+    
+    func animateTexture(node: SKSpriteNode, texture: [SKTexture]) {
+        let animate = SKAction.animate(with: texture, timePerFrame: 0.02)
+        node.run(animate)
+    }
+    
+    func animateIntructions(node: SKSpriteNode) {
+        
+        let animate1 = SKAction.animate(with: howToSeq1, timePerFrame: 0.1)
+        let animateBridge1 = SKAction.animate(with: howToBridge1, timePerFrame: 0.1)
+        let animate2 = SKAction.animate(with: howToSeq2, timePerFrame: 0.1)
+        let animateBridge2 = SKAction.animate(with: howToBridge2, timePerFrame: 0.1)
+        
+        let waitOneSec = SKAction.wait(forDuration: 1)
+        let waitQuarterSec = SKAction.wait(forDuration: 0.25)
+        
+        let seq = SKAction.sequence([waitQuarterSec, animate1, waitOneSec, animateBridge1, waitQuarterSec, animate2, waitOneSec, animateBridge2])
+        
+        let repeatForever = SKAction.repeatForever(seq)
+        
+        node.run(repeatForever)
+        
     }
 }

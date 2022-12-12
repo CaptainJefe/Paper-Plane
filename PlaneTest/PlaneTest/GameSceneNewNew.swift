@@ -20,14 +20,21 @@ import SpriteKit
 
 class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 
+    var howToPlay: SKSpriteNode!
+    var firstTimePlaying: Bool = true
+    var gotIt: SKSpriteNode!
+    
     var buttonRight: SKSpriteNode!
     var buttonLeft: SKSpriteNode!
+    var leftControl: SKSpriteNode!
+    var rightControl: SKSpriteNode!
     var pauseButton: SKSpriteNode!
 
     var pauseMenu = SKSpriteNode(imageNamed: "Pause Window")
-    var gameOverWindow = SKSpriteNode(imageNamed: "Game Over Window")
-    var homeButton = SKSpriteNode(imageNamed: "Home Button")
-    var restartButton = SKSpriteNode(imageNamed: "Restart Button")
+    var gameOverWindow: SKSpriteNode!
+    var homeButton = SKSpriteNode(imageNamed: "home_button_2")
+    var restartButton = SKSpriteNode(imageNamed: "restart_button")
+    var levelSelectButton = SKSpriteNode(imageNamed: "level_select_button")
 
     var backgroundPieces: [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode()]
     var backgroundSpeed: CGFloat = 1.0 { didSet { for background in backgroundPieces { background.speed = backgroundSpeed } } }
@@ -36,6 +43,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
     var cloudPieces: [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode()]
     var skyTexture: SKTexture!
     var cloudsTexture: SKTexture! { didSet { for clouds in cloudPieces { clouds.texture = cloudsTexture } } }
+    var sky: SKSpriteNode!
 
     var wallPieces: [SKSpriteNode] = [SKSpriteNode(imageNamed: "Wall"), SKSpriteNode(imageNamed: "Wall")]
     var wallPieces2: [SKSpriteNode] = [SKSpriteNode(imageNamed: "Wall"), SKSpriteNode(imageNamed: "Wall")]
@@ -65,6 +73,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
     var scoreLabel: SKLabelNode!
     var score = 0 { didSet { scoreLabel.text = "\(score)" } }
     var finalScoreLabel: SKLabelNode!
+    var bestScore: SKLabelNode!
 
     var gameIsPaused = false
 
@@ -93,7 +102,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
     var firstPlatform: SKTexture! { didSet { firstPlatformSize = firstPlatform.size() } }
     var secondPlatform: SKTexture!
     var thirdPlatform: SKTexture!
-    var transitionPlatform = SKTexture(imageNamed: "desert_transition_platform")
+    var transitionPlatform = SKTexture(imageNamed: "transition_platform")
     var firstPlatformSize: CGSize!
 
     var castleSky: SKTexture!
@@ -101,11 +110,16 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 
     var toggleNoClip: SKSpriteNode!
     var noClipLabel: SKLabelNode!
-    var noClip = true { didSet { noClipLabel.text = "Collision: \(!noClip)" } }
+    var noClip = false { didSet { noClipLabel.text = "Collision: \(!noClip)" } }
 
     var initialPlatforms = true
     
     var increaseWorldSpeed: Int = 0
+    
+    var gameOverUIContainer = [SKNode]()
+    
+    var countdownLabel: SKLabelNode!
+    var count = 3 { didSet { countdownLabel.text = "\(count)" } }
 
     override func didMove(to view: SKView) {
         
@@ -122,19 +136,24 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
         platformGap = frame.midY - (((transitionPlatform.size().height * 3) * CGFloat(min(platformCount,2))))
         
         initiateTextures()
+        preGame()
         createPlane()
         createLabels()
         createButtons()
-        
         createBackground()
         createSky()
         platformer()
-//        print("tran plat: \(transitionPlatform.size().height)")
-//        createWalls()
-//        startPlatforms()
         planeMode()
         musicPlayer()
 //        createSky()
+        
+        let barrier = SKSpriteNode()
+        barrier.position = CGPoint(x: frame.midX, y: frame.midY)
+        barrier.size = CGSize(width: frame.size.width, height: frame.size.height)
+        barrier.zPosition = 750
+        barrier.color = .clear
+        barrier.name = "barrier"
+        addChild(barrier)
 
         toggleNoClip = SKSpriteNode(imageNamed: "no_clip")
         toggleNoClip.size = CGSize(width: 48, height: 48)
@@ -157,12 +176,108 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
         physicsWorld.contactDelegate = self
 
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
+        
+        // lets every node initialize before attempting to pause them
+        let wait = SKAction.wait(forDuration: 0.001)
+        let runAction = SKAction.run { [unowned self] in
+            for node in self.nodeArray {
+                node.isPaused = true
+            }
+        }
+        let seq = SKAction.sequence([wait, runAction])
+        
+        run(seq)
+        
 
 //        print(frame.width)
 //        print(frame.height)
 //        print(" maxY when lowestPlatform \(self.frame.midY - self.transitionPlatform.size().height * 3)")
 //        print("transition size \(transitionPlatform.size())")
     }
+    
+    func preGame() {
+        
+        for node in backgroundPieces {
+            node.color = .darkGray
+            node.colorBlendFactor = 0.65
+        }
+        
+        for node in cloudPieces {
+            node.color = .darkGray
+            node.colorBlendFactor = 0.65
+        }
+        
+        if firstTimePlaying == true {
+            howToPlay = SKSpriteNode(imageNamed: "how_to0")
+            howToPlay.size = CGSize(width: howToPlay.size.width * 0.65, height: howToPlay.size.height * 0.65)
+            howToPlay.position = CGPoint(x: frame.midX, y: frame.midY)
+            howToPlay.zPosition = 800
+            howToPlay.name = "howToPlay"
+            addChild(howToPlay)
+            
+            gotIt = SKSpriteNode(imageNamed: "got_it")
+            gotIt.size = CGSize(width: gotIt.size.width, height: gotIt.size.height)
+            gotIt.position = CGPoint(x: howToPlay.frame.midX, y: frame.maxY * 0.33)
+            gotIt.zPosition = 810
+            gotIt.name = "gotIt"
+            addChild(gotIt)
+            
+            Animations.shared.animateIntructions(node: howToPlay)
+        } else {
+            countdown()
+        }
+        
+//        let startLabel = SKLabelNode(fontNamed: "Paper Plane Font")
+//        startLabel.position = CGPoint(x: frame.midX, y: frame.maxY * 0.65)
+//        startLabel.fontSize = 50
+//        startLabel.text = "Tap to start"
+//        startLabel.color = .black
+//        startLabel.alpha = 0
+//        startLabel.zPosition = 70
+//        startLabel.name = "startLabel"
+//        addChild(startLabel)
+//
+//        let fadeAlphaTo = SKAction.fadeAlpha(to: 0.5, duration: 1)
+//        let fadeIn = SKAction.fadeIn(withDuration: 1.5)
+//        let wait = SKAction.wait(forDuration: 1.2)
+//        let fadeOut = SKAction.fadeOut(withDuration: 1.5)
+//        let fadeInFadeOut = SKAction.sequence([fadeIn, wait, fadeOut])
+//        let repeatForever = SKAction.repeatForever(fadeInFadeOut)
+//
+//        startLabel.run(repeatForever)
+    }
+    
+    func countdown() {
+        
+        countdownLabel = SKLabelNode(fontNamed: "Paper Plane Font")
+        countdownLabel.position = CGPoint(x: frame.midX, y: frame.maxY * 0.75)
+        countdownLabel.zPosition = 300
+        countdownLabel.fontSize = 100
+        countdownLabel.text = "\(count)"
+        addChild(countdownLabel)
+        
+        let decreaseCounter = SKAction.sequence([SKAction.wait(forDuration: 1), SKAction.run { [unowned self] in
+            self.count -= 1
+        }])
+        
+        let endCountdown = SKAction.run { [unowned self] in
+            self.countdownLabel.removeFromParent()
+            childNode(withName: "barrier")?.removeFromParent()
+            
+            for node in backgroundPieces {
+                node.colorBlendFactor = 0
+            }
+            
+            for node in cloudPieces {
+                node.colorBlendFactor = 0
+            }
+            
+            self.start()
+        }
+        
+        run(SKAction.sequence([SKAction.repeat(decreaseCounter, count: 3), endCountdown]))
+    }
+
     
     func animateBackground(texture: SKTexture) {
         let fadeOut = SKAction.fadeOut(withDuration: 0.4)
@@ -193,35 +308,35 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             secondBackground = SKTexture(imageNamed: "castle_background_1")
             thirdBackground = SKTexture(imageNamed: "castle_background_3")
 
-            firstPlatform = SKTexture(imageNamed: "desert_platform_1")
-            secondPlatform = SKTexture(imageNamed: "desert_platform_2")
-            thirdPlatform = SKTexture(imageNamed: "desert_platform_3")
-            transitionPlatform = SKTexture(imageNamed: "desert_transition_platform")
+            firstPlatform = SKTexture(imageNamed: "platform_1")
+            secondPlatform = SKTexture(imageNamed: "platform_2")
+            thirdPlatform = SKTexture(imageNamed: "platform_3")
+            transitionPlatform = SKTexture(imageNamed: "transition_platform")
             
             skyTexture = SKTexture(imageNamed: "sky_background_day")
             cloudsTexture = SKTexture(imageNamed: "clouds_day")
 
         case "chasm":
-            firstBackground = SKTexture(imageNamed: "cave_background_1")
-            secondBackground = SKTexture(imageNamed: "cave_background_2")
-            thirdBackground = SKTexture(imageNamed: "cave_background_3")
+            firstBackground = SKTexture(imageNamed: "chasm_background_1")
+            secondBackground = SKTexture(imageNamed: "chasm_background_2")
+            thirdBackground = SKTexture(imageNamed: "chasm_background_3")
 
-            firstPlatform = SKTexture(imageNamed: "desert_platform_1")
-            secondPlatform = SKTexture(imageNamed: "desert_platform_2")
-            thirdPlatform = SKTexture(imageNamed: "desert_platform_3")
-            transitionPlatform = SKTexture(imageNamed: "desert_transition_platform")
+            firstPlatform = SKTexture(imageNamed: "platform_1")
+            secondPlatform = SKTexture(imageNamed: "platform_2")
+            thirdPlatform = SKTexture(imageNamed: "platform_3")
+            transitionPlatform = SKTexture(imageNamed: "transition_platform")
 
             skyTexture = SKTexture(imageNamed: "sky_background_night")
             
         case "silo":
             firstBackground = SKTexture(imageNamed: "silo_background_1")
             secondBackground = SKTexture(imageNamed: "silo_background_2")
-            thirdBackground = SKTexture(imageNamed: "silo_background_1")
+            thirdBackground = SKTexture(imageNamed: "silo_background_3")
 
-            firstPlatform = SKTexture(imageNamed: "desert_platform_1")
-            secondPlatform = SKTexture(imageNamed: "desert_platform_2")
-            thirdPlatform = SKTexture(imageNamed: "desert_platform_3")
-            transitionPlatform = SKTexture(imageNamed: "desert_transition_platform")
+            firstPlatform = SKTexture(imageNamed: "platform_1")
+            secondPlatform = SKTexture(imageNamed: "platform_2")
+            thirdPlatform = SKTexture(imageNamed: "platform_3")
+            transitionPlatform = SKTexture(imageNamed: "transition_platform")
 
             skyTexture = SKTexture(imageNamed: "sky_background_night")
             cloudsTexture = SKTexture(imageNamed: "clouds_night")
@@ -265,6 +380,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 
 
     func musicPlayer() {
+        print(isMusicMuted)
         let bgMusic = SKAudioNode(fileNamed: "Paper Plane.mp3")
         addChild(bgMusic)
 
@@ -449,7 +565,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
     }
 
     func createSky() {
-        let sky = SKSpriteNode()
+        sky = SKSpriteNode()
         sky.texture = skyTexture
         sky.position = CGPoint(x: frame.midX, y: frame.midY)
         sky.size = CGSize(width: frame.size.width, height: frame.size.height)
@@ -485,6 +601,10 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
         let max = CGFloat(frame.width / 3)
         var xPosition = CGFloat.random(in: -min ... max)
         
+        let randMin: CGFloat = 0
+        let randMax: CGFloat = 8
+        var platformRandomizer = CGFloat.random(in: randMin ... randMax)
+        
 //        print("min \(min)")
 //        print("max \(max)")
 //        print("xPosition \(xPosition)")
@@ -494,10 +614,12 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
         if platformCount >= 19 && platformCount < 30 {
             setPlatforms(currentStage: 0)
             xPosition = frame.width * 0.125
+            platformRandomizer = 0
         } else if platformCount == 30 {
             setPlatforms(currentStage: 2)
         } else if platformCount >= 49 && platformCount < 60 {
             setPlatforms(currentStage: 0)
+            platformRandomizer = 0
             xPosition = frame.width * 0.125
         } else if platformCount == 60 {
             setPlatforms(currentStage: 3)
@@ -537,9 +659,25 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
         scoreNode.zPosition = 100
         scoreNode.name = "scoreDetect"
         scoreNode.speed = platformSpeed
+        
 
-
-        let newNodes: Set<SKSpriteNode> = [platformLeft, platformRight, scoreNode]
+        // randomizer need to check if one or both platform needs to be added
+        
+        let newNodes: Set<SKSpriteNode>
+        
+        platformRandomizer = 0 // always spawns a set of them
+        
+        switch platformRandomizer {
+        case 0...2:
+            newNodes = [platformLeft, platformRight, scoreNode]
+        case 3...5:
+            newNodes = [platformRight, scoreNode]
+        case 6...8:
+            newNodes = [platformLeft, scoreNode]
+        default:
+            newNodes = [platformLeft, platformRight, scoreNode]
+        }
+        
         for node in newNodes {
             platformGroup.insert(node)
         }
@@ -614,6 +752,26 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
         buttonRight.name = "buttonRight"
         buttonRight.zPosition = 200
         addChild(buttonRight)
+        
+        // leftControl and rightControl are fake button. Just a UI piece to indicate where to tap for movement
+        
+        leftControl = SKSpriteNode(imageNamed: "left_control_button")
+        leftControl.size = CGSize(width: 96, height: 96)
+        leftControl.position = CGPoint(x: frame.maxX * 0.2, y: frame.maxY * 0.15)
+        leftControl.alpha = 1
+        leftControl.zPosition = 190
+        leftControl.name = "leftControl"
+        leftControl.isHidden = UserDefaults.standard.bool(forKey: "areControlsHidden")
+        addChild(leftControl)
+        
+        rightControl = SKSpriteNode(imageNamed: "right_control_button")
+        rightControl.size = CGSize(width: 96, height: 96)
+        rightControl.position = CGPoint(x: frame.maxX * 0.8, y: frame.maxY * 0.15)
+        rightControl.alpha = 1
+        rightControl.zPosition = 190
+        rightControl.name = "rightControl"
+        rightControl.isHidden = UserDefaults.standard.bool(forKey: "areControlsHidden")
+        addChild(rightControl)
 
         pauseButton = SKSpriteNode(imageNamed: "Pause Button")
         pauseButton.size = CGSize(width: 48, height: 48)
@@ -648,7 +806,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
     }
 
 
-    func restartGame(node: SKSpriteNode) {
+    func restartGame() {
         if let scene = GameSceneNewNew(fileNamed: "GameSceneNewNew") {
             scene.scaleMode = .aspectFill
             scene.size = self.view!.frame.size
@@ -658,7 +816,7 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
     }
 
 
-    func backToTitle(node: SKSpriteNode) {
+    func backToTitle() {
         if let skView = self.view {
 
             guard let scene = TitleScreen(fileNamed: "TitleScreen") else { return }
@@ -673,129 +831,162 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             buttonRight.removeFromParent()
         }
     }
-
-
-    func pause(isPaused: Bool) {
-        if isPaused == true {
-            for node in nodeArray {
-                node.isPaused = true
-            }
-            // self.view?.isPaused = isPaused
-        } else if isPaused == false {
-            for node in nodeArray {
-                node.isPaused = false
-            }
+    
+    func worldSelectMenu() {
+        if let skView = self.view {
+            
+            Assets.sharedInstance.preloadGameAssets()
+            
+            guard let scene = WorldSelect(fileNamed: "WorldSelect") else { return }
+            scene.size = skView.frame.size
+            
+            let transition = SKTransition.fade(withDuration: 1.5)
+            
+            scene.scaleMode = .aspectFill
+            
+            skView.presentScene(scene, transition: transition)
         }
     }
 
-
     func pauseGame() {
-        pauseMenu.size = CGSize(width: 1, height: 1)
-//        pauseMenu.color = .black
-        pauseMenu.alpha = 1
-//        pauseMenu.texture = nil
-        pauseMenu.zPosition = 210
-        pauseMenu.position = CGPoint(x: frame.midX, y: frame.midY + 100)
+        scoreLabel.alpha = 0
 
-        homeButton.size = CGSize(width: 80, height: 80)
-//        homeButton.texture = nil
+        homeButton.size = CGSize(width: 48, height: 48)
         homeButton.zPosition = 220
-        homeButton.position = CGPoint(x: pauseMenu.frame.midX + pauseMenu.frame.midX / 3, y: pauseMenu.frame.midY)
+        homeButton.position = CGPoint(x: frame.maxX * 0.35, y: frame.maxY * 0.90)
         homeButton.name = "homeButton"
 
-        restartButton.size = CGSize(width: 80, height: 80)
+        restartButton.size = CGSize(width: 48, height: 48)
         restartButton.zPosition = 220
-//        restartButton.texture = nil
-        restartButton.position = CGPoint(x: pauseMenu.frame.midX - pauseMenu.frame.midX / 3, y: pauseMenu.frame.midY)
+        restartButton.position = CGPoint(x: frame.maxX * 0.65, y: frame.maxY * 0.90)
         restartButton.name = "restartButton"
+        
+        levelSelectButton.size = CGSize(width: 48, height: 48)
+        levelSelectButton.zPosition = 220
+        levelSelectButton.position = CGPoint(x: frame.maxX * 0.5, y: frame.maxY * 0.9)
+        levelSelectButton.name = "levelSelectButton"
+        
+        let pauseLabel = SKLabelNode(fontNamed: "Paper Plane Font")
+        pauseLabel.position = CGPoint(x: frame.midX, y: frame.maxY * 0.65)
+        pauseLabel.text = "Paused"
+        pauseLabel.fontSize = 48
+        pauseLabel.zPosition = 220
+        pauseLabel.name = "pauseLabel"
 
-        let scalePrelim = SKAction.scale(to: CGSize(width: 1, height: 1), duration: 0)
-        let scalePauseMenuUp = SKAction.scale(to: CGSize(width: 300, height: 150), duration: 0.065)
-        let scaleMenuButtonsUp = SKAction.scale(to: CGSize(width: 80, height: 80), duration: 0.065)
+        addChild(homeButton)
+        addChild(restartButton)
+        addChild(levelSelectButton)
+        addChild(pauseLabel)
 
-        let scaleSeq = SKAction.sequence([scalePrelim, scaleMenuButtonsUp])
+        for node in nodeArray {
+            node.isPaused = true
+        }
+    }
+    
+    func closePauseMenu() {
+        scoreLabel.alpha = 1
+        homeButton.removeFromParent()
+        restartButton.removeFromParent()
+        levelSelectButton.removeFromParent()
+        childNode(withName: "pauseLabel")?.removeFromParent()
 
-        if gameIsPaused == false {
-            addChild(pauseMenu)
-            addChild(homeButton)
-            addChild(restartButton)
-
-            pauseMenu.run(scalePauseMenuUp)
-            homeButton.run(scaleSeq)
-            restartButton.run(scaleSeq)
-
-            gameIsPaused.toggle()
-            pause(isPaused: gameIsPaused)
-
-        } else if gameIsPaused == true {
-            pauseMenu.removeFromParent()
-            homeButton.removeFromParent()
-            restartButton.removeFromParent()
-
-            gameIsPaused.toggle()
-            pause(isPaused: gameIsPaused)
+        for node in nodeArray {
+            node.isPaused = false
         }
     }
 
 
     func gameOver() {
-        childNode(withName: "continueLabel")?.removeFromParent()
+        guard gameState == 1 else { return }
         
-        gameOverWindow.size = CGSize(width: 1, height: 1)
-        gameOverWindow.alpha = 1
+        buttonLeft.removeFromParent()
+        buttonRight.removeFromParent()
+        
+        SavedData.shared.setScore(score)
+        SavedData.shared.setScore(score)
+        
+        SavedData.shared.setGamesPlayed()
+        
+        let sortedScores = SavedData.shared.getScore()?.sorted(by: >).first
+        let scoreAsString = sortedScores.map(String.init)
+        
+        childNode(withName: "continueLabel")?.removeFromParent()
+        childNode(withName: "gameOverLabel")?.removeFromParent()
+        
+        let gameOverLabel = SKSpriteNode(imageNamed: "game_over_label")
+        gameOverLabel.position = CGPoint(x: frame.midX, y: frame.maxY * 0.825)
+        gameOverLabel.size = CGSize(width: gameOverLabel.size.width * 1.5, height: gameOverLabel.size.height * 1.5)
+        gameOverLabel.zPosition = 200
+        gameOverLabel.alpha = 0
+        gameOverLabel.name = "gameOverLabel"
+        addChild(gameOverLabel)
+        
+        gameOverWindow = SKSpriteNode(imageNamed: "game_over_window")
+        gameOverWindow.position = CGPoint(x: frame.midX, y: frame.midY * 1.1)
+        gameOverWindow.size = CGSize(width: gameOverWindow.size.width * 1.8, height: gameOverWindow.size.height * 1.8)
         gameOverWindow.zPosition = 170
-        gameOverWindow.position = CGPoint(x: frame.midX, y: frame.midY + 100)
+        gameOverWindow.alpha = 0
+        gameOverWindow.name = "gameOverWindow"
+        addChild(gameOverWindow)
+        gameOverUIContainer.append(gameOverWindow)
 
-        homeButton.size = CGSize(width: 96, height: 96)
-        homeButton.zPosition = 210
-        homeButton.position = CGPoint(x: gameOverWindow.frame.midX + 75, y: gameOverWindow.frame.midY - 75)
-        homeButton.name = "homeButton"
-
-        restartButton.size = CGSize(width: 96, height: 96)
+        restartButton.size = CGSize(width: 80, height: 80)
+        restartButton.position = CGPoint(x: gameOverWindow.frame.minX + (restartButton.frame.width / 2), y: gameOverWindow.frame.minY - 70)
+        restartButton.alpha = 0
         restartButton.zPosition = 210
-        restartButton.position = CGPoint(x: gameOverWindow.frame.midX - 75, y: gameOverWindow.frame.midY - 75)
         restartButton.name = "restartButton"
+        addChild(restartButton)
+        gameOverUIContainer.append(restartButton)
+        
+        levelSelectButton.size = CGSize(width: 80, height: 80)
+        levelSelectButton.position = CGPoint(x: gameOverWindow.frame.midX, y: gameOverWindow.frame.minY - 70)
+        levelSelectButton.alpha = 0
+        levelSelectButton.zPosition = 210
+        levelSelectButton.name = "levelSelectButton"
+        addChild(levelSelectButton)
+        gameOverUIContainer.append(levelSelectButton)
+        
+        homeButton.size = CGSize(width: 80, height: 80)
+        homeButton.position = CGPoint(x: gameOverWindow.frame.maxX - (homeButton.frame.width / 2), y: gameOverWindow.frame.minY - 70)
+        homeButton.zPosition = 210
+        homeButton.alpha = 0
+        homeButton.name = "homeButton"
+        addChild(homeButton)
+        gameOverUIContainer.append(homeButton)
 
-        finalScoreLabel = SKLabelNode(fontNamed: "Paper Plane Font")
-        finalScoreLabel.text = "Score"
-        finalScoreLabel.color = .darkGray
-        finalScoreLabel.fontSize = 70
-        finalScoreLabel.position = CGPoint(x: gameOverWindow.frame.midX, y: gameOverWindow.frame.maxY * 1.27)
-        finalScoreLabel.zPosition = 210
+        bestScore = SKLabelNode(fontNamed: "Paper Plane Font")
+        bestScore.text = scoreAsString
+        bestScore.alpha = 0
+        bestScore.zPosition = 210
+        bestScore.fontSize = 65
+        bestScore.fontColor = SKColor.white
+        bestScore.position = CGPoint(x: gameOverWindow.frame.midX, y: gameOverWindow.frame.midY - 65)
+        bestScore.name = "bestScore"
+        addChild(bestScore)
+        gameOverUIContainer.append(bestScore)
+        
+//        let moveScore = SKAction.move(to: CGPoint(x: gameOverWindow.frame.midX, y: gameOverWindow.frame.maxY * 0.9), duration: 1.3)
+//        let pulseUp = SKAction.scale(to: 2.0, duration: 0.8)
+//        let pulseDown = SKAction.scale(to: 1, duration: 0.8)
+//
+//        let pulseSeq = SKAction.sequence([pulseUp, pulseDown])
 
-        let scalePrelim = SKAction.scale(to: CGSize(width: 1, height: 1), duration: 0)
-        let scaleGameOverMenuUp = SKAction.scale(to: CGSize(width: frame.size.width - frame.size.width / 6, height: frame.size.width - frame.size.width / 6), duration: 0.065)
-        let scaleMenuButtonsUp = SKAction.scale(to: CGSize(width: 96, height: 96), duration: 0.065)
+//        scoreLabel.run(moveScore)
+//        scoreLabel.run(pulseSeq)
 
-        let scaleSeq = SKAction.sequence([scalePrelim, scaleMenuButtonsUp])
+        scene!.speed = 1.00
+        
+        scoreLabel.position = CGPoint(x: gameOverWindow.frame.midX, y: gameOverWindow.frame.midY + 80)
 
-        let moveScore = SKAction.move(to: CGPoint(x: gameOverWindow.frame.midX, y: gameOverWindow.frame.maxY * 1.15), duration: 1.6)
-        let pulseUp = SKAction.scale(to: 2.0, duration: 0.8)
-        let pulseDown = SKAction.scale(to: 1, duration: 0.8)
-
-        let pulseSeq = SKAction.sequence([pulseUp, pulseDown])
-
-
-        if gameState == 1 {
-
-            GameplayStats.shared.setScore(score)
-            
-            scene!.speed = 1.00
-
-            addChild(gameOverWindow)
-            addChild(homeButton)
-            addChild(restartButton)
-
-            gameOverWindow.run(scaleGameOverMenuUp)
-            homeButton.run(scaleSeq)
-            restartButton.run(scaleSeq)
-
-            addChild(finalScoreLabel)
-            scoreLabel.run(moveScore)
-            scoreLabel.run(pulseSeq)
-
-            gameIsPaused = true
-            pause(isPaused: gameIsPaused)
+        for node in gameOverUIContainer {
+            Animations.shared.fadeAlphaIn(node: node, duration: 0.75, waitTime: 0)
+        }
+        
+        Animations.shared.fadeAlphaIn(node: gameOverLabel, duration: 0.75, waitTime: 0)
+        Animations.shared.fadeAlphaIn(node: scoreLabel, duration: 0.75, waitTime: 0)
+        
+        for node in nodeArray {
+            node.isPaused = true
         }
     }
 
@@ -844,6 +1035,26 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
                 addChild(particles)
             }
             
+            leftControl.removeFromParent()
+            rightControl.removeFromParent()
+            
+            Animations.shared.fadeAlphaOut(node: scoreLabel, duration: 0.5, waitTime: 0)
+            
+            // SKAction.colorize doesn't work for some reason
+            for node in backgroundPieces {
+                node.color = .darkGray
+                node.colorBlendFactor = 0.65
+            }
+            
+            for node in cloudPieces {
+                node.color = .darkGray
+                node.colorBlendFactor = 0.65
+            }
+            
+            
+            sky.color = .darkGray
+            sky.colorBlendFactor = 0.65
+            
             let continueLabel = SKLabelNode(fontNamed: "Paper Plane Font")
             continueLabel.position = CGPoint(x: frame.midX, y: frame.maxY * 0.65)
             continueLabel.fontSize = 45
@@ -876,7 +1087,11 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 
 
     func start() {
-        scene?.view?.isPaused = false
+//        scene?.view?.isPaused = false
+            
+        for node in self.children as [SKNode] {
+            node.isPaused = false
+        }
     }
 
 
@@ -904,7 +1119,6 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-
 
 
         for touch in touches {
@@ -947,9 +1161,19 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
                 isButtonTouched = "restartButton"
             }
 
+            if touchedNode.name == "levelSelectButton" {
+                Animations.shared.shrink(node: levelSelectButton)
+                isButtonTouched = "levelSelectButton"
+            }
+            
             if touchedNode.name == "noClip" {
                 Animations.shared.shrink(node: toggleNoClip)
                 isButtonTouched = "noClip"
+            }
+            
+            if touchedNode.name == "gotIt" {
+                Animations.shared.shrink(node: gotIt)
+                isButtonTouched = "gotIt"
             }
         }
     }
@@ -968,7 +1192,8 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
             }
 
             if touchedNode.name == "pauseButton" && isButtonTouched == "pauseButton" {
-                pauseGame()
+                gameIsPaused.toggle()
+                if gameIsPaused == true { pauseGame() } else { closePauseMenu() }
                 Animations.shared.expand(node: pauseButton)
             } else if touchedNode.name != "" && isButtonTouched == "pauseButton" {
                 Animations.shared.expand(node: pauseButton)
@@ -976,24 +1201,53 @@ class GameSceneNewNew: SKScene, SKPhysicsContactDelegate {
 
             if touchedNode.name == "homeButton" {
                 Animations.shared.expand(node: homeButton)
-                backToTitle(node: homeButton)
+                backToTitle()
             } else if touchedNode.name != "" && isButtonTouched == "homeButton" {
                 Animations.shared.expand(node: homeButton)
             }
 
             if touchedNode.name == "restartButton" {
                 Animations.shared.expand(node: restartButton)
-                restartGame(node: restartButton)
+                restartGame()
             } else if touchedNode.name != "" && isButtonTouched == "restartButton" {
                 Animations.shared.expand(node: restartButton)
+            }
+            
+            if touchedNode.name == "levelSelectButton" {
+                Animations.shared.expand(node: levelSelectButton)
+                worldSelectMenu()
+            } else if touchedNode.name != "" && isButtonTouched == "levelSelectButton" {
+                Animations.shared.expand(node: levelSelectButton)
             }
 
             if touchedNode.name == "noClip" {
                 noClip = !noClip
             }
-
-
-
+            
+            if touchedNode.name == "gotIt" {
+                Animations.shared.expand(node: gotIt)
+                
+                let fadeOut = SKAction.run {
+                    Animations.shared.fadeAlphaOut(node: self.howToPlay, duration: 0.25, waitTime: 0)
+                    Animations.shared.fadeAlphaOut(node: self.gotIt, duration: 0.25, waitTime: 0)
+                }
+                
+                let wait = SKAction.wait(forDuration: 0.25)
+                
+                let remove = SKAction.run {
+                    self.childNode(withName: "howToPlay")?.removeFromParent()
+                    self.childNode(withName: "gotIt")?.removeFromParent()
+                }
+                
+                let seq = SKAction.sequence([fadeOut, wait, remove])
+                run(seq)
+                
+                countdown()
+                
+            } else if touchedNode.name != "" && isButtonTouched == "gotIt" {
+                Animations.shared.expand(node: gotIt)
+            }
+                
             buttonLeft.removeAction(forKey: "cycle")
             buttonRight.removeAction(forKey: "cycle")
 

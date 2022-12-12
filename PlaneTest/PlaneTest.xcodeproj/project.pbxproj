@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D60153C327AE86340076CF76 /* GameplayStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60153C227AE86340076CF76 /* GameplayStats.swift */; };
 		D6800755252AE6100090D16D /* DestroyPlane.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6800753252AE6100090D16D /* DestroyPlane.sks */; };
 		D6800756252AE6100090D16D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6800754252AE6100090D16D /* Assets.xcassets */; };
 		D68007652537E8DA0090D16D /* TitleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68007642537E8DA0090D16D /* TitleScreen.swift */; };
@@ -18,6 +17,13 @@
 		D6A513E62913534F0098F2DD /* WorldSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513E52913534F0098F2DD /* WorldSelect.swift */; };
 		D6A513E8291353660098F2DD /* WorldSelect.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6A513E7291353660098F2DD /* WorldSelect.sks */; };
 		D6A513EC2914D3E70098F2DD /* Paper Plane Font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */; };
+		D6A513EE291C5F130098F2DD /* SwitchScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513ED291C5F130098F2DD /* SwitchScene.swift */; };
+		D6A513F0291F42610098F2DD /* SavedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513EF291F42610098F2DD /* SavedData.swift */; };
+		D6A513F22928191E0098F2DD /* WorldSelectTemp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513F12928191E0098F2DD /* WorldSelectTemp.swift */; };
+		D6A513F42928D41E0098F2DD /* AdSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513F32928D41E0098F2DD /* AdSupport.swift */; };
+		D6A513F62939785D0098F2DD /* Instructions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513F52939785D0098F2DD /* Instructions.swift */; };
+		D6A513F8293EECEE0098F2DD /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513F7293EECEE0098F2DD /* Audio.swift */; };
+		D6A513FA293EEEFA0098F2DD /* Button Click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D6A513F9293EEEFA0098F2DD /* Button Click.mp3 */; };
 		D6AD9B3A24EFBAA000503775 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AD9B3924EFBAA000503775 /* AppDelegate.swift */; };
 		D6AD9B3C24EFBAA000503775 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6AD9B3B24EFBAA000503775 /* GameScene.sks */; };
 		D6AD9B4024EFBAA000503775 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AD9B3F24EFBAA000503775 /* GameScene.swift */; };
@@ -38,7 +44,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D60153C227AE86340076CF76 /* GameplayStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameplayStats.swift; sourceTree = "<group>"; };
 		D6800753252AE6100090D16D /* DestroyPlane.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = DestroyPlane.sks; sourceTree = SOURCE_ROOT; };
 		D6800754252AE6100090D16D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		D68007642537E8DA0090D16D /* TitleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleScreen.swift; sourceTree = "<group>"; };
@@ -49,7 +54,14 @@
 		D6A513E52913534F0098F2DD /* WorldSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSelect.swift; sourceTree = "<group>"; };
 		D6A513E7291353660098F2DD /* WorldSelect.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = WorldSelect.sks; sourceTree = "<group>"; };
 		D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Paper Plane Font.ttf"; sourceTree = "<group>"; };
-		D6AD9B3624EFBAA000503775 /* PlaneTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlaneTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6A513ED291C5F130098F2DD /* SwitchScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchScene.swift; sourceTree = "<group>"; };
+		D6A513EF291F42610098F2DD /* SavedData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedData.swift; sourceTree = "<group>"; };
+		D6A513F12928191E0098F2DD /* WorldSelectTemp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorldSelectTemp.swift; sourceTree = "<group>"; };
+		D6A513F32928D41E0098F2DD /* AdSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdSupport.swift; sourceTree = "<group>"; };
+		D6A513F52939785D0098F2DD /* Instructions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Instructions.swift; sourceTree = "<group>"; };
+		D6A513F7293EECEE0098F2DD /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
+		D6A513F9293EEEFA0098F2DD /* Button Click.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Button Click.mp3"; sourceTree = "<group>"; };
+		D6AD9B3624EFBAA000503775 /* Paper Plane.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Paper Plane.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6AD9B3924EFBAA000503775 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D6AD9B3B24EFBAA000503775 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		D6AD9B3F24EFBAA000503775 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -84,6 +96,7 @@
 		D6974233259C4C41006F6049 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D6A513F9293EEEFA0098F2DD /* Button Click.mp3 */,
 				D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */,
 				D6E06BAD25C95168005FAC98 /* Paper Plane.mp3 */,
 				D6974234259C4C58006F6049 /* Asai-Analogue.ttf */,
@@ -102,7 +115,7 @@
 		D6AD9B3724EFBAA000503775 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D6AD9B3624EFBAA000503775 /* PlaneTest.app */,
+				D6AD9B3624EFBAA000503775 /* Paper Plane.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -115,16 +128,21 @@
 				D68007642537E8DA0090D16D /* TitleScreen.swift */,
 				D68007692537F2CE0090D16D /* TitleScreen.sks */,
 				D6A513E52913534F0098F2DD /* WorldSelect.swift */,
+				D6A513F7293EECEE0098F2DD /* Audio.swift */,
+				D6A513F12928191E0098F2DD /* WorldSelectTemp.swift */,
 				D6A513E7291353660098F2DD /* WorldSelect.sks */,
 				D6EED41628DF40AF00A7F703 /* GameSceneNewNew.swift */,
 				D6EED41828DF458000A7F703 /* GameSceneNewNew.sks */,
 				D6AD9B3F24EFBAA000503775 /* GameScene.swift */,
 				D6AD9B3B24EFBAA000503775 /* GameScene.sks */,
+				D6A513F52939785D0098F2DD /* Instructions.swift */,
 				D6EED40E28D5835900A7F703 /* GameSceneNew.swift */,
 				D6EED41028D58A8700A7F703 /* GameSceneNew.sks */,
-				D60153C227AE86340076CF76 /* GameplayStats.swift */,
+				D6A513EF291F42610098F2DD /* SavedData.swift */,
 				D6EED41228D6DCBC00A7F703 /* Animations.swift */,
+				D6A513ED291C5F130098F2DD /* SwitchScene.swift */,
 				D6B2F13E290DB04C0054D747 /* Assets.swift */,
+				D6A513F32928D41E0098F2DD /* AdSupport.swift */,
 				D6925D2025D284EE00D6AA90 /* ObjectProperties.swift */,
 				D6EED41A28E04CFB00A7F703 /* Temp Test Code.swift */,
 				D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */,
@@ -158,7 +176,7 @@
 			);
 			name = PlaneTest;
 			productName = PlaneTest;
-			productReference = D6AD9B3624EFBAA000503775 /* PlaneTest.app */;
+			productReference = D6AD9B3624EFBAA000503775 /* Paper Plane.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -205,6 +223,7 @@
 				D6EED41928DF458000A7F703 /* GameSceneNewNew.sks in Resources */,
 				D680076A2537F2CE0090D16D /* TitleScreen.sks in Resources */,
 				D6EED41128D58A8700A7F703 /* GameSceneNew.sks in Resources */,
+				D6A513FA293EEEFA0098F2DD /* Button Click.mp3 in Resources */,
 				D6AD9B4724EFBAA000503775 /* Assets.xcassets in Resources */,
 				D6974235259C4C58006F6049 /* Asai-Analogue.ttf in Resources */,
 				D6A513EC2914D3E70098F2DD /* Paper Plane Font.ttf in Resources */,
@@ -223,17 +242,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6AD9B4024EFBAA000503775 /* GameScene.swift in Sources */,
+				D6A513F22928191E0098F2DD /* WorldSelectTemp.swift in Sources */,
 				D6925D2125D284EE00D6AA90 /* ObjectProperties.swift in Sources */,
+				D6A513F0291F42610098F2DD /* SavedData.swift in Sources */,
+				D6A513F8293EECEE0098F2DD /* Audio.swift in Sources */,
 				D68007652537E8DA0090D16D /* TitleScreen.swift in Sources */,
-				D60153C327AE86340076CF76 /* GameplayStats.swift in Sources */,
 				D6AD9B4224EFBAA000503775 /* GameViewController.swift in Sources */,
 				D6EED41D28E15CFD00A7F703 /* SKSmoothCameraNode.swift in Sources */,
 				D6A513E62913534F0098F2DD /* WorldSelect.swift in Sources */,
+				D6A513F42928D41E0098F2DD /* AdSupport.swift in Sources */,
 				D6EED41328D6DCBC00A7F703 /* Animations.swift in Sources */,
 				D69BFEAF25AD79D500B99E91 /* GameScene Backup.swift in Sources */,
 				D6B2F13F290DB04C0054D747 /* Assets.swift in Sources */,
 				D6AD9B3A24EFBAA000503775 /* AppDelegate.swift in Sources */,
 				D6EED41B28E04CFB00A7F703 /* Temp Test Code.swift in Sources */,
+				D6A513EE291C5F130098F2DD /* SwitchScene.swift in Sources */,
+				D6A513F62939785D0098F2DD /* Instructions.swift in Sources */,
 				D6EED41728DF40AF00A7F703 /* GameSceneNewNew.swift in Sources */,
 				D6EED41528DDBA7500A7F703 /* TitleScreenDuplicate.swift in Sources */,
 				D6EED40F28D5835900A7F703 /* GameSceneNew.swift in Sources */,
@@ -385,13 +409,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9R9H53AU37;
 				INFOPLIST_FILE = PlaneTest/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = learningswift.PlaneTest;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = learningswift.PaperPlane;
+				PRODUCT_NAME = "Paper Plane";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -405,13 +430,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9R9H53AU37;
 				INFOPLIST_FILE = PlaneTest/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = learningswift.PlaneTest;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = learningswift.PaperPlane;
+				PRODUCT_NAME = "Paper Plane";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
