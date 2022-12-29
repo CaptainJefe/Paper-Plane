@@ -22,6 +22,7 @@
 		D6A513F62939785D0098F2DD /* Instructions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513F52939785D0098F2DD /* Instructions.swift */; };
 		D6A513F8293EECEE0098F2DD /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513F7293EECEE0098F2DD /* Audio.swift */; };
 		D6A513FA293EEEFA0098F2DD /* Button Click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D6A513F9293EEEFA0098F2DD /* Button Click.mp3 */; };
+		D6A5144C295D551B0098F2DD /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = D6A5144B295D551B0098F2DD /* .gitignore */; };
 		D6AD9B3A24EFBAA000503775 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AD9B3924EFBAA000503775 /* AppDelegate.swift */; };
 		D6AD9B4224EFBAA000503775 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AD9B4124EFBAA000503775 /* GameViewController.swift */; };
 		D6AD9B4524EFBAA000503775 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6AD9B4324EFBAA000503775 /* Main.storyboard */; };
@@ -50,6 +51,7 @@
 		D6A513F52939785D0098F2DD /* Instructions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Instructions.swift; sourceTree = "<group>"; };
 		D6A513F7293EECEE0098F2DD /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
 		D6A513F9293EEEFA0098F2DD /* Button Click.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Button Click.mp3"; sourceTree = "<group>"; };
+		D6A5144B295D551B0098F2DD /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; name = .gitignore; path = "Paper Plane/.gitignore"; sourceTree = "<group>"; };
 		D6AD9B3624EFBAA000503775 /* Paper Plane.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Paper Plane.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6AD9B3924EFBAA000503775 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D6AD9B3B24EFBAA000503775 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 		D6AD9B2D24EFBA9F00503775 = {
 			isa = PBXGroup;
 			children = (
+				D6A5144B295D551B0098F2DD /* .gitignore */,
 				D6AD9B3824EFBAA000503775 /* Paper Plane */,
 				D6AD9B3724EFBAA000503775 /* Products */,
 			);
@@ -219,6 +222,7 @@
 				D6AD9B4A24EFBAA000503775 /* LaunchScreen.storyboard in Resources */,
 				D6E06BAE25C95168005FAC98 /* Paper Plane.mp3 in Resources */,
 				D6800756252AE6100090D16D /* Assets.xcassets in Resources */,
+				D6A5144C295D551B0098F2DD /* .gitignore in Resources */,
 				D6800755252AE6100090D16D /* DestroyPlane.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

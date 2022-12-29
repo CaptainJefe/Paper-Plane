@@ -1,3 +1,0 @@
-Target dependency graph (2 targets)
-Paper Plane in Paper Plane, no dependencies
-Paper Plane in Paper Plane, no dependencies
