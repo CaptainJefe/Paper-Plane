@@ -1,0 +1,457 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D6800755252AE6100090D16D /* DestroyPlane.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6800753252AE6100090D16D /* DestroyPlane.sks */; };
+		D6800756252AE6100090D16D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6800754252AE6100090D16D /* Assets.xcassets */; };
+		D68007652537E8DA0090D16D /* TitleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68007642537E8DA0090D16D /* TitleScreen.swift */; };
+		D680076A2537F2CE0090D16D /* TitleScreen.sks in Resources */ = {isa = PBXBuildFile; fileRef = D68007692537F2CE0090D16D /* TitleScreen.sks */; };
+		D6974235259C4C58006F6049 /* Asai-Analogue.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6974234259C4C58006F6049 /* Asai-Analogue.ttf */; };
+		D69BFEAF25AD79D500B99E91 /* GameScene Backup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */; };
+		D6A513E62913534F0098F2DD /* WorldSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513E52913534F0098F2DD /* WorldSelect.swift */; };
+		D6A513E8291353660098F2DD /* WorldSelect.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6A513E7291353660098F2DD /* WorldSelect.sks */; };
+		D6A513EC2914D3E70098F2DD /* Paper Plane Font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */; };
+		D6A513EE291C5F130098F2DD /* SwitchScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513ED291C5F130098F2DD /* SwitchScene.swift */; };
+		D6A513F0291F42610098F2DD /* SavedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513EF291F42610098F2DD /* SavedData.swift */; };
+		D6A513F42928D41E0098F2DD /* AdSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513F32928D41E0098F2DD /* AdSupport.swift */; };
+		D6A513F62939785D0098F2DD /* Instructions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513F52939785D0098F2DD /* Instructions.swift */; };
+		D6A513F8293EECEE0098F2DD /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513F7293EECEE0098F2DD /* Audio.swift */; };
+		D6A513FA293EEEFA0098F2DD /* Button Click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D6A513F9293EEEFA0098F2DD /* Button Click.mp3 */; };
+		D6A5144C295D551B0098F2DD /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = D6A5144B295D551B0098F2DD /* .gitignore */; };
+		D6AD9B3A24EFBAA000503775 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AD9B3924EFBAA000503775 /* AppDelegate.swift */; };
+		D6AD9B4224EFBAA000503775 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AD9B4124EFBAA000503775 /* GameViewController.swift */; };
+		D6AD9B4524EFBAA000503775 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6AD9B4324EFBAA000503775 /* Main.storyboard */; };
+		D6AD9B4724EFBAA000503775 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6AD9B4624EFBAA000503775 /* Assets.xcassets */; };
+		D6AD9B4A24EFBAA000503775 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6AD9B4824EFBAA000503775 /* LaunchScreen.storyboard */; };
+		D6B2F13F290DB04C0054D747 /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2F13E290DB04C0054D747 /* Assets.swift */; };
+		D6E06BAE25C95168005FAC98 /* Paper Plane.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D6E06BAD25C95168005FAC98 /* Paper Plane.mp3 */; };
+		D6EED41328D6DCBC00A7F703 /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EED41228D6DCBC00A7F703 /* Animations.swift */; };
+		D6EED41728DF40AF00A7F703 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EED41628DF40AF00A7F703 /* GameScene.swift */; };
+		D6EED41928DF458000A7F703 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6EED41828DF458000A7F703 /* GameScene.sks */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		D6800753252AE6100090D16D /* DestroyPlane.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = DestroyPlane.sks; sourceTree = SOURCE_ROOT; };
+		D6800754252AE6100090D16D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		D68007642537E8DA0090D16D /* TitleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleScreen.swift; sourceTree = "<group>"; };
+		D68007692537F2CE0090D16D /* TitleScreen.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TitleScreen.sks; sourceTree = "<group>"; };
+		D6974234259C4C58006F6049 /* Asai-Analogue.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Asai-Analogue.ttf"; sourceTree = "<group>"; };
+		D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameScene Backup.swift"; sourceTree = "<group>"; };
+		D6A513E52913534F0098F2DD /* WorldSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSelect.swift; sourceTree = "<group>"; };
+		D6A513E7291353660098F2DD /* WorldSelect.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = WorldSelect.sks; sourceTree = "<group>"; };
+		D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Paper Plane Font.ttf"; sourceTree = "<group>"; };
+		D6A513ED291C5F130098F2DD /* SwitchScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchScene.swift; sourceTree = "<group>"; };
+		D6A513EF291F42610098F2DD /* SavedData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedData.swift; sourceTree = "<group>"; };
+		D6A513F32928D41E0098F2DD /* AdSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdSupport.swift; sourceTree = "<group>"; };
+		D6A513F52939785D0098F2DD /* Instructions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Instructions.swift; sourceTree = "<group>"; };
+		D6A513F7293EECEE0098F2DD /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
+		D6A513F9293EEEFA0098F2DD /* Button Click.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Button Click.mp3"; sourceTree = "<group>"; };
+		D6A5144B295D551B0098F2DD /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; name = .gitignore; path = "Paper Plane/.gitignore"; sourceTree = "<group>"; };
+		D6AD9B3624EFBAA000503775 /* Paper Plane.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Paper Plane.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6AD9B3924EFBAA000503775 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D6AD9B3B24EFBAA000503775 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		D6AD9B3F24EFBAA000503775 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		D6AD9B4124EFBAA000503775 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		D6AD9B4424EFBAA000503775 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		D6AD9B4624EFBAA000503775 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D6AD9B4924EFBAA000503775 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		D6AD9B4B24EFBAA000503775 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Paper Plane/Info.plist"; sourceTree = SOURCE_ROOT; };
+		D6B2F13E290DB04C0054D747 /* Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
+		D6E06BAD25C95168005FAC98 /* Paper Plane.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Paper Plane.mp3"; sourceTree = "<group>"; };
+		D6EED40E28D5835900A7F703 /* GameSceneNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSceneNew.swift; sourceTree = "<group>"; };
+		D6EED41028D58A8700A7F703 /* GameSceneNew.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameSceneNew.sks; sourceTree = "<group>"; };
+		D6EED41228D6DCBC00A7F703 /* Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
+		D6EED41628DF40AF00A7F703 /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		D6EED41828DF458000A7F703 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		D6EED41A28E04CFB00A7F703 /* Temp Test Code.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Temp Test Code.swift"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D6AD9B3324EFBAA000503775 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D6974233259C4C41006F6049 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D6A513F9293EEEFA0098F2DD /* Button Click.mp3 */,
+				D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */,
+				D6E06BAD25C95168005FAC98 /* Paper Plane.mp3 */,
+				D6974234259C4C58006F6049 /* Asai-Analogue.ttf */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		D6A5144A294709760098F2DD /* Old */ = {
+			isa = PBXGroup;
+			children = (
+				D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */,
+				D6EED41A28E04CFB00A7F703 /* Temp Test Code.swift */,
+				D6AD9B3F24EFBAA000503775 /* GameScene.swift */,
+				D6AD9B3B24EFBAA000503775 /* GameScene.sks */,
+				D6EED40E28D5835900A7F703 /* GameSceneNew.swift */,
+				D6EED41028D58A8700A7F703 /* GameSceneNew.sks */,
+			);
+			path = Old;
+			sourceTree = "<group>";
+		};
+		D6AD9B2D24EFBA9F00503775 = {
+			isa = PBXGroup;
+			children = (
+				D6A5144B295D551B0098F2DD /* .gitignore */,
+				D6AD9B3824EFBAA000503775 /* Paper Plane */,
+				D6AD9B3724EFBAA000503775 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D6AD9B3724EFBAA000503775 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D6AD9B3624EFBAA000503775 /* Paper Plane.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D6AD9B3824EFBAA000503775 /* Paper Plane */ = {
+			isa = PBXGroup;
+			children = (
+				D6AD9B3924EFBAA000503775 /* AppDelegate.swift */,
+				D6AD9B4124EFBAA000503775 /* GameViewController.swift */,
+				D68007642537E8DA0090D16D /* TitleScreen.swift */,
+				D68007692537F2CE0090D16D /* TitleScreen.sks */,
+				D6A513E52913534F0098F2DD /* WorldSelect.swift */,
+				D6A513E7291353660098F2DD /* WorldSelect.sks */,
+				D6EED41628DF40AF00A7F703 /* GameScene.swift */,
+				D6EED41828DF458000A7F703 /* GameScene.sks */,
+				D6A513EF291F42610098F2DD /* SavedData.swift */,
+				D6EED41228D6DCBC00A7F703 /* Animations.swift */,
+				D6A513F7293EECEE0098F2DD /* Audio.swift */,
+				D6A513F52939785D0098F2DD /* Instructions.swift */,
+				D6B2F13E290DB04C0054D747 /* Assets.swift */,
+				D6A513ED291C5F130098F2DD /* SwitchScene.swift */,
+				D6A513F32928D41E0098F2DD /* AdSupport.swift */,
+				D6800753252AE6100090D16D /* DestroyPlane.sks */,
+				D6AD9B4624EFBAA000503775 /* Assets.xcassets */,
+				D6800754252AE6100090D16D /* Assets.xcassets */,
+				D6AD9B4324EFBAA000503775 /* Main.storyboard */,
+				D6AD9B4824EFBAA000503775 /* LaunchScreen.storyboard */,
+				D6AD9B4B24EFBAA000503775 /* Info.plist */,
+				D6974233259C4C41006F6049 /* Resources */,
+				D6A5144A294709760098F2DD /* Old */,
+			);
+			path = "Paper Plane";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D6AD9B3524EFBAA000503775 /* Paper Plane */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D6AD9B4E24EFBAA000503775 /* Build configuration list for PBXNativeTarget "Paper Plane" */;
+			buildPhases = (
+				D6AD9B3224EFBAA000503775 /* Sources */,
+				D6AD9B3324EFBAA000503775 /* Frameworks */,
+				D6AD9B3424EFBAA000503775 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Paper Plane";
+			productName = PlaneTest;
+			productReference = D6AD9B3624EFBAA000503775 /* Paper Plane.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D6AD9B2E24EFBA9F00503775 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1130;
+				LastUpgradeCheck = 1200;
+				ORGANIZATIONNAME = "Cade Williams";
+				TargetAttributes = {
+					D6AD9B3524EFBAA000503775 = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+				};
+			};
+			buildConfigurationList = D6AD9B3124EFBA9F00503775 /* Build configuration list for PBXProject "Paper Plane" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D6AD9B2D24EFBA9F00503775;
+			productRefGroup = D6AD9B3724EFBAA000503775 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D6AD9B3524EFBAA000503775 /* Paper Plane */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D6AD9B3424EFBAA000503775 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D6AD9B4524EFBAA000503775 /* Main.storyboard in Resources */,
+				D6A513E8291353660098F2DD /* WorldSelect.sks in Resources */,
+				D6EED41928DF458000A7F703 /* GameScene.sks in Resources */,
+				D680076A2537F2CE0090D16D /* TitleScreen.sks in Resources */,
+				D6A513FA293EEEFA0098F2DD /* Button Click.mp3 in Resources */,
+				D6AD9B4724EFBAA000503775 /* Assets.xcassets in Resources */,
+				D6974235259C4C58006F6049 /* Asai-Analogue.ttf in Resources */,
+				D6A513EC2914D3E70098F2DD /* Paper Plane Font.ttf in Resources */,
+				D6AD9B4A24EFBAA000503775 /* LaunchScreen.storyboard in Resources */,
+				D6E06BAE25C95168005FAC98 /* Paper Plane.mp3 in Resources */,
+				D6800756252AE6100090D16D /* Assets.xcassets in Resources */,
+				D6A5144C295D551B0098F2DD /* .gitignore in Resources */,
+				D6800755252AE6100090D16D /* DestroyPlane.sks in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D6AD9B3224EFBAA000503775 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D6A513F0291F42610098F2DD /* SavedData.swift in Sources */,
+				D6A513F8293EECEE0098F2DD /* Audio.swift in Sources */,
+				D68007652537E8DA0090D16D /* TitleScreen.swift in Sources */,
+				D6AD9B4224EFBAA000503775 /* GameViewController.swift in Sources */,
+				D6A513E62913534F0098F2DD /* WorldSelect.swift in Sources */,
+				D6A513F42928D41E0098F2DD /* AdSupport.swift in Sources */,
+				D6EED41328D6DCBC00A7F703 /* Animations.swift in Sources */,
+				D69BFEAF25AD79D500B99E91 /* GameScene Backup.swift in Sources */,
+				D6B2F13F290DB04C0054D747 /* Assets.swift in Sources */,
+				D6AD9B3A24EFBAA000503775 /* AppDelegate.swift in Sources */,
+				D6A513EE291C5F130098F2DD /* SwitchScene.swift in Sources */,
+				D6A513F62939785D0098F2DD /* Instructions.swift in Sources */,
+				D6EED41728DF40AF00A7F703 /* GameScene.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		D6AD9B4324EFBAA000503775 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D6AD9B4424EFBAA000503775 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		D6AD9B4824EFBAA000503775 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D6AD9B4924EFBAA000503775 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		D6AD9B4C24EFBAA000503775 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		D6AD9B4D24EFBAA000503775 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D6AD9B4F24EFBAA000503775 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9R9H53AU37;
+				INFOPLIST_FILE = "Paper Plane/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = learningswift.PaperPlane;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		D6AD9B5024EFBAA000503775 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9R9H53AU37;
+				INFOPLIST_FILE = "Paper Plane/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = learningswift.PaperPlane;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D6AD9B3124EFBA9F00503775 /* Build configuration list for PBXProject "Paper Plane" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D6AD9B4C24EFBAA000503775 /* Debug */,
+				D6AD9B4D24EFBAA000503775 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D6AD9B4E24EFBAA000503775 /* Build configuration list for PBXNativeTarget "Paper Plane" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D6AD9B4F24EFBAA000503775 /* Debug */,
+				D6AD9B5024EFBAA000503775 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D6AD9B2E24EFBA9F00503775 /* Project object */;
+}

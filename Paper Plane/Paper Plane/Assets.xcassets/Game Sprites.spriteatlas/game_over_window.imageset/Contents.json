@@ -1,0 +1,22 @@
+{
+  "images" : [
+    {
+      "filename" : "Game Over Window - Trimmed - Squared.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "Game Over Window - Trimmed - Squared@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
