@@ -24,6 +24,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var firstTimePlaying: Bool = true
     var gotIt: SKSpriteNode!
     
+    var currentStage: Int = 1
+    var updateInitializer: Bool = false
+    
     var buttonRight: SKSpriteNode!
     var buttonLeft: SKSpriteNode!
     var leftControl: SKSpriteNode!
@@ -110,7 +113,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     var toggleNoClip: SKSpriteNode!
     var noClipLabel: SKLabelNode!
-    var noClip = false { didSet { noClipLabel.text = "Collision: \(!noClip)" } }
+    var noClip = true { didSet { noClipLabel.text = "Collision: \(!noClip)" } }
 
     var initialPlatforms = true
     
@@ -142,7 +145,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createButtons()
         createBackground()
         createSky()
-        platformer()
+        createPlatforms(yPosition: platformGap)
+        createPlatforms(yPosition: platformGap)
+        createPlatforms(yPosition: platformGap)
         planeMode()
         musicPlayer()
 //        createSky()
@@ -345,33 +350,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             break
         }
         
-        setBackground(currentStage: 1)
-        setPlatforms(currentStage: 1)
+        setBackground()
+        setPlatforms()
     }
 
-    func setPlatforms(currentStage: Int) {
+    func setPlatforms() {
         switch currentStage {
         case 1:
             platformTexture = firstPlatform
         case 2:
             platformTexture = secondPlatform
-        case 3:
+        case 3...:
             platformTexture = thirdPlatform
-        case 0:
+        case ..<0:
             platformTexture = transitionPlatform
         default:
             break
         }
     }
     
-    func setBackground(currentStage: Int) {
+    func setBackground() {
         switch currentStage {
         case 1:
             backgroundTexture = firstBackground
         case 2:
             backgroundTexture = secondBackground
 //            animateBackground(texture: secondBackground)
-        case 3:
+        case 3...:
             backgroundTexture = thirdBackground
         default:
             break
@@ -610,26 +615,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        print("xPosition \(xPosition)")
 //        print("frame.x \(frame.minX)")
 
-
-        if platformCount >= 19 && platformCount < 30 {
-            setPlatforms(currentStage: 0)
+        
+        print("platformCount: \(platformCount)")
+        print("currentStage pre: \(currentStage)")
+        
+        if platformCount == 30 {
+            currentStage = -currentStage
+            currentStage += 1
+            setPlatforms()
+            platformCount = 0
+            
+        } else if platformCount >= 19 {
+            if platformCount == 19 {
+                currentStage = -currentStage
+                setPlatforms()
+            }
+            
             xPosition = frame.width * 0.125
-            platformRandomizer = 0
-        } else if platformCount == 30 {
-            setPlatforms(currentStage: 2)
-        } else if platformCount >= 49 && platformCount < 60 {
-            setPlatforms(currentStage: 0)
-            platformRandomizer = 0
-            xPosition = frame.width * 0.125
-        } else if platformCount == 60 {
-            setPlatforms(currentStage: 3)
         }
         
-        if score == 30 {
-            setBackground(currentStage: 2)
-        } else if score == 60 {
-            setBackground(currentStage: 3)
+        
+        if score == 30 || score == 60 {
+            setBackground()
         }
+        
+        
+        print("currentStage post: \(currentStage)")
+        
+        
+        
 
 
         platformPhysics = SKPhysicsBody(rectangleOf: CGSize(width: platformTexture.size().width, height: platformTexture.size().height))
@@ -719,19 +733,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         
-        print(platformCount)
+        
 //         platformMonitor()
     }
-    
-    
-    func platformer() {
-        if self.platformCount == 0 {
-            self.createPlatforms(yPosition: platformGap)
-            self.createPlatforms(yPosition: platformGap)
-            self.createPlatforms(yPosition: platformGap)
-        }
-    }
-    
 
 
     func createButtons() {
@@ -1096,12 +1100,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
 
     override func update(_ currentTime: TimeInterval) {
-        if platformCount >= 3 {
-            // print("platformCount: \(platformCount)")
-             // Dont care about duplicate position platforms
-//            print("platformTrigger: \(platformTrigger.count)")
-            // DispatchQueue.global(qos: .background).async {
-            //    while self.topPlatform.position.y < (self.frame.midY - self.transitionPlatform.size().height * 3) {
+        if platformCount >= 3 && updateInitializer == false {
+            updateInitializer = true
+        } else if updateInitializer == true {
             if self.lowestPlatform.position.y >= ((self.frame.midY / 1.5) - self.transitionPlatform.size().height * 3) {
                 
                 self.createPlatforms(yPosition: lowestPlatform.position.y - (transitionPlatform.size().height * 3 - firstPlatform.size().height / 2))
@@ -1110,9 +1111,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 // print("called createPlatforms()")
             }
             
-            if highestPlatform.position.y >= plane.position.y {
-                score += 1
-            }
+//            if highestPlatform.position.y >= plane.position.y {
+//                score += 1
+//            }
         }
     }
 
