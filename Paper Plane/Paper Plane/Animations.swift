@@ -125,7 +125,7 @@ class Animations: SKNode {
     }
     
     func animateTexture(node: SKSpriteNode, texture: [SKTexture]) {
-        let animate = SKAction.animate(with: texture, timePerFrame: 0.02)
+        let animate = SKAction.animate(with: texture, timePerFrame: 0.05)
         node.run(animate)
     }
     

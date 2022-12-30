@@ -3,7 +3,7 @@
 //  PlaneTest
 //
 //  Created by Cade Williams on 8/21/20.
-//  Copyright © 2020 Cade Williams. All rights reserved.
+//  Copyright Â© 2020 Cade Williams. All rights reserved.
 //
 
 //struct Collisions {
@@ -19,7 +19,7 @@ import AVFoundation
 import SpriteKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
-
+    
     var howToPlay: SKSpriteNode!
     var firstTimePlaying: Bool = true
     var gotIt: SKSpriteNode!
@@ -32,30 +32,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var leftControl: SKSpriteNode!
     var rightControl: SKSpriteNode!
     var pauseButton: SKSpriteNode!
-
+    
     var pauseMenu = SKSpriteNode(imageNamed: "Pause Window")
     var gameOverWindow: SKSpriteNode!
     var homeButton = SKSpriteNode(imageNamed: "home_button_2")
     var restartButton = SKSpriteNode(imageNamed: "restart_button")
     var levelSelectButton = SKSpriteNode(imageNamed: "level_select_button")
-
+    
     var backgroundPieces: [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode()]
     var backgroundSpeed: CGFloat = 1.0 { didSet { for background in backgroundPieces { background.speed = backgroundSpeed } } }
     var backgroundTexture: SKTexture! { didSet { for background in backgroundPieces { background.texture = backgroundTexture } } }
-
+    
     var cloudPieces: [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode()]
     var skyTexture: SKTexture!
     var cloudsTexture: SKTexture! { didSet { for clouds in cloudPieces { clouds.texture = cloudsTexture } } }
     var sky: SKSpriteNode!
-
-    var wallPieces: [SKSpriteNode] = [SKSpriteNode(imageNamed: "Wall"), SKSpriteNode(imageNamed: "Wall")]
-    var wallPieces2: [SKSpriteNode] = [SKSpriteNode(imageNamed: "Wall"), SKSpriteNode(imageNamed: "Wall")]
-    var wallSpeed: CGFloat = 1.0 { didSet { for walls in wallPieces { walls.speed = wallSpeed }; for walls in wallPieces2 { walls.speed = wallSpeed } } }
-
+    
     var plane: SKSpriteNode!
     var platformGroup = Set<SKSpriteNode>() { didSet { platformTrigger = platformGroup.filter { $0.position.y < (frame.height / 2) } } }
     var platformSpeed: CGFloat = 0.6 { didSet { for platforms in platformGroup { platforms.speed = platformSpeed } } }
-
+    
+    
     var platformTexture: SKTexture!
     var platformPhysics: SKPhysicsBody!
     var platformGap: CGFloat!
@@ -64,26 +61,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             platformGap = frame.midY - (((transitionPlatform.size().height * 3) * CGFloat(min(platformCount,2))))
         }
     }
-
+    
     var spawnNode: SKSpriteNode!
-
+    
     var timer: Timer?
     var gameState: Int = 0
-
+    
     var label: SKLabelNode!
     var mode = 8 { didSet { label.text = "Mode: \(mode)" } }
-
+    
     var scoreLabel: SKLabelNode!
     var score = 0 { didSet { scoreLabel.text = "\(score)" } }
     var finalScoreLabel: SKLabelNode!
     var bestScore: SKLabelNode!
-
+    
     var gameIsPaused = false
-
+    
     var isButtonTouched: String!
     var isLeftButtonPressed: Bool!
     var isRightButtonPressed: Bool!
-
+    
     var nodeArray = [SKNode]()
     var platformDelta: CGFloat = 0.0
     var platformArray = [SKSpriteNode]() {
@@ -107,14 +104,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var thirdPlatform: SKTexture!
     var transitionPlatform = SKTexture(imageNamed: "transition_platform")
     var firstPlatformSize: CGSize!
-
+    
     var castleSky: SKTexture!
     var desertSky: SKTexture!
-
+    
     var toggleNoClip: SKSpriteNode!
     var noClipLabel: SKLabelNode!
     var noClip = true { didSet { noClipLabel.text = "Collision: \(!noClip)" } }
-
+    
     var initialPlatforms = true
     
     var increaseWorldSpeed: Int = 0
@@ -123,8 +120,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var countdownLabel: SKLabelNode!
     var count = 3 { didSet { countdownLabel.text = "\(count)" } }
-
+    
+    var lastRandom: CGFloat = 0.0
+    
+    var positionAtScore: CGFloat!
+    
+    var minGapSize: CGFloat!
+    
     override func didMove(to view: SKView) {
+        
+        let midXNode = SKSpriteNode(color: .red, size: CGSize(width: 5, height: 2500))
+        midXNode.position = CGPoint(x: frame.midX, y: frame.midY)
+        midXNode.zPosition = 900
+        addChild(midXNode)
         
         // add a transparent bar at the top for UI elements
         let topBar = SKSpriteNode()
@@ -133,7 +141,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         topBar.color = .black
         topBar.alpha = 0.6
         topBar.zPosition = 10
-//        addChild(topBar)
+        //        addChild(topBar)
         
         print("When lowestPlatform is greater than this point \((self.frame.midY / 2) - self.transitionPlatform.size().height * 3)")
         platformGap = frame.midY - (((transitionPlatform.size().height * 3) * CGFloat(min(platformCount,2))))
@@ -150,7 +158,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createPlatforms(yPosition: platformGap)
         planeMode()
         musicPlayer()
-//        createSky()
+        //        createSky()
         
         let barrier = SKSpriteNode()
         barrier.position = CGPoint(x: frame.midX, y: frame.midY)
@@ -159,7 +167,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         barrier.color = .clear
         barrier.name = "barrier"
         addChild(barrier)
-
+        
         toggleNoClip = SKSpriteNode(imageNamed: "no_clip")
         toggleNoClip.size = CGSize(width: 48, height: 48)
         toggleNoClip.position = CGPoint(x: frame.minX + 50, y: frame.maxY - 50)
@@ -168,18 +176,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         toggleNoClip.zPosition = 400
         toggleNoClip.name = "noClip"
         addChild(toggleNoClip)
-
+        
         noClipLabel = SKLabelNode(fontNamed: "Paper Plane Font")
         noClipLabel.position = CGPoint(x: frame.midX, y: frame.minY + 50)
         noClipLabel.zPosition = 200
         noClipLabel.fontSize = 30
         noClipLabel.text = "Collision: \(!noClip)"
         addChild(noClipLabel)
-
-
+        
+        
         physicsWorld.gravity = .zero
         physicsWorld.contactDelegate = self
-
+        
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
         
         // lets every node initialize before attempting to pause them
@@ -192,12 +200,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let seq = SKAction.sequence([wait, runAction])
         
         run(seq)
+    }
         
-
-//        print(frame.width)
-//        print(frame.height)
-//        print(" maxY when lowestPlatform \(self.frame.midY - self.transitionPlatform.size().height * 3)")
-//        print("transition size \(transitionPlatform.size())")
+    func getSpriteDetails(node: SKSpriteNode) {
+        var nodeFrame: CGRect = node.calculateAccumulatedFrame()
+        
+        let minX = nodeFrame.minX
+        let maxX = nodeFrame.maxX
+        let midX = nodeFrame.size.width/2
+        let name = node.name
+        
+        print("Object Name: \(name)\n Left Min: \(minX)\n MidPoint of Width: \(midX)\n Right Max: \(maxX)\n Node Width: \(nodeFrame.size.width)")
+        
     }
     
     func preGame() {
@@ -232,24 +246,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             countdown()
         }
         
-//        let startLabel = SKLabelNode(fontNamed: "Paper Plane Font")
-//        startLabel.position = CGPoint(x: frame.midX, y: frame.maxY * 0.65)
-//        startLabel.fontSize = 50
-//        startLabel.text = "Tap to start"
-//        startLabel.color = .black
-//        startLabel.alpha = 0
-//        startLabel.zPosition = 70
-//        startLabel.name = "startLabel"
-//        addChild(startLabel)
-//
-//        let fadeAlphaTo = SKAction.fadeAlpha(to: 0.5, duration: 1)
-//        let fadeIn = SKAction.fadeIn(withDuration: 1.5)
-//        let wait = SKAction.wait(forDuration: 1.2)
-//        let fadeOut = SKAction.fadeOut(withDuration: 1.5)
-//        let fadeInFadeOut = SKAction.sequence([fadeIn, wait, fadeOut])
-//        let repeatForever = SKAction.repeatForever(fadeInFadeOut)
-//
-//        startLabel.run(repeatForever)
+        //        let startLabel = SKLabelNode(fontNamed: "Paper Plane Font")
+        //        startLabel.position = CGPoint(x: frame.midX, y: frame.maxY * 0.65)
+        //        startLabel.fontSize = 50
+        //        startLabel.text = "Tap to start"
+        //        startLabel.color = .black
+        //        startLabel.alpha = 0
+        //        startLabel.zPosition = 70
+        //        startLabel.name = "startLabel"
+        //        addChild(startLabel)
+        //
+        //        let fadeAlphaTo = SKAction.fadeAlpha(to: 0.5, duration: 1)
+        //        let fadeIn = SKAction.fadeIn(withDuration: 1.5)
+        //        let wait = SKAction.wait(forDuration: 1.2)
+        //        let fadeOut = SKAction.fadeOut(withDuration: 1.5)
+        //        let fadeInFadeOut = SKAction.sequence([fadeIn, wait, fadeOut])
+        //        let repeatForever = SKAction.repeatForever(fadeInFadeOut)
+        //
+        //        startLabel.run(repeatForever)
     }
     
     func countdown() {
@@ -282,7 +296,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         run(SKAction.sequence([SKAction.repeat(decreaseCounter, count: 3), endCountdown]))
     }
-
+    
     
     func animateBackground(texture: SKTexture) {
         let fadeOut = SKAction.fadeOut(withDuration: 0.4)
@@ -294,25 +308,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         run(seq)
     }
-
-
+    
+    
     func initiateTextures() {
         // perhaps two or three switch cases which will read which properties are set to which then go down the list and pick which texture fits within those parameters. e.g. World? -> Theme? -> Stage? : World gives you the asset catelog for the particular world | Theme gives you the asset catelog within that chosen world | Stage gives you the sizes for the platforms for any given set theme.
-
-
-//        switch world {
-//        case "classic":
-//        case "world2":
-//        case "world3":
-//        }
-
-
+        
+        
+        //        switch world {
+        //        case "classic":
+        //        case "world2":
+        //        case "world3":
+        //        }
+        
+        
         switch theme {
         case "castle":
             firstBackground = SKTexture(imageNamed: "castle_background_2")
             secondBackground = SKTexture(imageNamed: "castle_background_1")
             thirdBackground = SKTexture(imageNamed: "castle_background_3")
-
+            
             firstPlatform = SKTexture(imageNamed: "platform_1")
             secondPlatform = SKTexture(imageNamed: "platform_2")
             thirdPlatform = SKTexture(imageNamed: "platform_3")
@@ -320,32 +334,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             skyTexture = SKTexture(imageNamed: "sky_background_day")
             cloudsTexture = SKTexture(imageNamed: "clouds_day")
-
+            
         case "chasm":
             firstBackground = SKTexture(imageNamed: "chasm_background_1")
             secondBackground = SKTexture(imageNamed: "chasm_background_2")
             thirdBackground = SKTexture(imageNamed: "chasm_background_3")
-
+            
             firstPlatform = SKTexture(imageNamed: "platform_1")
             secondPlatform = SKTexture(imageNamed: "platform_2")
             thirdPlatform = SKTexture(imageNamed: "platform_3")
             transitionPlatform = SKTexture(imageNamed: "transition_platform")
-
+            
             skyTexture = SKTexture(imageNamed: "sky_background_night")
             
         case "silo":
             firstBackground = SKTexture(imageNamed: "silo_background_1")
             secondBackground = SKTexture(imageNamed: "silo_background_2")
             thirdBackground = SKTexture(imageNamed: "silo_background_3")
-
+            
             firstPlatform = SKTexture(imageNamed: "platform_1")
             secondPlatform = SKTexture(imageNamed: "platform_2")
             thirdPlatform = SKTexture(imageNamed: "platform_3")
             transitionPlatform = SKTexture(imageNamed: "transition_platform")
-
+            
             skyTexture = SKTexture(imageNamed: "sky_background_night")
             cloudsTexture = SKTexture(imageNamed: "clouds_night")
-
+            
         default:
             break
         }
@@ -353,7 +367,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setBackground()
         setPlatforms()
     }
-
+    
     func setPlatforms() {
         switch currentStage {
         case 1:
@@ -375,154 +389,154 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             backgroundTexture = firstBackground
         case 2:
             backgroundTexture = secondBackground
-//            animateBackground(texture: secondBackground)
+            //            animateBackground(texture: secondBackground)
         case 3...:
             backgroundTexture = thirdBackground
         default:
             break
         }
     }
-
-
+    
+    
     func musicPlayer() {
         print(isMusicMuted)
         let bgMusic = SKAudioNode(fileNamed: "Paper Plane.mp3")
         addChild(bgMusic)
-
+        
         if isMusicMuted == true {
             bgMusic.run(SKAction.changeVolume(to: 0, duration: 0))
         }
     }
-
-
+    
+    
     @objc func planeMode() {
         let currentLocation = plane.position.x
-
+        
         let moveLeft = SKAction.moveTo(x: currentLocation - 1212.5, duration: 40) // old x value was (x: -1025)
         let repeatLeft = SKAction.repeatForever(moveLeft)
-
+        
         let moveRight = SKAction.moveTo(x: currentLocation + 1212.5, duration: 40) // old x value was (x: 1400)
         let repeatRight = SKAction.repeatForever(moveRight)
-
+        
         let moveDown = SKAction.moveTo(x: currentLocation, duration: 40)
         let repeatDown = SKAction.repeatForever(moveDown)
-
+        
         if mode == 4 {
             plane.isPaused = true
         } else {
             plane.isPaused = false
         }
-
+        
         switch mode {
         case 0:
             plane.texture = SKTexture(imageNamed: "Plane 1")
             plane.speed = 7
             plane.run(repeatLeft)
-
+            
             backgroundSpeed = 0.3
-            wallSpeed = 1
+            
             platformSpeed = 0.6
-
+            
         case 1:
             plane.texture = SKTexture(imageNamed: "Plane 2")
             plane.speed = 5
             plane.run(repeatLeft)
-
+            
             backgroundSpeed = 0.6
-            wallSpeed = 1.3
+            
             platformSpeed = 0.9
-
+            
         case 2:
             plane.texture = SKTexture(imageNamed: "Plane 3")
             plane.speed = 3
             plane.run(repeatLeft)
-
+            
             backgroundSpeed = 0.9
-            wallSpeed = 1.6
+            
             platformSpeed = 1.3
-
+            
         case 3:
             plane.texture = SKTexture(imageNamed: "Plane 4")
             plane.speed = 1
             plane.run(repeatLeft)
-
+            
             backgroundSpeed = 1.1
-            wallSpeed = 1.8
+            
             platformSpeed = 1.5
-
+            
         case 4:
             plane.texture = SKTexture(imageNamed: "Plane 5")
-//            let move = SKAction.moveBy(x: 0, y: 0, duration: 40)
-//            let loop = SKAction.repeatForever(move)
-//            plane.run(loop)
+            //            let move = SKAction.moveBy(x: 0, y: 0, duration: 40)
+            //            let loop = SKAction.repeatForever(move)
+            //            plane.run(loop)
             plane.run(repeatDown)
-
+            
             backgroundSpeed = 1.3
-            wallSpeed = 2.2
+            
             platformSpeed = 1.8
-
+            
         case 5:
             plane.texture = SKTexture(imageNamed: "Plane 6")
             plane.speed = 4
             plane.run(repeatRight)
-
+            
             backgroundSpeed = 1.1
-            wallSpeed = 1.8
+            
             platformSpeed = 1.5
-
+            
         case 6:
             plane.texture = SKTexture(imageNamed: "Plane 7")
             plane.speed = 5
             plane.run(repeatRight)
-
+            
             backgroundSpeed = 0.9
-            wallSpeed = 1.6
+            
             platformSpeed = 1.3
-
+            
         case 7:
             plane.texture = SKTexture(imageNamed: "Plane 8")
             plane.speed = 6
             plane.run(repeatRight)
-
+            
             backgroundSpeed = 0.6
-            wallSpeed = 1.3
+            
             platformSpeed = 0.9
-
+            
         case 8:
             plane.texture = SKTexture(imageNamed: "Plane 9")
             plane.speed = 8
             plane.run(repeatRight)
-
+            
             backgroundSpeed = 0.3
-            wallSpeed = 1
+            
             platformSpeed = 0.6
-
+            
         default:
             break
         }
     }
-
-
+    
+    
     func createPlane() {
         let planeTexture = SKTexture(imageNamed: "Plane 9")
         plane = SKSpriteNode(texture: planeTexture)
         plane.position = CGPoint(x: frame.midX / 2, y: frame.maxY - frame.maxY / 4)
         plane.zPosition = 5
         plane.alpha = 1
-//        plane.colorBlendFactor = 1
-//        plane.color = plane.color
+        //        plane.colorBlendFactor = 1
+        //        plane.color = plane.color
         plane.size = CGSize(width: 96, height: 96)
         plane.name = "plane"
         addChild(plane)
         nodeArray.append(plane)
-
+        
         plane.physicsBody = SKPhysicsBody(circleOfRadius: plane.size.width / 7)
         plane.physicsBody!.contactTestBitMask = plane.physicsBody!.collisionBitMask
         plane.physicsBody?.collisionBitMask = 0
         plane.physicsBody?.isDynamic = true
     }
-
-
+    
+    
     func createLabels() {
         scoreLabel = SKLabelNode(fontNamed: "Paper Plane Font") // Asai-Analogue
         scoreLabel.text = "\(score)"
@@ -530,45 +544,45 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.fontSize = 60
         scoreLabel.zPosition = 220
         addChild(scoreLabel)
-
+        
         label = SKLabelNode(fontNamed: "Paper Plane Font")
         label.text = "Mode: \(mode)"
         label.position = CGPoint(x: 660, y: 1280)
         label.horizontalAlignmentMode = .right
         label.zPosition = 50
-//        addChild(label)
+        //        addChild(label)
     }
-
-
+    
+    
     func createBackground() {
-
+        
         for i in 0 ... 1 {
-
+            
             // use anchorPoint (0, 0) with old background.position -- old anchor/position doesn't set the top of BG at the top of the scene
             let background = backgroundPieces[i]
             background.texture = backgroundTexture
             background.anchorPoint = CGPoint(x: 0.5, y: 0.5)
             background.zPosition = -5
             background.size = CGSize(width: frame.size.width, height: frame.size.width * 2.5)
-
+            
             
             background.position = CGPoint(x: view!.center.x, y: view!.center.y + background.size.height + (-background.size.height) + (-background.size.height * CGFloat(i)))
             
-//            background.position = CGPoint(x: 0, y: background.size.height + (-background.size.height) + (-background.size.height * CGFloat(i)))
-
+            //            background.position = CGPoint(x: 0, y: background.size.height + (-background.size.height) + (-background.size.height * CGFloat(i)))
+            
             self.addChild(background)
             nodeArray.append(background)
-
+            
             let scrollUp = SKAction.moveBy(x: 0, y: background.size.height, duration: 5)
             let scrollReset = SKAction.moveBy(x: 0, y: -background.size.height, duration: 0)
             let scrollLoop = SKAction.sequence([scrollUp, scrollReset])
             let scrollForever = SKAction.repeatForever(scrollLoop)
-
-
+            
+            
             background.run(scrollForever)
         }
     }
-
+    
     func createSky() {
         sky = SKSpriteNode()
         sky.texture = skyTexture
@@ -578,46 +592,48 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(sky)
         
         for i in 0 ... 1 {
-
+            
             let clouds = cloudPieces[i]
             clouds.texture = cloudsTexture
             clouds.anchorPoint = CGPoint(x: 0, y: 0)
             clouds.zPosition = -25
             clouds.size = CGSize(width: frame.size.width, height: frame.size.width * 2.5)
-
+            
             clouds.position = CGPoint(x: sky.size.width + (-sky.size.width) + (-sky.size.width * CGFloat(i)), y: 0)
-
+            
             self.addChild(clouds)
             nodeArray.append(clouds)
-
+            
             let scrollSideways = SKAction.moveBy(x: clouds.size.width, y: 0, duration: 22)
             let scrollReset = SKAction.moveBy(x: -clouds.size.width, y: 0, duration: 0)
             let scrollLoop = SKAction.sequence([scrollSideways, scrollReset])
             let scrollForever = SKAction.repeatForever(scrollLoop)
-
+            
             clouds.run(scrollForever)
         }
     }
     
     
     func createPlatforms(yPosition: CGFloat) {
-   
-        let min = CGFloat(frame.width / 6)
-        let max = CGFloat(frame.width / 3)
-        var xPosition = CGFloat.random(in: -min ... max)
         
-        let randMin: CGFloat = 0
-        let randMax: CGFloat = 8
-        var platformRandomizer = CGFloat.random(in: randMin ... randMax)
+        minGapSize = frame.width / 6
+        let newNodes: Set<SKSpriteNode>
+        var xPosition = min((CGFloat(Int.random(in: 2 ... 12)) / 12.0) * frame.size.width, frame.size.width - minGapSize)
         
-//        print("min \(min)")
-//        print("max \(max)")
-//        print("xPosition \(xPosition)")
-//        print("frame.x \(frame.minX)")
-
+        var randMin: Int = 1
+        var randMax: Int = 16
         
-        print("platformCount: \(platformCount)")
-        print("currentStage pre: \(currentStage)")
+        if 1...6 ~= lastRandom { // Last Platform Set Was Left Only
+            randMin = 7
+        }
+        else if 11...16 ~= lastRandom { // Last Platform Set Was Right Only
+            randMax = 10
+        }
+        
+        
+        let platformRandomizer = CGFloat(Int.random(in: randMin ... randMax))
+        
+        var transitionCheck = false
         
         if platformCount == 30 {
             currentStage = -currentStage
@@ -630,10 +646,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 currentStage = -currentStage
                 setPlatforms()
             }
+            transitionCheck = true
             
-            xPosition = frame.width * 0.125
         }
-        
         
         if score == 30 || score == 60 {
             setBackground()
@@ -643,9 +658,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         print("currentStage post: \(currentStage)")
         
         
-        
-
-
         platformPhysics = SKPhysicsBody(rectangleOf: CGSize(width: platformTexture.size().width, height: platformTexture.size().height))
         let platformLeft = SKSpriteNode(texture: platformTexture)
         platformLeft.physicsBody = platformPhysics.copy() as? SKPhysicsBody
@@ -657,7 +669,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         platformLeft.name = "left_platform"
         platformLeft.speed = platformSpeed
         platformArray.append(platformLeft)
-
+        
         let platformRight = SKSpriteNode(texture: platformTexture)
         platformRight.physicsBody = platformPhysics.copy() as? SKPhysicsBody
         platformRight.physicsBody?.isDynamic = true
@@ -674,37 +686,83 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreNode.name = "scoreDetect"
         scoreNode.speed = platformSpeed
         
-
+        
         // randomizer need to check if one or both platform needs to be added
         
-        let newNodes: Set<SKSpriteNode>
+        let minGapSize = frame.width / 6
+        var lpx: CGFloat = xPosition + platformLeft.size.width - minGapSize
+        var rpx: CGFloat = xPosition + minGapSize
+        var lpp: CGPoint
+        var rpp: CGPoint
+        var score_gap: [CGFloat] = []
+        var xAdjuster: CGFloat = 0
         
-        platformRandomizer = 0 // always spawns a set of them
-        
-        switch platformRandomizer {
-        case 0...2:
-            newNodes = [platformLeft, platformRight, scoreNode]
-        case 3...5:
-            newNodes = [platformRight, scoreNode]
-        case 6...8:
+        if 1...6 ~= platformRandomizer {
             newNodes = [platformLeft, scoreNode]
-        default:
+            lpx = frame.width * (platformRandomizer / 18)
+            rpx = 0
+            score_gap.append(frame.width - lpx)
+            score_gap.append(frame.maxX)
+          
+            
+            print("left")
+            
+        }
+        else if 11...16 ~= platformRandomizer {
+            newNodes = [platformRight, scoreNode]
+            rpx = frame.width * (platformRandomizer / 18)
+            lpx = 0
+            score_gap.append(frame.minX)
+            score_gap.append(frame.minX + frame.width - rpx)
+        
+            lpp = CGPoint(x: frame.minX - (platformLeft.size.width / 2), y: yPosition)
+            rpp = CGPoint(x: rpx, y: yPosition)
+            print("right")
+            
+        }
+        else {
             newNodes = [platformLeft, platformRight, scoreNode]
+            score_gap.append(frame.minX + (lpx * 2))
+            score_gap.append(frame.maxX - (rpx * 2))
+            lpp = CGPoint(x: lpx, y: yPosition )
+            rpp = CGPoint(x: rpx, y: yPosition )
+            print("double")
+        }
+        
+        if positionAtScore != nil && score_gap[0]...score_gap[1] ~= positionAtScore {
+            
+            xAdjuster = min(positionAtScore - score_gap[0],score_gap[1] - positionAtScore)
+            print("Adjuster Triggered! Previous Score Position: \(positionAtScore!)\n Scoring Gap Between \(score_gap[0]) and \(score_gap[1])\n Adjustment: \(xAdjuster)")
+            
         }
         
         for node in newNodes {
             platformGroup.insert(node)
         }
-
-        let gapSize: CGFloat = -frame.size.width / 6
-        platformLeft.position = CGPoint(x: xPosition + platformLeft.size.width - gapSize, y: yPosition )
-        platformRight.position = CGPoint(x: xPosition + gapSize, y: yPosition)
+        
+        
+        if lpx == 0 {
+            platformLeft.position = CGPoint(x: frame.minX - (platformLeft.size.width / 2), y: yPosition)
+            platformRight.position = CGPoint(x: rpx - xAdjuster, y: yPosition)
+        } else if rpx == 0 {
+            platformLeft.position = CGPoint(x: lpx + xAdjuster, y: yPosition)
+            platformRight.position = CGPoint(x: frame.maxX + (platformRight.size.width / 2), y: yPosition)
+            
+        }
+        else {
+           
+        }
+        
+        getSpriteDetails(node: platformLeft)
+        getSpriteDetails(node: platformRight)
+        
         scoreNode.position = CGPoint(x: frame.midX, y: platformLeft.position.y)
-
+        
+        
         let endPosition = frame.maxY + frame.midY
-
+        
         let moveAction = SKAction.moveBy(x: 0, y: endPosition, duration: 7)
-
+        
         for node in newNodes {
             let moveSequence = SKAction.sequence([
                 moveAction,
@@ -713,14 +771,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     self.platformGroup.remove(node)
                 }
             ])
-
+            
             addChild(node)
             nodeArray.append(node)
             node.run(moveSequence)
         }
         
         platformCount += 1
-        print("platform position \(platformLeft.position.y)")
+        
+        xAdjuster = 0
+        lastRandom = platformRandomizer
         
         increaseWorldSpeed += 1
         if increaseWorldSpeed % 10 == 0 {
@@ -732,26 +792,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
         }
-        
-        
-//         platformMonitor()
     }
-
-
+    
+    
     func createButtons() {
         buttonLeft = SKSpriteNode()
         buttonLeft.size = CGSize(width: frame.width / 2, height: frame.height)
         buttonLeft.position = CGPoint(x: frame.midX / 2, y: frame.midY)
-//        buttonLeft.color = .black
+        //        buttonLeft.color = .black
         buttonLeft.alpha = 1
         buttonLeft.name = "buttonLeft"
         buttonLeft.zPosition = 200
         addChild(buttonLeft)
-
+        
         buttonRight = SKSpriteNode()
         buttonRight.size = CGSize(width: frame.width / 2, height: frame.height)
         buttonRight.position = CGPoint(x: frame.midX * 1.5, y: frame.midY)
-//        buttonRight.color = .black
+        //        buttonRight.color = .black
         buttonRight.alpha = 1
         buttonRight.name = "buttonRight"
         buttonRight.zPosition = 200
@@ -776,7 +833,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         rightControl.name = "rightControl"
         rightControl.isHidden = UserDefaults.standard.bool(forKey: "areControlsHidden")
         addChild(rightControl)
-
+        
         pauseButton = SKSpriteNode(imageNamed: "Pause Button")
         pauseButton.size = CGSize(width: 48, height: 48)
         pauseButton.position = CGPoint(x: frame.maxX - 50, y: frame.maxY - 50)
@@ -784,32 +841,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         pauseButton.name = "pauseButton"
         addChild(pauseButton)
     }
-
-
+    
+    
     func changeMode(node: SKSpriteNode) {
         guard gameIsPaused == false else { return } // this may cause a bug if the player has died and presses the pause button to set gameIsPaused to true, which the restart you need to click the pause button again to set flag to false
-
+        
         if node == buttonLeft {
             mode -= 1
         } else if node == buttonRight {
             mode += 1
         }
-
+        
         if mode <= 8 && mode >= 0 {
-             planeMode()
+            planeMode()
         } else if mode > 8 {
-         mode = 8
+            mode = 8
         } else if mode < 0 {
-         mode = 0
+            mode = 0
         }
-
-
+        
+        
         if gameState == 1 {
             gameOver() // may want to be wary on how this is called because it is dependent on both gameState to == 1 and this call to be present as well
         }
     }
-
-
+    
+    
     func restartGame() {
         if let scene = GameScene(fileNamed: "GameScene") {
             scene.scaleMode = .aspectFill
@@ -818,17 +875,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             view?.presentScene(scene, transition: transition)
         }
     }
-
-
+    
+    
     func backToTitle() {
         if let skView = self.view {
-
+            
             guard let scene = TitleScreen(fileNamed: "TitleScreen") else { return }
             let transition = SKTransition.fade(withDuration: 1.5)
             scene.size = skView.frame.size
-
+            
             scene.scaleMode = .aspectFill
-
+            
             skView.presentScene(scene, transition: transition)
             pauseButton.removeFromParent()
             buttonLeft.removeFromParent()
@@ -851,15 +908,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             skView.presentScene(scene, transition: transition)
         }
     }
-
+    
     func pauseGame() {
         scoreLabel.alpha = 0
-
+        
         homeButton.size = CGSize(width: 48, height: 48)
         homeButton.zPosition = 220
         homeButton.position = CGPoint(x: frame.maxX * 0.35, y: frame.maxY * 0.90)
         homeButton.name = "homeButton"
-
+        
         restartButton.size = CGSize(width: 48, height: 48)
         restartButton.zPosition = 220
         restartButton.position = CGPoint(x: frame.maxX * 0.65, y: frame.maxY * 0.90)
@@ -876,12 +933,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         pauseLabel.fontSize = 48
         pauseLabel.zPosition = 220
         pauseLabel.name = "pauseLabel"
-
+        
         addChild(homeButton)
         addChild(restartButton)
         addChild(levelSelectButton)
         addChild(pauseLabel)
-
+        
         for node in nodeArray {
             node.isPaused = true
         }
@@ -893,13 +950,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         restartButton.removeFromParent()
         levelSelectButton.removeFromParent()
         childNode(withName: "pauseLabel")?.removeFromParent()
-
+        
         for node in nodeArray {
             node.isPaused = false
         }
     }
-
-
+    
+    
     func gameOver() {
         guard gameState == 1 else { return }
         
@@ -933,7 +990,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameOverWindow.name = "gameOverWindow"
         addChild(gameOverWindow)
         gameOverUIContainer.append(gameOverWindow)
-
+        
         restartButton.size = CGSize(width: 80, height: 80)
         restartButton.position = CGPoint(x: gameOverWindow.frame.minX + (restartButton.frame.width / 2), y: gameOverWindow.frame.minY - 70)
         restartButton.alpha = 0
@@ -957,7 +1014,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         homeButton.name = "homeButton"
         addChild(homeButton)
         gameOverUIContainer.append(homeButton)
-
+        
         bestScore = SKLabelNode(fontNamed: "Paper Plane Font")
         bestScore.text = scoreAsString
         bestScore.alpha = 0
@@ -969,19 +1026,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(bestScore)
         gameOverUIContainer.append(bestScore)
         
-//        let moveScore = SKAction.move(to: CGPoint(x: gameOverWindow.frame.midX, y: gameOverWindow.frame.maxY * 0.9), duration: 1.3)
-//        let pulseUp = SKAction.scale(to: 2.0, duration: 0.8)
-//        let pulseDown = SKAction.scale(to: 1, duration: 0.8)
-//
-//        let pulseSeq = SKAction.sequence([pulseUp, pulseDown])
-
-//        scoreLabel.run(moveScore)
-//        scoreLabel.run(pulseSeq)
-
+        //        let moveScore = SKAction.move(to: CGPoint(x: gameOverWindow.frame.midX, y: gameOverWindow.frame.maxY * 0.9), duration: 1.3)
+        //        let pulseUp = SKAction.scale(to: 2.0, duration: 0.8)
+        //        let pulseDown = SKAction.scale(to: 1, duration: 0.8)
+        //
+        //        let pulseSeq = SKAction.sequence([pulseUp, pulseDown])
+        
+        //        scoreLabel.run(moveScore)
+        //        scoreLabel.run(pulseSeq)
+        
         scene!.speed = 1.00
         
         scoreLabel.position = CGPoint(x: gameOverWindow.frame.midX, y: gameOverWindow.frame.midY + 80)
-
+        
         for node in gameOverUIContainer {
             Animations.shared.fadeAlphaIn(node: node, duration: 0.75, waitTime: 0)
         }
@@ -993,41 +1050,45 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             node.isPaused = true
         }
     }
-
-
+    
+    
     func didBegin(_ contact: SKPhysicsContact) {
-//        print("collision")
-
-         if contact.bodyA.node?.name == "scoreDetect" || contact.bodyB.node?.name == "scoreDetect" {
-             if contact.bodyA.node == plane {
-                 contact.bodyB.node?.removeFromParent()
-             } else {
-                 contact.bodyA.node?.removeFromParent()
-             }
-
-             score += 1
-
-             return
-         }
-
-//        if contact.bodyA.node?.name == "platformTrigger" || contact.bodyB.node?.name == "platformTrigger" {
-//            if contact.bodyA.node?.name == "spawn" || contact.bodyB.node?.name == "spawn" {
-//                let create = SKAction.run { [unowned self] in
-//                    self.createPlatforms()
-//                }
-//
-//                run(create)
-//
-//            }
-//        }
-
-
+        //        print("collision")
+        
+        if contact.bodyA.node?.name == "scoreDetect" || contact.bodyB.node?.name == "scoreDetect" {
+            if contact.bodyA.node == plane {
+                positionAtScore = contact.contactPoint.x
+                
+                contact.bodyB.node?.removeFromParent()
+            } else {
+                contact.bodyA.node?.removeFromParent()
+            }
+            
+            
+//            print("Score Collision Point: \(positionAtScore)")
+            score += 1
+            
+            return
+        }
+        
+        //        if contact.bodyA.node?.name == "platformTrigger" || contact.bodyB.node?.name == "platformTrigger" {
+        //            if contact.bodyA.node?.name == "spawn" || contact.bodyB.node?.name == "spawn" {
+        //                let create = SKAction.run { [unowned self] in
+        //                    self.createPlatforms()
+        //                }
+        //
+        //                run(create)
+        //
+        //            }
+        //        }
+        
+        
         guard contact.bodyA.node != nil && contact.bodyB.node != nil else {
             return
         }
-
+        
         guard noClip == false else { return }
-
+        
         if contact.bodyA.node == plane || contact.bodyB.node == plane {
             if contact.bodyA.node?.name == "platformTrigger" || contact.bodyB.node?.name == "platformTrigger" {
                 return
@@ -1069,7 +1130,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             continueLabel.name = "continueLabel"
             addChild(continueLabel)
             
-            let fadeAlphaTo = SKAction.fadeAlpha(to: 0.5, duration: 1)
+            _ = SKAction.fadeAlpha(to: 0.5, duration: 1)
             let fadeIn = SKAction.fadeIn(withDuration: 1.5)
             let wait = SKAction.wait(forDuration: 1.2)
             let fadeOut = SKAction.fadeOut(withDuration: 1.5)
@@ -1077,28 +1138,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let repeatForever = SKAction.repeatForever(fadeInFadeOut)
             
             continueLabel.run(repeatForever)
-
+            
             plane.removeFromParent()
             backgroundSpeed = 0
-            wallSpeed = 0
             platformSpeed = 0
             gameState = 1
-
+            
             pauseButton.removeFromParent()
             toggleNoClip.removeFromParent()
         }
     }
-
-
+    
+    
     func start() {
-//        scene?.view?.isPaused = false
-            
+        //        scene?.view?.isPaused = false
+        
         for node in self.children as [SKNode] {
             node.isPaused = false
         }
     }
-
-
+    
+    
     override func update(_ currentTime: TimeInterval) {
         if platformCount >= 3 && updateInitializer == false {
             updateInitializer = true
@@ -1107,61 +1167,61 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
                 self.createPlatforms(yPosition: lowestPlatform.position.y - (transitionPlatform.size().height * 3 - firstPlatform.size().height / 2))
                 
-//                         self.platformArray.append(self.topPlatform)
+                //                         self.platformArray.append(self.topPlatform)
                 // print("called createPlatforms()")
             }
             
-//            if highestPlatform.position.y >= plane.position.y {
-//                score += 1
-//            }
+            //            if highestPlatform.position.y >= plane.position.y {
+            //                score += 1
+            //            }
         }
     }
-
-
+    
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-
-
+        
+        
         for touch in touches {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
-
+            
             let cycle = SKAction.run {
                 self.changeMode(node: touchedNode as! SKSpriteNode)
             }
             let delay = SKAction.wait(forDuration: 0.10)
             let seq = SKAction.sequence([cycle, delay])
             let repeatAction = SKAction.repeatForever(seq)
-
+            
             if touchedNode.name == "buttonLeft" {
                 isButtonTouched = "buttonLeft"
-
+                
                 buttonLeft.run(repeatAction, withKey: "cycle")
-//                isLeftButtonPressed = true
+                //                isLeftButtonPressed = true
             }
-
+            
             if touchedNode.name == "buttonRight" {
                 isButtonTouched = "buttonRight"
-
+                
                 buttonRight.run(repeatAction, withKey: "cycle")
-//                isRightButtonPressed = true
+                //                isRightButtonPressed = true
             }
-
+            
             if touchedNode.name == "pauseButton" {
                 Animations.shared.shrink(node: pauseButton)
                 isButtonTouched = "pauseButton"
             }
-
+            
             if touchedNode.name == "homeButton" {
                 Animations.shared.shrink(node: homeButton)
                 isButtonTouched = "homeButton"
             }
-
+            
             if touchedNode.name == "restartButton" {
                 Animations.shared.shrink(node: restartButton)
                 isButtonTouched = "restartButton"
             }
-
+            
             if touchedNode.name == "levelSelectButton" {
                 Animations.shared.shrink(node: levelSelectButton)
                 isButtonTouched = "levelSelectButton"
@@ -1178,20 +1238,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
-
-
+    
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
-
+            
             // logically it can be put as only: else if isButtonIsTouched == "\stringName" rather than including touchedNode.name as well
             if touchedNode.name == "noClip" && isButtonTouched == "noClip" {
                 Animations.shared.expand(node: toggleNoClip)
             } else if touchedNode.name != "" && isButtonTouched == "noClip" {
                 Animations.shared.expand(node: toggleNoClip)
             }
-
+            
             if touchedNode.name == "pauseButton" && isButtonTouched == "pauseButton" {
                 gameIsPaused.toggle()
                 if gameIsPaused == true { pauseGame() } else { closePauseMenu() }
@@ -1199,14 +1259,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             } else if touchedNode.name != "" && isButtonTouched == "pauseButton" {
                 Animations.shared.expand(node: pauseButton)
             }
-
+            
             if touchedNode.name == "homeButton" {
                 Animations.shared.expand(node: homeButton)
                 backToTitle()
             } else if touchedNode.name != "" && isButtonTouched == "homeButton" {
                 Animations.shared.expand(node: homeButton)
             }
-
+            
             if touchedNode.name == "restartButton" {
                 Animations.shared.expand(node: restartButton)
                 restartGame()
@@ -1220,7 +1280,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             } else if touchedNode.name != "" && isButtonTouched == "levelSelectButton" {
                 Animations.shared.expand(node: levelSelectButton)
             }
-
+            
             if touchedNode.name == "noClip" {
                 noClip = !noClip
             }
@@ -1248,25 +1308,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             } else if touchedNode.name != "" && isButtonTouched == "gotIt" {
                 Animations.shared.expand(node: gotIt)
             }
-                
+            
             buttonLeft.removeAction(forKey: "cycle")
             buttonRight.removeAction(forKey: "cycle")
-
+            
             isButtonTouched = ""
         }
     }
-
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
-
+            
             // this may be bugged or lack the feature of swiping your finger button to button to quickly change presses. May need to just be moved to touchedEnded in some form or another.
-
+            
             if touchedNode.name != "buttonleft" {
                 buttonLeft.removeAction(forKey: "cycle")
             }
-
+            
             if touchedNode.name != "buttonRight" {
                 buttonLeft.removeAction(forKey: "cycle")
             }

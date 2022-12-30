@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "options_button_3.png",
+      "filename" : "options_button_3_alt.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "options_button_3@2x.png",
+      "filename" : "options_button_3_alt@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

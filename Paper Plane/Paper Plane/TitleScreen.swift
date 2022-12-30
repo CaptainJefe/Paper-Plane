@@ -559,13 +559,13 @@ class TitleScreen: SKScene {
             
             if touchedNode.name == "High Scores" {
                 Audio.shared.soundPlayer(node: touchedNode)
-                Animations.shared.animateTexture(node: highScoresButton, texture: [highScoresTexture2, highScoresTexture3, highScoresTexture4, highScoresTexture5])
+                Animations.shared.animateTexture(node: highScoresButton, texture: [highScoresTexture2, highScoresTexture3])
                 isButtonTouched = "High Scores"
             }
             
             if touchedNode.name == "Options" {
                 Audio.shared.soundPlayer(node: touchedNode)
-                Animations.shared.animateTexture(node: optionsButton, texture: [optionsTexture2, optionsTexture3, optionsTexture4, optionsTexture5])
+                Animations.shared.animateTexture(node: optionsButton, texture: [optionsTexture2, optionsTexture3])
                 isButtonTouched = "Options"
             }
             
@@ -616,7 +616,7 @@ class TitleScreen: SKScene {
             if touchedNode.name == "Play" && isButtonTouched == "Play" {
                 
                 let expand = SKAction.run { [unowned self] in
-                    Animations.shared.animateTexture(node: playButton, texture: [playButtonTexture4, playButtonTexture3, playButtonTexture2, playButtonTexture1])
+                    Animations.shared.animateTexture(node: playButton, texture: [playButtonTexture2, playButtonTexture1])
                 }
                 let wait = SKAction.wait(forDuration: 0.175)
                 let openWorldSelect = SKAction.run { [unowned self] in
@@ -635,22 +635,22 @@ class TitleScreen: SKScene {
             
             if touchedNode.name == "High Scores" && isButtonTouched == "High Scores" {
                 createHighScores()
-                Animations.shared.animateTexture(node: highScoresButton, texture: [highScoresTexture4, highScoresTexture3, highScoresTexture2, highScoresTexture1])
+                Animations.shared.animateTexture(node: highScoresButton, texture: [highScoresTexture2, highScoresTexture1])
                 for node in mainUIContainer { node.isUserInteractionEnabled = true }
                 
             } else if touchedNode.name != "High Scores" && isButtonTouched == "High Scores" {
-                Animations.shared.animateTexture(node: highScoresButton, texture: [highScoresTexture4, highScoresTexture3, highScoresTexture2, highScoresTexture1])
+                Animations.shared.animateTexture(node: highScoresButton, texture: [highScoresTexture2, highScoresTexture1])
             }
             
             
             if touchedNode.name == "Options" && isButtonTouched == "Options" {
-                Animations.shared.animateTexture(node: optionsButton, texture: [optionsTexture4, optionsTexture3, optionsTexture2, optionsTexture1])
+                Animations.shared.animateTexture(node: optionsButton, texture: [optionsTexture2, optionsTexture1])
                 createOptions()
                 lastMenuOpened = "Options"
                 for node in mainUIContainer { node.isUserInteractionEnabled = true }
                 
             } else if touchedNode.name != "Options" && isButtonTouched == "Options" {
-                Animations.shared.animateTexture(node: optionsButton, texture: [optionsTexture4, optionsTexture3, optionsTexture2, optionsTexture1])
+                Animations.shared.animateTexture(node: optionsButton, texture: [optionsTexture2, optionsTexture1])
             }
             
             

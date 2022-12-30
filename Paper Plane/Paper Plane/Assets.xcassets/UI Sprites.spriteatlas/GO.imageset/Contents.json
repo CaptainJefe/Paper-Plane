@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "GO.png",
+      "filename" : "play_button_1_alt_red.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "GO@2x.png",
+      "filename" : "play_button_1_alt_red@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

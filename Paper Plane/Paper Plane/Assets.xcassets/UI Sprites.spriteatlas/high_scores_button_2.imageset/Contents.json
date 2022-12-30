@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "high_scores_2.png",
+      "filename" : "high_scores_button_2_alt.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "high_scores_2@2x.png",
+      "filename" : "high_scores_button_2_alt@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
