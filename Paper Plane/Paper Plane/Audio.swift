@@ -26,12 +26,13 @@ class Audio: SKScene {
         guard isMusicMuted == false else { return }
         
         let castleTheme = SKAudioNode(fileNamed: "Paper Plane.mp3")
+        let chasmTheme = SKAudioNode(fileNamed: "Chasm_Theme.mp3")
         
         switch theme {
         case "castle":
             addChild(castleTheme)
         case "chasm":
-            addChild(castleTheme)
+            addChild(chasmTheme)
         case "silo":
             addChild(castleTheme)
         default:

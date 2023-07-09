@@ -47,12 +47,11 @@ class WorldSelect: SKScene {
     
     override func didMove(to view: SKView) {
         
-
         let scores = SavedData.shared.getScore()
         
         for value in scores ?? [] {
             if isSiloLocked == true {
-                if value >= 1500 {
+                if value >= 15 {
                     isSiloLocked = false
                     UserDefaults.standard.set(isSiloLocked, forKey: "isSiloLocked")
                 }

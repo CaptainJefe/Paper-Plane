@@ -84,11 +84,13 @@ class TitleScreen: SKScene {
     
     func startUp() {
         
-//        highScores = SavedData.shared.getScore() ?? [] // now set on declaration in file: SavedData
+//        SavedSettings.shared.setTutorialData() // Resets saved tutorial setting so it shows tutorial again
+        
         areControlsHidden = SavedSettings.shared.getControlsSettings()
         isMusicMuted = SavedSettings.shared.getMusicSettings() // retrieves and sets value that was last saved
         isSoundMuted = SavedSettings.shared.getSoundSettings() //
         gamesPlayed = SavedData.shared.getGamesPlayed()
+        firstTimePlaying = SavedSettings.shared.getTutorialData()
         
         if isFirstLaunch == true {
             let scaleUp = SKAction.scale(to: CGSize(width: logo.size.width * 4, height: logo.size.height * 4), duration: 0)

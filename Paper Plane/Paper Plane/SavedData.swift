@@ -79,6 +79,8 @@ var isSoundMuted = false
 
 var areControlsHidden = false
 
+var firstTimePlaying = true
+
 class SavedSettings {
     
     private init() {}
@@ -108,5 +110,13 @@ class SavedSettings {
     
     func getControlsSettings() -> Bool {
         return UserDefaults.standard.bool(forKey: "areControlsHidden")
+    }
+    
+    func setTutorialData() {
+        UserDefaults.standard.set(firstTimePlaying, forKey: "firstTimePlaying")
+    }
+    
+    func getTutorialData() -> Bool {
+        return UserDefaults.standard.bool(forKey: "firstTimePlaying")
     }
 }
