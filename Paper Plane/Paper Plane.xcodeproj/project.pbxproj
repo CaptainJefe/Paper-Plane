@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D61C63B52A8B923C0070C55F /* funcBackupTemp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61C63B42A8B923C0070C55F /* funcBackupTemp.swift */; };
 		D6800755252AE6100090D16D /* DestroyPlane.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6800753252AE6100090D16D /* DestroyPlane.sks */; };
 		D6800756252AE6100090D16D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6800754252AE6100090D16D /* Assets.xcassets */; };
 		D68007652537E8DA0090D16D /* TitleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68007642537E8DA0090D16D /* TitleScreen.swift */; };
@@ -39,6 +40,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D61C63B42A8B923C0070C55F /* funcBackupTemp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = funcBackupTemp.swift; sourceTree = "<group>"; };
 		D6800753252AE6100090D16D /* DestroyPlane.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = DestroyPlane.sks; sourceTree = SOURCE_ROOT; };
 		D6800754252AE6100090D16D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		D68007642537E8DA0090D16D /* TitleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleScreen.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 				D6EED41628DF40AF00A7F703 /* GameScene.swift */,
 				D6EED41828DF458000A7F703 /* GameScene.sks */,
 				D68DA3572A50F6E9003EAE12 /* GameSceneRewrite.swift */,
+				D61C63B42A8B923C0070C55F /* funcBackupTemp.swift */,
 				D68DA3582A50F6E9003EAE12 /* GameSceneRewrite.sks */,
 				D6A513EF291F42610098F2DD /* SavedData.swift */,
 				D6EED41228D6DCBC00A7F703 /* Animations.swift */,
@@ -259,6 +262,7 @@
 				D6A513EE291C5F130098F2DD /* SwitchScene.swift in Sources */,
 				D6A513F62939785D0098F2DD /* Instructions.swift in Sources */,
 				D6EED41728DF40AF00A7F703 /* GameScene.swift in Sources */,
+				D61C63B52A8B923C0070C55F /* funcBackupTemp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

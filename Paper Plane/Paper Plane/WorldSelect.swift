@@ -282,7 +282,7 @@ class WorldSelect: SKScene {
             
             Assets.sharedInstance.preloadGameAssets()
             
-            guard let scene = GameScene(fileNamed: "GameScene") else { return }
+            guard let scene = GameSceneRewrite(fileNamed: "GameSceneRewrite") else { return }
             scene.size = skView.frame.size
             
             let transition = SKTransition.fade(withDuration: 1.5)
