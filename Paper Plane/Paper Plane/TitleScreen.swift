@@ -23,6 +23,7 @@ class TitleScreen: SKScene {
     var playButton = SKSpriteNode(imageNamed: "play_button_1")
     var optionsButton = SKSpriteNode(imageNamed: "options_button_1")
     var highScoresButton = SKSpriteNode(imageNamed: "high_scores_button_1")
+    var menuSeparator: SKSpriteNode!
     
     var musicButton = SKSpriteNode(imageNamed: "")
     var soundButton = SKSpriteNode(imageNamed: "")
@@ -72,6 +73,10 @@ class TitleScreen: SKScene {
     var optionsTexture4 = SKTexture(imageNamed: "options_button_4")
     var optionsTexture5 = SKTexture(imageNamed: "options_button_5")
     
+    var menuSeperatorTexture = SKTexture(imageNamed: "menu_separator")
+    
+    var appVersion: String!
+    
     
     override func didMove(to view: SKView) {
         createMainMenu()
@@ -79,6 +84,10 @@ class TitleScreen: SKScene {
 //        createHighScores()
 //        createOptions()
         startUp()
+        
+        _ = SKAction.playSoundFileNamed("Button Click.mp3", waitForCompletion: false) // preloads the sound file to prevent lag when the audio is called for the first time -- seems to work in GameViewController, might preload for all scene instances
+        
+        appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     }
     
     
@@ -98,11 +107,13 @@ class TitleScreen: SKScene {
             let scaleDown = SKAction.scale(to: CGSize(width: logo.size.width, height: logo.size.height), duration: 1)
             let fadeInLogo = SKAction.fadeIn(withDuration: 1)
             
-            
-            Animations.shared.fadeAlphaIn(node: self.logo, duration: 1.75, waitTime: 1)
-            Animations.shared.fadeAlphaIn(node: self.playButton, duration: 0.5, waitTime: 3)
-            Animations.shared.fadeAlphaIn(node: self.highScoresButton, duration: 0.5, waitTime: 3)
-            Animations.shared.fadeAlphaIn(node: self.optionsButton, duration: 0.5, waitTime: 3)
+            for node in mainUIContainer {
+                if node.name == "logo" {
+                    Animations.shared.fadeAlphaIn(node: self.logo, duration: 1.75, waitTime: 1)
+                } else {
+                    Animations.shared.fadeAlphaIn(node: node, duration: 0.5, waitTime: 3)
+                }
+            }
             
             let sequence = SKAction.sequence([scaleUp, wait, scaleDown, fadeInLogo])
             
@@ -142,10 +153,11 @@ class TitleScreen: SKScene {
         }))
     }
     
+    
     func createMainMenu() {
         background = SKSpriteNode(imageNamed: "Title Screen BG")
         background.size = CGSize(width: frame.size.width, height: frame.size.width * 2.5)
-        background.position = CGPoint(x: view!.center.x, y: view!.center.y)
+        background.position = CGPoint(x: view!.center.x, y: view!.frame.maxY - background.frame.maxY)
         background.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         background.zPosition = -10
         background.alpha = 1
@@ -156,14 +168,19 @@ class TitleScreen: SKScene {
         logo.position = CGPoint(x: frame.midX, y: frame.maxY / 1.4)
         logo.alpha = 0
         addChild(logo)
+        
+        print("center \(view!.center.y)")
+        print("view diff \(view!.frame.maxY - background.frame.maxY)") // values change if written above background.position
+        print("background.frame.maxY\(background.frame.maxY)")
+        print("view.frame.maxY \(view!.frame.maxY)")
     }
     
     
     func createButtons() {
-        let UIButtonSize = CGSize(width: playButton.size.width * 1.7, height: playButton.size.height * 1.7)
+        let UIButtonSize = CGSize(width: playButton.size.width * 1.5, height: playButton.size.height * 1.5)
         
         playButton.size = UIButtonSize // // non number size is CGSize(width: frame.size.width / 2, height: frame.size.width / 4)
-        playButton.position = CGPoint(x: frame.midX, y: frame.midY / 1.1)
+        playButton.position = CGPoint(x: frame.midX, y: frame.midY / 1)
         playButton.colorBlendFactor = 0
         playButton.zPosition = 10
         playButton.alpha = 0
@@ -172,7 +189,7 @@ class TitleScreen: SKScene {
         mainUIContainer.append(playButton)
         
         highScoresButton.size = UIButtonSize // non number size is CGSize(width: frame.size.width / 2, height: frame.size.width / 4)
-        highScoresButton.position = CGPoint(x: playButton.position.x, y: playButton.position.y - 125)
+        highScoresButton.position = CGPoint(x: playButton.position.x, y: playButton.position.y - 70) // playButton.position.y - 150 is was the original
         highScoresButton.colorBlendFactor = 0
         highScoresButton.zPosition = 10
         highScoresButton.alpha = 0
@@ -180,14 +197,31 @@ class TitleScreen: SKScene {
         addChild(highScoresButton)
         mainUIContainer.append(highScoresButton)
         
-        optionsButton.size = CGSize(width: optionsButton.size.width, height: optionsButton.size.height)
-        optionsButton.position = CGPoint(x: frame.maxX * 0.9, y: frame.minY + (frame.size.height * 0.05))
+//        optionsButton.size = CGSize(width: optionsButton.size.width, height: optionsButton.size.height)
+//        optionsButton.position = CGPoint(x: frame.maxX * 0.9, y: frame.minY + (frame.size.height * 0.05))
+        optionsButton.size = UIButtonSize
+        optionsButton.position = CGPoint(x: playButton.position.x, y: highScoresButton.position.y - 70)
         optionsButton.colorBlendFactor = 0
         optionsButton.zPosition = 10
         optionsButton.alpha = 0
         optionsButton.name = "Options"
         addChild(optionsButton)
         mainUIContainer.append(optionsButton)
+        
+        var counter: [CGFloat] = [0,1]
+        
+        for x in 0...1 {
+            menuSeparator = SKSpriteNode(imageNamed: "separator")
+            menuSeparator.size = CGSize(width: playButton.size.width * 0.75, height: menuSeparator.size.height)
+            menuSeparator.position = CGPoint(x: playButton.position.x, y: (playButton.position.y - 35) - (CGFloat(x) * (playButton.position.y - highScoresButton.position.y)))
+            menuSeparator.colorBlendFactor = 0
+            menuSeparator.zPosition = 10
+            menuSeparator.alpha = 0
+            menuSeparator.name = "menuSeparator"
+            addChild(menuSeparator)
+            mainUIContainer.append(menuSeparator)
+
+        }
     }
 
     
@@ -210,7 +244,7 @@ class TitleScreen: SKScene {
     
     func createHighScores() {
         
-        highScoresLabel = SKSpriteNode(imageNamed: "highscores_label")
+        highScoresLabel = SKSpriteNode(imageNamed: "high_scores_label")
         highScoresLabel.position = CGPoint(x: frame.midX, y: frame.maxY * 0.88)
         highScoresLabel.size = CGSize(width: highScoresLabel.size.width * 1.2, height: highScoresLabel.size.height * 1.2)
         highScoresLabel.zPosition = 80
@@ -257,11 +291,11 @@ class TitleScreen: SKScene {
             addChild(hsNumberLabel)
             highScoresUIContainer.append(hsNumberLabel)
             
-            separator = SKSpriteNode(imageNamed: "Separator")
+            separator = SKSpriteNode(imageNamed: "separator")
             separator.position = CGPoint(x: self.frame.midX, y: hsLabel.position.y - 40)
             separator.size = CGSize(width: frame.width / 1.2, height: separator.size.height)
             separator.alpha = 0
-            separator.colorBlendFactor = 0.5
+            separator.colorBlendFactor = 0.25
             addChild(separator)
             highScoresUIContainer.append(separator)
             
@@ -384,7 +418,7 @@ class TitleScreen: SKScene {
         instructionsButton = SKSpriteNode(imageNamed: "instructions_button")
         instructionsButton.size = CGSize(width: 64, height: 64)
         instructionsButton.alpha = 0
-        instructionsButton.position = CGPoint(x: frame.midX / 3, y: frame.maxY * 0.10)
+        instructionsButton.position = CGPoint(x: frame.midX, y: controlsButton.position.y - 200)
         instructionsButton.zPosition = 55
         instructionsButton.name = "Instructions Button"
         addChild(instructionsButton)
@@ -392,7 +426,7 @@ class TitleScreen: SKScene {
         
         for i in 0...2 {
             
-            separator = SKSpriteNode(imageNamed: "Separator")
+            separator = SKSpriteNode(imageNamed: "separator")
             separator.position = CGPoint(x: self.frame.midX, y: (musicButton.position.y - 60) - CGFloat((i * 120)))
             separator.size = CGSize(width: frame.width / 1.2, height: separator.size.height)
             separator.alpha = 0
@@ -400,6 +434,16 @@ class TitleScreen: SKScene {
             addChild(separator)
             optionsUIContainer.append(separator)
         }
+        
+        let versionInfo = SKLabelNode(fontNamed: "Paper Plane Font")
+        versionInfo.text = "Version \(appVersion!)"
+        versionInfo.position = CGPoint(x: frame.midX
+                                       , y: frame.maxY * 0.05)
+        versionInfo.fontSize = 14
+        versionInfo.alpha = 0
+        addChild(versionInfo)
+        optionsUIContainer.append(versionInfo)
+        
         
         showOptionsMenu()
     }
@@ -554,20 +598,22 @@ class TitleScreen: SKScene {
             
             if touchedNode.name == "Play" {
                 Audio.shared.soundPlayer(node: touchedNode)
-                Animations.shared.animateTexture(node: playButton, texture: [playButtonTexture2, playButtonTexture3])
+                Animations.shared.shrink(node: playButton)
+//                Animations.shared.animateTexture(node: playButton, texture: [playButtonTexture2, playButtonTexture3])
                 isButtonTouched = "Play"
             }
             
-            
             if touchedNode.name == "High Scores" {
                 Audio.shared.soundPlayer(node: touchedNode)
-                Animations.shared.animateTexture(node: highScoresButton, texture: [highScoresTexture2, highScoresTexture3])
+                Animations.shared.shrink(node: highScoresButton)
+//                Animations.shared.animateTexture(node: highScoresButton, texture: [highScoresTexture2, highScoresTexture3])
                 isButtonTouched = "High Scores"
             }
             
             if touchedNode.name == "Options" {
                 Audio.shared.soundPlayer(node: touchedNode)
-                Animations.shared.animateTexture(node: optionsButton, texture: [optionsTexture2, optionsTexture3])
+                Animations.shared.shrink(node: optionsButton)
+//                Animations.shared.animateTexture(node: optionsButton, texture: [optionsTexture2, optionsTexture3])
                 isButtonTouched = "Options"
             }
             
@@ -617,42 +663,59 @@ class TitleScreen: SKScene {
             
             if touchedNode.name == "Play" && isButtonTouched == "Play" {
                 
+//                let expand = SKAction.run { [unowned self] in
+//                    Animations.shared.animateTexture(node: playButton, texture: [playButtonTexture2, playButtonTexture1])
+//                }
+//                let wait = SKAction.wait(forDuration: 0.175)
+//                let openWorldSelect = SKAction.run { [unowned self] in
+//                    worldSelectMenu()
+//                }
+//                let sequence = SKAction.sequence([expand, wait, openWorldSelect])
+//                
+//                run(sequence)
+                
                 let expand = SKAction.run { [unowned self] in
-                    Animations.shared.animateTexture(node: playButton, texture: [playButtonTexture2, playButtonTexture1])
+                    Animations.shared.expand(node: playButton)
                 }
                 let wait = SKAction.wait(forDuration: 0.175)
-                let openWorldSelect = SKAction.run { [unowned self] in
-                    worldSelectMenu()
-                }
-                let sequence = SKAction.sequence([expand, wait, openWorldSelect])
+                let sequence = SKAction.sequence([expand, wait])
                 
-                run(sequence)
+                run(sequence, completion: { self.worldSelectMenu() } )
                 
                 for node in mainUIContainer { node.isUserInteractionEnabled = true }
                 
             } else if touchedNode.name != "Play" && isButtonTouched == "Play" {
-                Animations.shared.animateTexture(node: playButton, texture: [playButtonTexture2, playButtonTexture1])
+//                Animations.shared.animateTexture(node: playButton, texture: [playButtonTexture2, playButtonTexture1])
+                Animations.shared.expand(node: playButton)
             }
             
             
             if touchedNode.name == "High Scores" && isButtonTouched == "High Scores" {
+                
+//                Animations.shared.animateTexture(node: highScoresButton, texture: [highScoresTexture2, highScoresTexture1])
+                Animations.shared.expand(node: highScoresButton)
                 createHighScores()
-                Animations.shared.animateTexture(node: highScoresButton, texture: [highScoresTexture2, highScoresTexture1])
+                
                 for node in mainUIContainer { node.isUserInteractionEnabled = true }
                 
             } else if touchedNode.name != "High Scores" && isButtonTouched == "High Scores" {
-                Animations.shared.animateTexture(node: highScoresButton, texture: [highScoresTexture2, highScoresTexture1])
+//                Animations.shared.animateTexture(node: highScoresButton, texture: [highScoresTexture2, highScoresTexture1])
+                Animations.shared.expand(node: highScoresButton)
             }
             
             
             if touchedNode.name == "Options" && isButtonTouched == "Options" {
-                Animations.shared.animateTexture(node: optionsButton, texture: [optionsTexture2, optionsTexture1])
+                
+                Animations.shared.expand(node: optionsButton)
                 createOptions()
+//                Animations.shared.animateTexture(node: optionsButton, texture: [optionsTexture2, optionsTexture1])
+                
                 lastMenuOpened = "Options"
                 for node in mainUIContainer { node.isUserInteractionEnabled = true }
                 
             } else if touchedNode.name != "Options" && isButtonTouched == "Options" {
-                Animations.shared.animateTexture(node: optionsButton, texture: [optionsTexture2, optionsTexture1])
+//                Animations.shared.animateTexture(node: optionsButton, texture: [optionsTexture2, optionsTexture1])
+                Animations.shared.expand(node: optionsButton)
             }
             
             
@@ -743,10 +806,8 @@ class TitleScreen: SKScene {
                 run(seq)
                 
             } else if touchedNode.name != "gotIt" && isButtonTouched == "gotIt" {
-                Animations.shared.expand(node: closeButton)
+                Animations.shared.expand(node: gotIt)
             }
-            
-            
             
             
             if touchedNode.name == "Close Button" && isButtonTouched == "Close Button" {

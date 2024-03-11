@@ -34,6 +34,7 @@ class Animations: SKNode {
         }))
     }
     
+    
     // Colorizes a SKNode -- Primarily used to darken/dim
     func colorize(node: SKNode, color: UIColor, colorBlendFactor: CGFloat, duration: TimeInterval) {
         let colorize = SKAction.colorize(with: color, colorBlendFactor: colorBlendFactor, duration: duration)

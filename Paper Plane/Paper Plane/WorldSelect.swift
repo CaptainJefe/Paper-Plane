@@ -35,6 +35,8 @@ class WorldSelect: SKScene {
     var homeButton: SKSpriteNode!
     var playButton: SKSpriteNode!
     
+    var areButtonsEnabled = true
+    
     var isButtonTouched: String!
     var firstLoad: Bool = true
     
@@ -51,7 +53,7 @@ class WorldSelect: SKScene {
         
         for value in scores ?? [] {
             if isSiloLocked == true {
-                if value >= 15 {
+                if value >= 50 {
                     isSiloLocked = false
                     UserDefaults.standard.set(isSiloLocked, forKey: "isSiloLocked")
                 }
@@ -103,9 +105,9 @@ class WorldSelect: SKScene {
         homeButton.name = "homeButton"
         addChild(homeButton)
         
-        playButton = SKSpriteNode(imageNamed: "GO")
-        playButton.size = CGSize(width: 128, height: 64)
-        playButton.position = CGPoint(x: frame.midX, y: frame.midY / 3)
+        playButton = SKSpriteNode(imageNamed: "ws_play_button")
+        playButton.size = CGSize(width: 80, height: 80)
+        playButton.position = CGPoint(x: frame.midX, y: frame.midY / 2.5)
         playButton.zPosition = 200
         playButton.name = "playButton"
         addChild(playButton)
@@ -126,12 +128,21 @@ class WorldSelect: SKScene {
     }
     
     func animateBackground(texture: SKTexture) {
+        let disableButtons = SKAction.run {
+            self.areButtonsEnabled = false
+        }
+        
         let fadeOut = SKAction.fadeOut(withDuration: 0.4)
         let fadeIn = SKAction.fadeIn(withDuration: 0.4)
         let setTexture = SKAction.run {
             self.previewBackgroundTexture = texture
         }
-        let seq = SKAction.sequence([fadeOut, setTexture, fadeIn])
+        
+        let enableButtons = SKAction.run {
+            self.areButtonsEnabled = true
+        }
+        
+        let seq = SKAction.sequence([disableButtons, fadeOut, setTexture, fadeIn, enableButtons])
         
         run(seq)
     }
@@ -159,10 +170,10 @@ class WorldSelect: SKScene {
         if isSiloLocked == true {
             if theme == "silo" {
                 
-                lockedText.text = "Get a score of 150 or more to unlock!"
+                lockedText.text = "Get a score of 50 or more to unlock!"
                 Animations.shared.fadeAlphaIn(node: lockSprite, duration: 0.4, waitTime: 0.3)
                 Animations.shared.colorize(node: previewBackground, color: .darkGray, colorBlendFactor: 0.85, duration: 0.3)
-                Animations.shared.fadeAlphaIn(node: lockedText, duration: 0.8, waitTime: 0.3)
+                Animations.shared.fadeAlphaIn(node: lockedText, duration: 0.4, waitTime: 0.3)
             } else {
                 Animations.shared.fadeAlphaOut(node: lockSprite, duration: 0.4, waitTime: 0)
                 Animations.shared.colorize(node: previewBackground, color: .clear, colorBlendFactor: 0, duration: 0.3)
@@ -182,7 +193,7 @@ class WorldSelect: SKScene {
                 
                 Animations.shared.fadeAlphaIn(node: lockSprite, duration: 0.4, waitTime: 0.3)
                 Animations.shared.colorize(node: previewBackground, color: .darkGray, colorBlendFactor: 0.85, duration: 0.3)
-                Animations.shared.fadeAlphaIn(node: lockedText, duration: 0.8, waitTime: 0.3)
+                Animations.shared.fadeAlphaIn(node: lockedText, duration: 0.4, waitTime: 0.3)
             } else {
                 Animations.shared.fadeAlphaOut(node: lockSprite, duration: 0.4, waitTime: 0)
                 Animations.shared.colorize(node: previewBackground, color: .clear, colorBlendFactor: 0, duration: 0.3)
@@ -196,6 +207,7 @@ class WorldSelect: SKScene {
         
         switch currentPreview {
         case "castle":
+            theme = "castle"
             
             if firstLoad == true {
                 previewBackgroundTexture = castlePreview
@@ -206,16 +218,16 @@ class WorldSelect: SKScene {
                 animateLabel(texture: castleLabel)
             }
             
-            theme = "castle"
             
             playButton.isHidden = false
             
         case "chasm":
+            theme = "chasm"
+            
             levelIndicator.texture = SKTexture(imageNamed: "level_indicator_2")
             animateBackground(texture: chasmPreview)
             animateLabel(texture: chasmLabel)
             
-            theme = "chasm"
             
             if isChasmLocked == true {
                 playButton.isHidden = true
@@ -224,11 +236,12 @@ class WorldSelect: SKScene {
             }
             
         case "silo":
+            theme = "silo"
+            
             levelIndicator.texture = SKTexture(imageNamed: "level_indicator_3")
             animateBackground(texture: siloPreview)
             animateLabel(texture: siloLabel)
             
-            theme = "silo"
             
             if isSiloLocked == true {
                 playButton.isHidden = true
@@ -338,12 +351,12 @@ class WorldSelect: SKScene {
                 isButtonTouched = "playButton"
             }
             
-            if touchedNode.name == "buttonLeft" {
+            if touchedNode.name == "buttonLeft" && areButtonsEnabled == true {
                 Animations.shared.shrink(node: buttonLeft)
                 isButtonTouched = "buttonLeft"
             }
             
-            if touchedNode.name == "buttonRight" {
+            if touchedNode.name == "buttonRight" && areButtonsEnabled == true {
                 Animations.shared.shrink(node: buttonRight)
                 isButtonTouched = "buttonRight"
             }
@@ -389,7 +402,7 @@ class WorldSelect: SKScene {
                 Animations.shared.expand(node: playButton)
             }
             
-            if touchedNode.name == "buttonLeft" {
+            if touchedNode.name == "buttonLeft" && areButtonsEnabled == true {
                 Animations.shared.expand(node: buttonLeft)
                 
                 if theme == "castle" {
@@ -409,7 +422,7 @@ class WorldSelect: SKScene {
                 Animations.shared.expand(node: buttonLeft)
             }
             
-            if touchedNode.name == "buttonRight" {
+            if touchedNode.name == "buttonRight" && areButtonsEnabled == true {
                 Animations.shared.expand(node: buttonRight)
                 
                 if theme == "castle" {
@@ -419,8 +432,7 @@ class WorldSelect: SKScene {
                 } else if theme == "silo" {
                     setPreview(currentPreview: "castle")
                 }
-                
-                
+            
             } else if touchedNode.name != "buttonRight" && isButtonTouched == "buttonRight" {
                 Animations.shared.expand(node: buttonRight)
             }

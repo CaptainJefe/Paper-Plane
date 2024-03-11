@@ -1,16 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Sound Button.png",
+      "filename" : "Sound Button v2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Sound Button@2x.png",
+      "filename" : "Sound Button v2 128x128.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "Sound Button v2 192x192.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

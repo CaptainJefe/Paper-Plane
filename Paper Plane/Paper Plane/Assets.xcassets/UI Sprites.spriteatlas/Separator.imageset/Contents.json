@@ -1,16 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Separator.png",
+      "filename" : "separator.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Separator@2x.png",
+      "filename" : "separator@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "separator@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

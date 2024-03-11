@@ -3,11 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		D61C63B52A8B923C0070C55F /* funcBackupTemp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61C63B42A8B923C0070C55F /* funcBackupTemp.swift */; };
+		D64616882B920E6000EFAAF8 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = D64616872B920E6000EFAAF8 /* GoogleMobileAds */; };
 		D6800755252AE6100090D16D /* DestroyPlane.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6800753252AE6100090D16D /* DestroyPlane.sks */; };
 		D6800756252AE6100090D16D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6800754252AE6100090D16D /* Assets.xcassets */; };
 		D68007652537E8DA0090D16D /* TitleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68007642537E8DA0090D16D /* TitleScreen.swift */; };
@@ -33,7 +34,6 @@
 		D6AD9B4724EFBAA000503775 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6AD9B4624EFBAA000503775 /* Assets.xcassets */; };
 		D6AD9B4A24EFBAA000503775 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6AD9B4824EFBAA000503775 /* LaunchScreen.storyboard */; };
 		D6B2F13F290DB04C0054D747 /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2F13E290DB04C0054D747 /* Assets.swift */; };
-		D6E06BAE25C95168005FAC98 /* Paper Plane.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D6E06BAD25C95168005FAC98 /* Paper Plane.mp3 */; };
 		D6EED41328D6DCBC00A7F703 /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EED41228D6DCBC00A7F703 /* Animations.swift */; };
 		D6EED41728DF40AF00A7F703 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EED41628DF40AF00A7F703 /* GameScene.swift */; };
 		D6EED41928DF458000A7F703 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6EED41828DF458000A7F703 /* GameScene.sks */; };
@@ -70,7 +70,6 @@
 		D6AD9B4924EFBAA000503775 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D6AD9B4B24EFBAA000503775 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Paper Plane/Info.plist"; sourceTree = SOURCE_ROOT; };
 		D6B2F13E290DB04C0054D747 /* Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
-		D6E06BAD25C95168005FAC98 /* Paper Plane.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Paper Plane.mp3"; sourceTree = "<group>"; };
 		D6EED40E28D5835900A7F703 /* GameSceneNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSceneNew.swift; sourceTree = "<group>"; };
 		D6EED41028D58A8700A7F703 /* GameSceneNew.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameSceneNew.sks; sourceTree = "<group>"; };
 		D6EED41228D6DCBC00A7F703 /* Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
@@ -84,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D64616882B920E6000EFAAF8 /* GoogleMobileAds in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,7 +96,6 @@
 				D68DA35B2A57A0B4003EAE12 /* Chasm_Theme.mp3 */,
 				D6A513F9293EEEFA0098F2DD /* Button Click.mp3 */,
 				D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */,
-				D6E06BAD25C95168005FAC98 /* Paper Plane.mp3 */,
 				D6974234259C4C58006F6049 /* Asai-Analogue.ttf */,
 			);
 			path = Resources;
@@ -181,6 +180,9 @@
 			dependencies = (
 			);
 			name = "Paper Plane";
+			packageProductDependencies = (
+				D64616872B920E6000EFAAF8 /* GoogleMobileAds */,
+			);
 			productName = PlaneTest;
 			productReference = D6AD9B3624EFBAA000503775 /* Paper Plane.app */;
 			productType = "com.apple.product-type.application";
@@ -201,7 +203,7 @@
 				};
 			};
 			buildConfigurationList = D6AD9B3124EFBA9F00503775 /* Build configuration list for PBXProject "Paper Plane" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -209,6 +211,9 @@
 				Base,
 			);
 			mainGroup = D6AD9B2D24EFBA9F00503775;
+			packageReferences = (
+				D64616862B920E6000EFAAF8 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+			);
 			productRefGroup = D6AD9B3724EFBAA000503775 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -233,7 +238,6 @@
 				D6A513EC2914D3E70098F2DD /* Paper Plane Font.ttf in Resources */,
 				D68DA35C2A57A0B4003EAE12 /* Chasm_Theme.mp3 in Resources */,
 				D6AD9B4A24EFBAA000503775 /* LaunchScreen.storyboard in Resources */,
-				D6E06BAE25C95168005FAC98 /* Paper Plane.mp3 in Resources */,
 				D6800756252AE6100090D16D /* Assets.xcassets in Resources */,
 				D68DA35A2A50F6E9003EAE12 /* GameSceneRewrite.sks in Resources */,
 				D6A5144C295D551B0098F2DD /* .gitignore in Resources */,
@@ -408,6 +412,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9R9H53AU37;
 				INFOPLIST_FILE = "Paper Plane/Info.plist";
@@ -417,9 +422,12 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = learningswift.PaperPlane;
+				PRODUCT_BUNDLE_IDENTIFIER = westonwilliams.PaperPlane;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -429,6 +437,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9R9H53AU37;
 				INFOPLIST_FILE = "Paper Plane/Info.plist";
@@ -438,9 +447,12 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = learningswift.PaperPlane;
+				PRODUCT_BUNDLE_IDENTIFIER = westonwilliams.PaperPlane;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -468,6 +480,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D64616862B920E6000EFAAF8 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D64616872B920E6000EFAAF8 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D64616862B920E6000EFAAF8 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D6AD9B2E24EFBA9F00503775 /* Project object */;
 }
