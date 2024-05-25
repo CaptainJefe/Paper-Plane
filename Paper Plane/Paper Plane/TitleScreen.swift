@@ -23,12 +23,14 @@ class TitleScreen: SKScene {
     var playButton = SKSpriteNode(imageNamed: "play_button_1")
     var optionsButton = SKSpriteNode(imageNamed: "options_button_1")
     var highScoresButton = SKSpriteNode(imageNamed: "high_scores_button_1")
+    var removeAdsButton = SKSpriteNode(imageNamed: "remove_ads")
     var menuSeparator: SKSpriteNode!
     
     var musicButton = SKSpriteNode(imageNamed: "")
     var soundButton = SKSpriteNode(imageNamed: "")
     var controlsButton = SKSpriteNode(imageNamed: "")
-    var instructionsButton: SKSpriteNode!
+    var tutorialButton: SKSpriteNode!
+    var restorePurchases: SKSpriteNode!
     
     var closeButton = SKSpriteNode(imageNamed: "Close Button")
     
@@ -77,31 +79,25 @@ class TitleScreen: SKScene {
     
     var appVersion: String!
     
+    static var shared = TitleScreen()
+    
     
     override func didMove(to view: SKView) {
+        
         createMainMenu()
         createButtons()
-//        createHighScores()
-//        createOptions()
         startUp()
         
-        _ = SKAction.playSoundFileNamed("Button Click.mp3", waitForCompletion: false) // preloads the sound file to prevent lag when the audio is called for the first time -- seems to work in GameViewController, might preload for all scene instances
-        
         appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+        
+        TitleScreen.shared = self
     }
     
     
     func startUp() {
         
-//        SavedSettings.shared.setTutorialData() // Resets saved tutorial setting so it shows tutorial again
-        
-        areControlsHidden = SavedSettings.shared.getControlsSettings()
-        isMusicMuted = SavedSettings.shared.getMusicSettings() // retrieves and sets value that was last saved
-        isSoundMuted = SavedSettings.shared.getSoundSettings() //
-        gamesPlayed = SavedData.shared.getGamesPlayed()
-        firstTimePlaying = SavedSettings.shared.getTutorialData()
-        
         if isFirstLaunch == true {
+            
             let scaleUp = SKAction.scale(to: CGSize(width: logo.size.width * 4, height: logo.size.height * 4), duration: 0)
             let wait = SKAction.wait(forDuration: 1)
             let scaleDown = SKAction.scale(to: CGSize(width: logo.size.width, height: logo.size.height), duration: 1)
@@ -127,6 +123,14 @@ class TitleScreen: SKScene {
                 Animations.shared.fadeAlphaIn(node: node, duration: 0.35, waitTime: 0)
 
             }
+            
+            let wait = SKAction.wait(forDuration: 0.35)
+            let showBanner = SKAction.run {
+                GameViewController.shared.showBannerAds()
+            }
+            let seq = SKAction.sequence([wait, showBanner])
+            
+            run(seq)
             
             // Use this for UI elements to already exist when coming back to the main menu
 //            for node in mainUIContainer {
@@ -155,7 +159,7 @@ class TitleScreen: SKScene {
     
     
     func createMainMenu() {
-        background = SKSpriteNode(imageNamed: "Title Screen BG")
+        background = SKSpriteNode(imageNamed: "title_screen_background")
         background.size = CGSize(width: frame.size.width, height: frame.size.width * 2.5)
         background.position = CGPoint(x: view!.center.x, y: view!.frame.maxY - background.frame.maxY)
         background.anchorPoint = CGPoint(x: 0.5, y: 0.5)
@@ -208,6 +212,18 @@ class TitleScreen: SKScene {
         addChild(optionsButton)
         mainUIContainer.append(optionsButton)
         
+        removeAdsButton.size = CGSize(width: removeAdsButton.size.width * 1.5, height: removeAdsButton.size.height * 1.5)
+        removeAdsButton.position = CGPoint(x: playButton.position.x, y: optionsButton.position.y - 120)
+        removeAdsButton.colorBlendFactor = 0
+        removeAdsButton.zPosition = 10
+        removeAdsButton.alpha = 0
+        removeAdsButton.name = "remove_ads"
+        mainUIContainer.append(removeAdsButton)
+        
+        if adsRemoved == false {
+            addChild(removeAdsButton)
+        }
+        
         var counter: [CGFloat] = [0,1]
         
         for x in 0...1 {
@@ -251,21 +267,30 @@ class TitleScreen: SKScene {
         highScoresLabel.alpha = 0
         addChild(highScoresLabel)
         
-        let sortedScores = SavedData.shared.getScore()?.sorted(by: >)
-        var scoresList = sortedScores ?? [Int](repeating: 0, count: 10)
-        let scoresAsString = scoresList.map(String.init)
         
-        print("Scores: \(scoresList)")
+        var displayScores = [String](repeating: "...", count: 10)
+        let sortedScores = SavedData.shared.getScore() ?? []
+        var uniqueScores = Array(Set(sortedScores)).sorted(by: >).filter { $0 != 0 }
         
-        let scoresArray = [Int](repeating: 0, count: 10) // preset array for testing
+        for (index, score) in uniqueScores.enumerated() {
+            if index < displayScores.count {
+                displayScores[index] = String(score)
+            } else {
+                break
+            }
+        }
         
+        // Old declaration for score sorting
         
-        print(scoresAsString)
+//        let sortedScores = SavedData.shared.getScore()
+//        var uniqueScores = Array(Set(sortedScores ?? [])).sorted(by: >)
+//        var scoresList = uniqueScores ?? [Int](repeating: 0, count: 10)
+//        let scoresAsString = scoresList.map(String.init)
         
         var counter: CGFloat = 0
         var counter2: Int = 0 // counter doesn't compile (takes too long) when set as an Int. This is a temp solution
         
-        for highscore in scoresAsString.prefix(10) { // scoresAsString[0...4] is also a valid call
+        for highscore in displayScores.prefix(10) { // scoresAsString[0...4] is also a valid call
             
             hsLabel = SKLabelNode(fontNamed: "Paper Plane Font")
             hsLabel.text = highscore as String
@@ -341,94 +366,55 @@ class TitleScreen: SKScene {
         
         run(sequence)
         Animations.shared.colorize(node: background, color: .darkGray, colorBlendFactor: 0.75, duration: 0.6)
+        
+        GameViewController.shared.hideBannerAds()
     }
     
     
     func createOptions() {
         
-        if UserDefaults.standard.bool(forKey: "isMusicMuted") == false {
-            musicButton.texture = SKTexture(imageNamed: "music_button")
-        } else {
-            musicButton.texture = SKTexture(imageNamed: "music_button_muted")
-        }
+        var soundButtonTexture: String
         
         if UserDefaults.standard.bool(forKey: "isSoundMuted") == false {
-            soundButton.texture = SKTexture(imageNamed: "sound_button")
+            soundButtonTexture = "sound_button_on"
         } else {
-            soundButton.texture = SKTexture(imageNamed: "sound_button_muted")
+            soundButtonTexture = "sound_button_off"
         }
         
-        if UserDefaults.standard.bool(forKey: "areControlsHidden") == false {
-            controlsButton.texture = SKTexture(imageNamed: "controls_button")
-        } else {
-            controlsButton.texture = SKTexture(imageNamed: "controls_button_hidden")
-        }
+//        CGPoint(x: frame.midX, y: musicButton.position.y + (musicButton.size.height / 6))
         
-        musicButton.size = CGSize(width: 64, height: 64)
-        musicButton.alpha = 0
-        musicButton.position = CGPoint(x: frame.midX / 3, y: frame.maxY * 0.75)
-        musicButton.zPosition = 55
-        musicButton.name = "Music Button"
-        addChild(musicButton)
-        optionsUIContainer.append(musicButton)
-        
-        let musicLabel = SKLabelNode(fontNamed: "Paper Plane Font")
-        musicLabel.text = "Music"
-        musicLabel.position = CGPoint(x: frame.midX, y: musicButton.position.y + (musicButton.size.height / 6))
-        musicLabel.fontSize = 48
-        musicLabel.alpha = 0
-        addChild(musicLabel)
-        optionsUIContainer.append(musicLabel)
-        
-        soundButton.size = CGSize(width: 64, height: 64)
+        soundButton = SKSpriteNode(imageNamed: soundButtonTexture)
+        soundButton.size = CGSize(width: soundButton.size.width * 1.5, height: soundButton.size.height * 1.5)
         soundButton.alpha = 0
-        soundButton.position = CGPoint(x: frame.midX / 3, y: musicButton.position.y - 120)
+        soundButton.position = CGPoint(x: frame.midX, y: frame.maxY * 0.6)
         soundButton.zPosition = 55
-        soundButton.name = "Sound Button"
+        soundButton.name = "sound_button"
         addChild(soundButton)
         optionsUIContainer.append(soundButton)
         
-        print("music1 \(musicButton.position.y - 120)")
-        print("music2 \(musicButton.position.y + (musicButton.size.height / 6))")
+        tutorialButton = SKSpriteNode(imageNamed: "tutorial_button")
+        tutorialButton.size = CGSize(width: tutorialButton.size.width * 1.5, height: tutorialButton.size.height * 1.5)
+        tutorialButton.alpha = 0
+        tutorialButton.position = CGPoint(x: frame.midX, y: soundButton.position.y - 90)
+        tutorialButton.zPosition = 55
+        tutorialButton.name = "tutorial_button"
+        addChild(tutorialButton)
+        optionsUIContainer.append(tutorialButton)
         
-        let soundLabel = SKLabelNode(fontNamed: "Paper Plane Font")
-        soundLabel.text = "Sound"
-        soundLabel.position = CGPoint(x: frame.midX, y: soundButton.position.y + (soundButton.size.height / 6))
-        soundLabel.fontSize = 48
-        soundLabel.alpha = 0
-        addChild(soundLabel)
-        optionsUIContainer.append(soundLabel)
-        
-        controlsButton.size = CGSize(width: 64, height: 64)
-        controlsButton.alpha = 0
-        controlsButton.position = CGPoint(x: frame.midX / 3, y: soundButton.position.y - 120)
-        controlsButton.zPosition = 55
-        controlsButton.name = "Controls Button"
-        addChild(controlsButton)
-        optionsUIContainer.append(controlsButton)
-        
-        let controlsLabel = SKLabelNode(fontNamed: "Paper Plane Font")
-        controlsLabel.text = "Controls"
-        controlsLabel.position = CGPoint(x: frame.midX, y: controlsButton.position.y + (controlsButton.size.height / 6))
-        controlsLabel.fontSize = 48
-        controlsLabel.alpha = 0
-        addChild(controlsLabel)
-        optionsUIContainer.append(controlsLabel)
-        
-        instructionsButton = SKSpriteNode(imageNamed: "instructions_button")
-        instructionsButton.size = CGSize(width: 64, height: 64)
-        instructionsButton.alpha = 0
-        instructionsButton.position = CGPoint(x: frame.midX, y: controlsButton.position.y - 200)
-        instructionsButton.zPosition = 55
-        instructionsButton.name = "Instructions Button"
-        addChild(instructionsButton)
-        optionsUIContainer.append(instructionsButton)
+        restorePurchases = SKSpriteNode(imageNamed: "restore_purchases")
+        restorePurchases.size = CGSize(width: restorePurchases.size.width * 1.5, height: restorePurchases.size.height * 1.5)
+        restorePurchases.alpha = 0
+        restorePurchases.position = CGPoint(x: frame.midX, y: tutorialButton.position.y - 90)
+        restorePurchases.zPosition = 55
+        restorePurchases.name = "restore_purchases"
+        addChild(restorePurchases)
+        optionsUIContainer.append(restorePurchases)
         
         for i in 0...2 {
             
             separator = SKSpriteNode(imageNamed: "separator")
-            separator.position = CGPoint(x: self.frame.midX, y: (musicButton.position.y - 60) - CGFloat((i * 120)))
-            separator.size = CGSize(width: frame.width / 1.2, height: separator.size.height)
+            separator.position = CGPoint(x: self.frame.midX, y: (soundButton.position.y - 45) - CGFloat((i * 90)))
+            separator.size = CGSize(width: frame.width / 1.5, height: separator.size.height)
             separator.alpha = 0
             separator.colorBlendFactor = 0.5
             addChild(separator)
@@ -443,8 +429,7 @@ class TitleScreen: SKScene {
         versionInfo.alpha = 0
         addChild(versionInfo)
         optionsUIContainer.append(versionInfo)
-        
-        
+    
         showOptionsMenu()
     }
     
@@ -477,6 +462,8 @@ class TitleScreen: SKScene {
         
         run(sequence)
         background.run(dimBG)
+        
+        GameViewController.shared.hideBannerAds()
     }
     
     func instructionsMenu() {
@@ -491,7 +478,7 @@ class TitleScreen: SKScene {
         
         gotIt = SKSpriteNode(imageNamed: "got_it")
         gotIt.size = CGSize(width: gotIt.size.width, height: gotIt.size.height)
-        gotIt.position = CGPoint(x: howToPlay.frame.midX, y: frame.maxY * 0.33)
+        gotIt.position = CGPoint(x: howToPlay.frame.midX, y: howToPlay.position.y - (howToPlay.size.height * 0.38)) // old y-value was: frame.maxY * 0.33
         gotIt.alpha = 0
         gotIt.zPosition = 810
         gotIt.name = "gotIt"
@@ -539,6 +526,7 @@ class TitleScreen: SKScene {
             }
             let remove = SKAction.run { [unowned self] in
                 for node in self.highScoresUIContainer {
+                    node.removeAllActions()
                     node.removeFromParent()
                 }
                 highScoresUIContainer.removeAll()
@@ -566,6 +554,7 @@ class TitleScreen: SKScene {
             }
             let remove = SKAction.run { [unowned self] in
                 for node in self.optionsUIContainer {
+                    node.removeAllActions()
                     node.removeFromParent()
                 }
             }
@@ -580,6 +569,8 @@ class TitleScreen: SKScene {
         default:
             break
         }
+        
+        GameViewController.shared.showBannerAds()
     }
     
     
@@ -597,58 +588,70 @@ class TitleScreen: SKScene {
 //            }
             
             if touchedNode.name == "Play" {
-                Audio.shared.soundPlayer(node: touchedNode)
+                Audio.shared.soundPlayer(soundName: "Button Click")
                 Animations.shared.shrink(node: playButton)
 //                Animations.shared.animateTexture(node: playButton, texture: [playButtonTexture2, playButtonTexture3])
                 isButtonTouched = "Play"
             }
             
             if touchedNode.name == "High Scores" {
-                Audio.shared.soundPlayer(node: touchedNode)
+                Audio.shared.soundPlayer(soundName: "Button Click")
                 Animations.shared.shrink(node: highScoresButton)
 //                Animations.shared.animateTexture(node: highScoresButton, texture: [highScoresTexture2, highScoresTexture3])
                 isButtonTouched = "High Scores"
             }
             
             if touchedNode.name == "Options" {
-                Audio.shared.soundPlayer(node: touchedNode)
+                Audio.shared.soundPlayer(soundName: "Button Click")
                 Animations.shared.shrink(node: optionsButton)
 //                Animations.shared.animateTexture(node: optionsButton, texture: [optionsTexture2, optionsTexture3])
                 isButtonTouched = "Options"
             }
             
+            if touchedNode.name == "remove_ads" {
+                Audio.shared.soundPlayer(soundName: "Button Click")
+                Animations.shared.shrink(node: removeAdsButton)
+                isButtonTouched = "remove_ads"
+            }
+            
             if touchedNode.name == "Music Button" {
-                Audio.shared.soundPlayer(node: touchedNode)
+                Audio.shared.soundPlayer(soundName: "Button Click")
                 Animations.shared.shrink(node: musicButton)
                 isButtonTouched = "Music Button"
             }
             
-            if touchedNode.name == "Sound Button" {
-                Audio.shared.soundPlayer(node: touchedNode)
+            if touchedNode.name == "sound_button" {
+                Audio.shared.soundPlayer(soundName: "Button Click")
                 Animations.shared.shrink(node: soundButton)
-                isButtonTouched = "Sound Button"
+                isButtonTouched = "sound_button"
             }
             
             if touchedNode.name == "Controls Button" {
-                Audio.shared.soundPlayer(node: touchedNode)
+                Audio.shared.soundPlayer(soundName: "Button Click")
                 Animations.shared.shrink(node: controlsButton)
                 isButtonTouched = "Controls Button"
             }
             
-            if touchedNode.name == "Instructions Button" {
-                Audio.shared.soundPlayer(node: touchedNode)
-                Animations.shared.shrink(node: instructionsButton)
-                isButtonTouched = "Instructions Button"
+            if touchedNode.name == "tutorial_button" {
+                Audio.shared.soundPlayer(soundName: "Button Click")
+                Animations.shared.shrink(node: tutorialButton)
+                isButtonTouched = "tutorial_button"
+            }
+            
+            if touchedNode.name == "restore_purchases" {
+                Audio.shared.soundPlayer(soundName: "Button Click")
+                Animations.shared.shrink(node: restorePurchases)
+                isButtonTouched = "restore_purchases"
             }
             
             if touchedNode.name == "gotIt" {
-                Audio.shared.soundPlayer(node: touchedNode)
+                Audio.shared.soundPlayer(soundName: "Button Click")
                 Animations.shared.shrink(node: gotIt)
                 isButtonTouched = "gotIt"
             }
             
             if touchedNode.name == "Close Button" {
-                Audio.shared.soundPlayer(node: touchedNode)
+                Audio.shared.soundPlayer(soundName: "Button Click")
                 Animations.shared.shrink(node: closeButton)
                 isButtonTouched = "Close Button"
             }
@@ -674,13 +677,17 @@ class TitleScreen: SKScene {
 //                
 //                run(sequence)
                 
-                let expand = SKAction.run { [unowned self] in
-                    Animations.shared.expand(node: playButton)
+                let expand = SKAction.run {
+                    Animations.shared.expand(node: self.playButton)
                 }
                 let wait = SKAction.wait(forDuration: 0.175)
                 let sequence = SKAction.sequence([expand, wait])
                 
                 run(sequence, completion: { self.worldSelectMenu() } )
+                
+//                Animations.shared.animateAndChangeScene(node: playButton) {
+//                    self.worldSelectMenu()
+//                }
                 
                 for node in mainUIContainer { node.isUserInteractionEnabled = true }
                 
@@ -718,6 +725,13 @@ class TitleScreen: SKScene {
                 Animations.shared.expand(node: optionsButton)
             }
             
+            if touchedNode.name == "remove_ads" && isButtonTouched == "remove_ads" {
+                Animations.shared.expand(node: removeAdsButton)
+                
+                InAppPurchaseManager.shared.requestPurchase()
+            }
+
+            
             
             if touchedNode.name == "Music Button" && isButtonTouched == "Music Button" {
                 print("isMM \(isMusicMuted)")
@@ -737,18 +751,18 @@ class TitleScreen: SKScene {
             }
             
             
-            if touchedNode.name == "Sound Button" && isButtonTouched == "Sound Button" {
+            if touchedNode.name == "sound_button" && isButtonTouched == "sound_button" {
                 isSoundMuted.toggle() // toggles bool for sounds
                 SavedSettings.shared.setSoundSettings() // saves isSoundMuted boolean in UserDefaults
                 Animations.shared.expand(node: soundButton)
                 
                 if UserDefaults.standard.bool(forKey: "isSoundMuted") == false {
-                    soundButton.texture = SKTexture(imageNamed: "sound_button")
+                    soundButton.texture = SKTexture(imageNamed: "sound_button_on")
                 } else if UserDefaults.standard.bool(forKey: "isSoundMuted") {
-                    soundButton.texture = SKTexture(imageNamed: "sound_button_muted")
+                    soundButton.texture = SKTexture(imageNamed: "sound_button_off")
                 }
                 
-            } else if touchedNode.name != "Sound Button" && isButtonTouched == "Sound Button" {
+            } else if touchedNode.name != "sound_button" && isButtonTouched == "sound_button" {
                 Animations.shared.expand(node: soundButton)
             }
             
@@ -769,12 +783,21 @@ class TitleScreen: SKScene {
             }
             
             
-            if touchedNode.name == "Instructions Button" && isButtonTouched == "Instructions Button" {
-                Animations.shared.expand(node: instructionsButton)
+            if touchedNode.name == "tutorial_button" && isButtonTouched == "tutorial_button" {
+                Animations.shared.expand(node: tutorialButton)
                 instructionsMenu()
                 
-            } else if touchedNode.name != "Instructions Button" && isButtonTouched == "Instructions Button" {
-                Animations.shared.expand(node: instructionsButton)
+            } else if touchedNode.name != "tutorial_button" && isButtonTouched == "tutorial_button" {
+                Animations.shared.expand(node: tutorialButton)
+            }
+            
+            
+            if touchedNode.name == "restore_purchases" && isButtonTouched == "restore_purchases" {
+                Animations.shared.expand(node: restorePurchases)
+                InAppPurchaseManager.shared.restorePurchases()
+                
+            } else if touchedNode.name != "restore_purchases" && isButtonTouched == "restore_purchases" {
+                Animations.shared.expand(node: restorePurchases)
             }
             
             
@@ -843,4 +866,119 @@ class TitleScreen: SKScene {
     deinit {
         print("All Good")
     }
+    
+    // old createOptions
+    
+//    func createOptions() {
+//        
+//        if UserDefaults.standard.bool(forKey: "isMusicMuted") == false {
+//            musicButton.texture = SKTexture(imageNamed: "music_button")
+//        } else {
+//            musicButton.texture = SKTexture(imageNamed: "music_button_muted")
+//        }
+//        
+//        if UserDefaults.standard.bool(forKey: "isSoundMuted") == false {
+//            soundButton.texture = SKTexture(imageNamed: "sound_button")
+//        } else {
+//            soundButton.texture = SKTexture(imageNamed: "sound_button_muted")
+//        }
+//        
+//        if UserDefaults.standard.bool(forKey: "areControlsHidden") == false {
+//            controlsButton.texture = SKTexture(imageNamed: "controls_button")
+//        } else {
+//            controlsButton.texture = SKTexture(imageNamed: "controls_button_hidden")
+//        }
+//        
+//        musicButton.size = CGSize(width: 64, height: 64)
+//        musicButton.alpha = 0
+//        musicButton.position = CGPoint(x: frame.midX / 3, y: frame.maxY * 0.75)
+//        musicButton.zPosition = 55
+//        musicButton.name = "Music Button"
+//        addChild(musicButton)
+//        optionsUIContainer.append(musicButton)
+//        
+//        let musicLabel = SKLabelNode(fontNamed: "Paper Plane Font")
+//        musicLabel.text = "Music"
+//        musicLabel.position = CGPoint(x: frame.midX, y: musicButton.position.y + (musicButton.size.height / 6))
+//        musicLabel.fontSize = 48
+//        musicLabel.alpha = 0
+//        addChild(musicLabel)
+//        optionsUIContainer.append(musicLabel)
+//        
+//        soundButton.size = CGSize(width: 64, height: 64)
+//        soundButton.alpha = 0
+//        soundButton.position = CGPoint(x: frame.midX / 3, y: musicButton.position.y - 120)
+//        soundButton.zPosition = 55
+//        soundButton.name = "sound_button"
+//        addChild(soundButton)
+//        optionsUIContainer.append(soundButton)
+//        
+//        print("music1 \(musicButton.position.y - 120)")
+//        print("music2 \(musicButton.position.y + (musicButton.size.height / 6))")
+//        
+//        let soundLabel = SKLabelNode(fontNamed: "Paper Plane Font")
+//        soundLabel.text = "Sound"
+//        soundLabel.position = CGPoint(x: frame.midX, y: soundButton.position.y + (soundButton.size.height / 6))
+//        soundLabel.fontSize = 48
+//        soundLabel.alpha = 0
+//        addChild(soundLabel)
+//        optionsUIContainer.append(soundLabel)
+//        
+//        controlsButton.size = CGSize(width: 64, height: 64)
+//        controlsButton.alpha = 0
+//        controlsButton.position = CGPoint(x: frame.midX / 3, y: soundButton.position.y - 120)
+//        controlsButton.zPosition = 55
+//        controlsButton.name = "Controls Button"
+//        addChild(controlsButton)
+//        optionsUIContainer.append(controlsButton)
+//        
+//        let controlsLabel = SKLabelNode(fontNamed: "Paper Plane Font")
+//        controlsLabel.text = "Controls"
+//        controlsLabel.position = CGPoint(x: frame.midX, y: controlsButton.position.y + (controlsButton.size.height / 6))
+//        controlsLabel.fontSize = 48
+//        controlsLabel.alpha = 0
+//        addChild(controlsLabel)
+//        optionsUIContainer.append(controlsLabel)
+//        
+//        instructionsButton = SKSpriteNode(imageNamed: "instructions_button")
+//        instructionsButton.size = CGSize(width: instructionsButton.size.width * 1.5, height: instructionsButton.size.height * 1.5)
+//        instructionsButton.alpha = 0
+//        instructionsButton.position = CGPoint(x: frame.midX, y: controlsButton.position.y - 200)
+//        instructionsButton.zPosition = 55
+//        instructionsButton.name = "Instructions Button"
+//        addChild(instructionsButton)
+//        optionsUIContainer.append(instructionsButton)
+//        
+//        restorePurchases = SKSpriteNode(imageNamed: "restore_purchases")
+//        restorePurchases.size = CGSize(width: restorePurchases.size.width * 1.25, height: restorePurchases.size.height * 1.25)
+//        restorePurchases.alpha = 0
+//        restorePurchases.position = CGPoint(x: frame.midX, y: controlsButton.position.y - 300)
+//        restorePurchases.zPosition = 55
+//        restorePurchases.name = "restore_purchases"
+//        addChild(restorePurchases)
+//        optionsUIContainer.append(restorePurchases)
+//        
+//        for i in 0...2 {
+//            
+//            separator = SKSpriteNode(imageNamed: "separator")
+//            separator.position = CGPoint(x: self.frame.midX, y: (musicButton.position.y - 60) - CGFloat((i * 120)))
+//            separator.size = CGSize(width: frame.width / 1.2, height: separator.size.height)
+//            separator.alpha = 0
+//            separator.colorBlendFactor = 0.5
+//            addChild(separator)
+//            optionsUIContainer.append(separator)
+//        }
+//        
+//        let versionInfo = SKLabelNode(fontNamed: "Paper Plane Font")
+//        versionInfo.text = "Version \(appVersion!)"
+//        versionInfo.position = CGPoint(x: frame.midX
+//                                       , y: frame.maxY * 0.05)
+//        versionInfo.fontSize = 14
+//        versionInfo.alpha = 0
+//        addChild(versionInfo)
+//        optionsUIContainer.append(versionInfo)
+//        
+//        
+//        showOptionsMenu()
+//    }
 }

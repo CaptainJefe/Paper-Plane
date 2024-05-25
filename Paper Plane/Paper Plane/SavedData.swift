@@ -23,6 +23,8 @@ var isSiloLocked: Bool = true
 
 var gamesPlayed = UserDefaults.standard.integer(forKey: "gamesPlayed")
 
+var adsRemoved: Bool!
+
 class SavedData {
     
     private init() {}
@@ -117,6 +119,14 @@ class SavedSettings {
     }
     
     func getTutorialData() -> Bool {
-        return UserDefaults.standard.bool(forKey: "firstTimePlaying")
+        return UserDefaults.standard.bool(forKey: "firstTimePlaying") ?? true
+    }
+    
+    func setAdsSettings() {
+        UserDefaults.standard.setValue(adsRemoved, forKey: "adsRemoved")
+    }
+    
+    func getAdsSettings() -> Bool {
+        return UserDefaults.standard.bool(forKey: "adsRemoved")
     }
 }

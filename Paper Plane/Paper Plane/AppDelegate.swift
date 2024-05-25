@@ -7,15 +7,28 @@
 //
 
 import UIKit
+import GoogleMobileAds
+import AVFoundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    var audioPlayer: AVAudioPlayer?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        GADMobileAds.sharedInstance().start(completionHandler: nil)
+        
+        UserDefaults.standard.register(defaults: ["firstTimePlaying" : true])
+        UserDefaults.standard.register(defaults: ["adsRemoved" : false]) // set to false to have ads on by default
+        
+        Audio.shared.audioSession()
+        Audio.shared.initEngine()
+        
+        
         return true
     }
 

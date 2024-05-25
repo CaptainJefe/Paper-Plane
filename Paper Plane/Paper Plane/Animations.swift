@@ -116,6 +116,13 @@ class Animations: SKNode {
         node.run(seq)
     }
     
+    func fadeAlphaTo(node: SKNode, alpha: Double, duration: Double, waitTime: Double) {
+        let wait = SKAction.wait(forDuration: waitTime)
+        let fadeTo = SKAction.fadeAlpha(to: alpha, duration: duration)
+            
+        let seq = SKAction.sequence([wait, fadeTo])
+        node.run(seq)
+    }
     
     func scaleUp(node: SKSpriteNode) {
         let scalePrelim = SKAction.scale(to: CGSize(width: 1, height: 1), duration: 0)
@@ -146,5 +153,15 @@ class Animations: SKNode {
         
         node.run(repeatForever)
         
+    }
+    
+    func animateAndChangeScene(node: SKSpriteNode, changeScene: @escaping () -> Void) {
+        let expand = SKAction.run { [unowned self] in
+            Animations.shared.expand(node: node)
+        }
+        let wait = SKAction.wait(forDuration: 0.175)
+        let sequence = SKAction.sequence([expand, wait])
+        
+        run(sequence, completion: { changeScene() } )
     }
 }

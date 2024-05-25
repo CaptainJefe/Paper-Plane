@@ -13,11 +13,12 @@
 		D6800756252AE6100090D16D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6800754252AE6100090D16D /* Assets.xcassets */; };
 		D68007652537E8DA0090D16D /* TitleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68007642537E8DA0090D16D /* TitleScreen.swift */; };
 		D680076A2537F2CE0090D16D /* TitleScreen.sks in Resources */ = {isa = PBXBuildFile; fileRef = D68007692537F2CE0090D16D /* TitleScreen.sks */; };
-		D68DA3592A50F6E9003EAE12 /* GameSceneRewrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68DA3572A50F6E9003EAE12 /* GameSceneRewrite.swift */; };
 		D68DA35A2A50F6E9003EAE12 /* GameSceneRewrite.sks in Resources */ = {isa = PBXBuildFile; fileRef = D68DA3582A50F6E9003EAE12 /* GameSceneRewrite.sks */; };
 		D68DA35C2A57A0B4003EAE12 /* Chasm_Theme.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D68DA35B2A57A0B4003EAE12 /* Chasm_Theme.mp3 */; };
 		D6974235259C4C58006F6049 /* Asai-Analogue.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6974234259C4C58006F6049 /* Asai-Analogue.ttf */; };
 		D69BFEAF25AD79D500B99E91 /* GameScene Backup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */; };
+		D6A006572C01B3F800BFD5F1 /* plane_turn.wav in Resources */ = {isa = PBXBuildFile; fileRef = D6A006562C01B3F800BFD5F1 /* plane_turn.wav */; };
+		D6A0065C2C01B5FA00BFD5F1 /* level_wind.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D6A0065B2C01B5FA00BFD5F1 /* level_wind.mp3 */; };
 		D6A513E62913534F0098F2DD /* WorldSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513E52913534F0098F2DD /* WorldSelect.swift */; };
 		D6A513E8291353660098F2DD /* WorldSelect.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6A513E7291353660098F2DD /* WorldSelect.sks */; };
 		D6A513EC2914D3E70098F2DD /* Paper Plane Font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */; };
@@ -34,9 +35,13 @@
 		D6AD9B4724EFBAA000503775 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6AD9B4624EFBAA000503775 /* Assets.xcassets */; };
 		D6AD9B4A24EFBAA000503775 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6AD9B4824EFBAA000503775 /* LaunchScreen.storyboard */; };
 		D6B2F13F290DB04C0054D747 /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2F13E290DB04C0054D747 /* Assets.swift */; };
+		D6B4406D2BAB1284006529C4 /* GameSceneOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B4406C2BAB1284006529C4 /* GameSceneOld.swift */; };
+		D6B4406F2BAB1297006529C4 /* TitleScreen_Backup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B4406E2BAB1297006529C4 /* TitleScreen_Backup.swift */; };
+		D6BAE9D62BA980A500E28628 /* AdMobDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BAE9D52BA980A500E28628 /* AdMobDelegate.swift */; };
 		D6EED41328D6DCBC00A7F703 /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EED41228D6DCBC00A7F703 /* Animations.swift */; };
 		D6EED41728DF40AF00A7F703 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EED41628DF40AF00A7F703 /* GameScene.swift */; };
 		D6EED41928DF458000A7F703 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6EED41828DF458000A7F703 /* GameScene.sks */; };
+		D6FE94DF2BCBC52E005260F9 /* InAppPurchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FE94DE2BCBC52E005260F9 /* InAppPurchases.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,11 +50,12 @@
 		D6800754252AE6100090D16D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		D68007642537E8DA0090D16D /* TitleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleScreen.swift; sourceTree = "<group>"; };
 		D68007692537F2CE0090D16D /* TitleScreen.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TitleScreen.sks; sourceTree = "<group>"; };
-		D68DA3572A50F6E9003EAE12 /* GameSceneRewrite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSceneRewrite.swift; sourceTree = "<group>"; };
 		D68DA3582A50F6E9003EAE12 /* GameSceneRewrite.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameSceneRewrite.sks; sourceTree = "<group>"; };
 		D68DA35B2A57A0B4003EAE12 /* Chasm_Theme.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Chasm_Theme.mp3; sourceTree = "<group>"; };
 		D6974234259C4C58006F6049 /* Asai-Analogue.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Asai-Analogue.ttf"; sourceTree = "<group>"; };
 		D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameScene Backup.swift"; sourceTree = "<group>"; };
+		D6A006562C01B3F800BFD5F1 /* plane_turn.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = plane_turn.wav; sourceTree = "<group>"; };
+		D6A0065B2C01B5FA00BFD5F1 /* level_wind.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = level_wind.mp3; sourceTree = "<group>"; };
 		D6A513E52913534F0098F2DD /* WorldSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSelect.swift; sourceTree = "<group>"; };
 		D6A513E7291353660098F2DD /* WorldSelect.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = WorldSelect.sks; sourceTree = "<group>"; };
 		D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Paper Plane Font.ttf"; sourceTree = "<group>"; };
@@ -70,12 +76,17 @@
 		D6AD9B4924EFBAA000503775 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D6AD9B4B24EFBAA000503775 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Paper Plane/Info.plist"; sourceTree = SOURCE_ROOT; };
 		D6B2F13E290DB04C0054D747 /* Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
+		D6B4406C2BAB1284006529C4 /* GameSceneOld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSceneOld.swift; sourceTree = "<group>"; };
+		D6B4406E2BAB1297006529C4 /* TitleScreen_Backup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleScreen_Backup.swift; sourceTree = "<group>"; };
+		D6BAE9D52BA980A500E28628 /* AdMobDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobDelegate.swift; sourceTree = "<group>"; };
 		D6EED40E28D5835900A7F703 /* GameSceneNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSceneNew.swift; sourceTree = "<group>"; };
 		D6EED41028D58A8700A7F703 /* GameSceneNew.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameSceneNew.sks; sourceTree = "<group>"; };
 		D6EED41228D6DCBC00A7F703 /* Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
 		D6EED41628DF40AF00A7F703 /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		D6EED41828DF458000A7F703 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		D6EED41A28E04CFB00A7F703 /* Temp Test Code.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Temp Test Code.swift"; sourceTree = "<group>"; };
+		D6FE94DD2BCBB696005260F9 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
+		D6FE94DE2BCBC52E005260F9 /* InAppPurchases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchases.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +104,8 @@
 		D6974233259C4C41006F6049 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D6A0065B2C01B5FA00BFD5F1 /* level_wind.mp3 */,
+				D6A006562C01B3F800BFD5F1 /* plane_turn.wav */,
 				D68DA35B2A57A0B4003EAE12 /* Chasm_Theme.mp3 */,
 				D6A513F9293EEEFA0098F2DD /* Button Click.mp3 */,
 				D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */,
@@ -105,7 +118,9 @@
 			isa = PBXGroup;
 			children = (
 				D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */,
+				D6B4406C2BAB1284006529C4 /* GameSceneOld.swift */,
 				D6EED41A28E04CFB00A7F703 /* Temp Test Code.swift */,
+				D6B4406E2BAB1297006529C4 /* TitleScreen_Backup.swift */,
 				D6AD9B3F24EFBAA000503775 /* GameScene.swift */,
 				D6AD9B3B24EFBAA000503775 /* GameScene.sks */,
 				D6EED40E28D5835900A7F703 /* GameSceneNew.swift */,
@@ -142,7 +157,6 @@
 				D6A513E7291353660098F2DD /* WorldSelect.sks */,
 				D6EED41628DF40AF00A7F703 /* GameScene.swift */,
 				D6EED41828DF458000A7F703 /* GameScene.sks */,
-				D68DA3572A50F6E9003EAE12 /* GameSceneRewrite.swift */,
 				D61C63B42A8B923C0070C55F /* funcBackupTemp.swift */,
 				D68DA3582A50F6E9003EAE12 /* GameSceneRewrite.sks */,
 				D6A513EF291F42610098F2DD /* SavedData.swift */,
@@ -151,7 +165,10 @@
 				D6A513F52939785D0098F2DD /* Instructions.swift */,
 				D6B2F13E290DB04C0054D747 /* Assets.swift */,
 				D6A513ED291C5F130098F2DD /* SwitchScene.swift */,
+				D6FE94DE2BCBC52E005260F9 /* InAppPurchases.swift */,
+				D6FE94DD2BCBB696005260F9 /* Configuration.storekit */,
 				D6A513F32928D41E0098F2DD /* AdSupport.swift */,
+				D6BAE9D52BA980A500E28628 /* AdMobDelegate.swift */,
 				D6800753252AE6100090D16D /* DestroyPlane.sks */,
 				D6AD9B4624EFBAA000503775 /* Assets.xcassets */,
 				D6800754252AE6100090D16D /* Assets.xcassets */,
@@ -232,6 +249,8 @@
 				D6A513E8291353660098F2DD /* WorldSelect.sks in Resources */,
 				D6EED41928DF458000A7F703 /* GameScene.sks in Resources */,
 				D680076A2537F2CE0090D16D /* TitleScreen.sks in Resources */,
+				D6A006572C01B3F800BFD5F1 /* plane_turn.wav in Resources */,
+				D6A0065C2C01B5FA00BFD5F1 /* level_wind.mp3 in Resources */,
 				D6A513FA293EEEFA0098F2DD /* Button Click.mp3 in Resources */,
 				D6AD9B4724EFBAA000503775 /* Assets.xcassets in Resources */,
 				D6974235259C4C58006F6049 /* Asai-Analogue.ttf in Resources */,
@@ -256,13 +275,16 @@
 				D6A513F8293EECEE0098F2DD /* Audio.swift in Sources */,
 				D68007652537E8DA0090D16D /* TitleScreen.swift in Sources */,
 				D6AD9B4224EFBAA000503775 /* GameViewController.swift in Sources */,
+				D6B4406F2BAB1297006529C4 /* TitleScreen_Backup.swift in Sources */,
+				D6B4406D2BAB1284006529C4 /* GameSceneOld.swift in Sources */,
 				D6A513E62913534F0098F2DD /* WorldSelect.swift in Sources */,
 				D6A513F42928D41E0098F2DD /* AdSupport.swift in Sources */,
 				D6EED41328D6DCBC00A7F703 /* Animations.swift in Sources */,
 				D69BFEAF25AD79D500B99E91 /* GameScene Backup.swift in Sources */,
 				D6B2F13F290DB04C0054D747 /* Assets.swift in Sources */,
-				D68DA3592A50F6E9003EAE12 /* GameSceneRewrite.swift in Sources */,
+				D6BAE9D62BA980A500E28628 /* AdMobDelegate.swift in Sources */,
 				D6AD9B3A24EFBAA000503775 /* AppDelegate.swift in Sources */,
+				D6FE94DF2BCBC52E005260F9 /* InAppPurchases.swift in Sources */,
 				D6A513EE291C5F130098F2DD /* SwitchScene.swift in Sources */,
 				D6A513F62939785D0098F2DD /* Instructions.swift in Sources */,
 				D6EED41728DF40AF00A7F703 /* GameScene.swift in Sources */,
@@ -417,6 +439,7 @@
 				DEVELOPMENT_TEAM = 9R9H53AU37;
 				INFOPLIST_FILE = "Paper Plane/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -442,6 +465,7 @@
 				DEVELOPMENT_TEAM = 9R9H53AU37;
 				INFOPLIST_FILE = "Paper Plane/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

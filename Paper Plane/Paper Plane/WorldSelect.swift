@@ -97,31 +97,32 @@ class WorldSelect: SKScene {
         firstLoad = false
     }
     
+    
     func createUI() {
         homeButton = SKSpriteNode(imageNamed: "home_button")
-        homeButton.size = CGSize(width: 64, height: 64)
+        homeButton.size = CGSize(width: 48, height: 48)
         homeButton.position = CGPoint(x: frame.maxX * 0.9, y: frame.maxY * 0.95)
         homeButton.zPosition = 200
         homeButton.name = "homeButton"
         addChild(homeButton)
         
-        playButton = SKSpriteNode(imageNamed: "ws_play_button")
-        playButton.size = CGSize(width: 80, height: 80)
-        playButton.position = CGPoint(x: frame.midX, y: frame.midY / 2.5)
-        playButton.zPosition = 200
-        playButton.name = "playButton"
-        addChild(playButton)
+//        playButton = SKSpriteNode(imageNamed: "ws_play_button")
+//        playButton.size = CGSize(width: 80, height: 80)
+//        playButton.position = CGPoint(x: frame.midX, y: frame.midY / 2.5)
+//        playButton.zPosition = 200
+//        playButton.name = "playButton"
+//        addChild(playButton)
         
         buttonLeft = SKSpriteNode(imageNamed: "arrow_left")
         buttonLeft.size = CGSize(width: 48, height: 48)
-        buttonLeft.position = CGPoint(x: frame.maxX * 0.1, y: frame.midY)
+        buttonLeft.position = CGPoint(x: frame.maxX * 0.08, y: frame.midY)
         buttonLeft.zPosition = 180
         buttonLeft.name = "buttonLeft"
         addChild(buttonLeft)
         
         buttonRight = SKSpriteNode(imageNamed: "arrow_right")
         buttonRight.size = CGSize(width: 48, height: 48)
-        buttonRight.position = CGPoint(x: frame.maxX * 0.9, y: frame.midY)
+        buttonRight.position = CGPoint(x: frame.maxX * 0.92, y: frame.midY)
         buttonRight.zPosition = 180
         buttonRight.name = "buttonRight"
         addChild(buttonRight)
@@ -219,7 +220,7 @@ class WorldSelect: SKScene {
             }
             
             
-            playButton.isHidden = false
+//            playButton.isHidden = false
             
         case "chasm":
             theme = "chasm"
@@ -230,9 +231,9 @@ class WorldSelect: SKScene {
             
             
             if isChasmLocked == true {
-                playButton.isHidden = true
+//                playButton.isHidden = true
             } else {
-                playButton.isHidden = false
+//                playButton.isHidden = false
             }
             
         case "silo":
@@ -244,9 +245,9 @@ class WorldSelect: SKScene {
             
             
             if isSiloLocked == true {
-                playButton.isHidden = true
+//                playButton.isHidden = true
             } else {
-                playButton.isHidden = false
+//                playButton.isHidden = false
             }
             
         default:
@@ -256,7 +257,7 @@ class WorldSelect: SKScene {
             
             theme = "castle"
             
-            playButton.isHidden = false
+//            playButton.isHidden = false
         }
         
         worldLocked()
@@ -295,7 +296,7 @@ class WorldSelect: SKScene {
             
             Assets.sharedInstance.preloadGameAssets()
             
-            guard let scene = GameSceneRewrite(fileNamed: "GameSceneRewrite") else { return }
+            guard let scene = GameScene(fileNamed: "GameScene") else { return }
             scene.size = skView.frame.size
             
             let transition = SKTransition.fade(withDuration: 1.5)
@@ -329,26 +330,24 @@ class WorldSelect: SKScene {
                 isButtonTouched = "homeButton"
             }
             
-            if touchedNode.name == "playButton" {
-                
+            if touchedNode.name == "previewBackground" {
                 if theme == "chasm" {
                     if isChasmLocked == true {
                         return
                     } else {
-                        Animations.shared.shrink(node: playButton)
+                        Animations.shared.fadeAlphaTo(node: previewBackground, alpha: 0.5, duration: 0.1, waitTime: 0)
                     }
                 } else if theme == "silo" {
                     if isSiloLocked == true {
                         return
                     } else {
-                        Animations.shared.shrink(node: playButton)
+                        Animations.shared.fadeAlphaTo(node: previewBackground, alpha: 0.5, duration: 0.1, waitTime: 0)
                     }
                 } else {
-                    Animations.shared.shrink(node: playButton)
+                    Animations.shared.fadeAlphaTo(node: previewBackground, alpha: 0.5, duration: 0.1, waitTime: 0)
                 }
-                
-                
-                isButtonTouched = "playButton"
+                    
+                isButtonTouched = "previewBackground"
             }
             
             if touchedNode.name == "buttonLeft" && areButtonsEnabled == true {
@@ -375,33 +374,45 @@ class WorldSelect: SKScene {
                 Animations.shared.expand(node: homeButton)
             }
             
-            if touchedNode.name == "playButton" {
-                if theme == "silo" {
-                    if isSiloLocked == true {
-                        Animations.shared.expand(node: playButton)
-                        
-                        // use animation unless deciding to hide playButton if level is locked
-                        
-                        let shakeLeft = SKAction.rotate(toAngle: (1 / 36) * .pi, duration: 0.06, shortestUnitArc: true)
-                        let shakeRight = SKAction.rotate(toAngle: (71 / 36) * .pi, duration: 0.06, shortestUnitArc: true)
-                        let center = SKAction.rotate(toAngle: 0, duration: 0.06, shortestUnitArc: true)
-                        let seq = SKAction.sequence([shakeLeft, shakeRight, center])
+            // alpha fade in
+            
+            let fadeIn = SKAction.run {
+                Animations.shared.fadeAlphaIn(node: self.previewBackground, duration: 0.25, waitTime: 0)
+            }
+            let wait = SKAction.wait(forDuration: 0.25)
+            let sequence = SKAction.sequence([fadeIn, wait])
+            
+            // shakes text (and lock sprite) if level is locked
+            
+            let shakeLeft = SKAction.rotate(toAngle: (1 / 36) * .pi, duration: 0.06, shortestUnitArc: true)
+            let shakeRight = SKAction.rotate(toAngle: (71 / 36) * .pi, duration: 0.06, shortestUnitArc: true)
+            let center = SKAction.rotate(toAngle: 0, duration: 0.06, shortestUnitArc: true)
+            let seq = SKAction.sequence([shakeLeft, shakeRight, center])
+            
+            if touchedNode.name == "previewBackground" {
+                if theme == "chasm" {
+                    if isChasmLocked == true {
                         lockedText.run(seq)
-//                        lockSprite.run(seq)
-                        
+                        lockSprite.run(seq)
                     } else {
-                        Animations.shared.expand(node: playButton)
-                        startGame()
+                        run(sequence, completion: { self.startGame() } )
+                    }
+                } else if theme == "silo" {
+                    if isSiloLocked == true {
+                        lockedText.run(seq)
+                        lockSprite.run(seq)
+                    } else {
+                        run(sequence, completion: { self.startGame() } )
                     }
                 } else {
-                    Animations.shared.expand(node: playButton)
-                    startGame()
+                    run(sequence, completion: { self.startGame() } )
                 }
-                
-            } else if touchedNode.name != "playButton" && isButtonTouched == "playButton" {
-                Animations.shared.expand(node: playButton)
+            } else if touchedNode.name != "previewBackground" && isButtonTouched == "previewBackground" {
+                run(fadeIn)
             }
             
+            
+
             if touchedNode.name == "buttonLeft" && areButtonsEnabled == true {
                 Animations.shared.expand(node: buttonLeft)
                 
