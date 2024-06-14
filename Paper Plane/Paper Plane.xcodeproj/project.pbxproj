@@ -8,17 +8,26 @@
 
 /* Begin PBXBuildFile section */
 		D61C63B52A8B923C0070C55F /* funcBackupTemp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61C63B42A8B923C0070C55F /* funcBackupTemp.swift */; };
+		D6333D0E2C1406A6006166CB /* Configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = D6333D0D2C1406A6006166CB /* Configuration.storekit */; };
 		D64616882B920E6000EFAAF8 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = D64616872B920E6000EFAAF8 /* GoogleMobileAds */; };
 		D6800755252AE6100090D16D /* DestroyPlane.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6800753252AE6100090D16D /* DestroyPlane.sks */; };
 		D6800756252AE6100090D16D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6800754252AE6100090D16D /* Assets.xcassets */; };
 		D68007652537E8DA0090D16D /* TitleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68007642537E8DA0090D16D /* TitleScreen.swift */; };
 		D680076A2537F2CE0090D16D /* TitleScreen.sks in Resources */ = {isa = PBXBuildFile; fileRef = D68007692537F2CE0090D16D /* TitleScreen.sks */; };
 		D68DA35A2A50F6E9003EAE12 /* GameSceneRewrite.sks in Resources */ = {isa = PBXBuildFile; fileRef = D68DA3582A50F6E9003EAE12 /* GameSceneRewrite.sks */; };
-		D68DA35C2A57A0B4003EAE12 /* Chasm_Theme.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D68DA35B2A57A0B4003EAE12 /* Chasm_Theme.mp3 */; };
+		D6934A6F2C15398500BC8F69 /* StoreKitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6934A6E2C15398500BC8F69 /* StoreKitHelper.swift */; };
+		D69653FB2C13E36900BBDE1B /* plane_crash.wav in Resources */ = {isa = PBXBuildFile; fileRef = D69653FA2C13E36900BBDE1B /* plane_crash.wav */; };
+		D69653FF2C13E3D300BBDE1B /* button_click.wav in Resources */ = {isa = PBXBuildFile; fileRef = D69653FE2C13E3D300BBDE1B /* button_click.wav */; };
+		D69654052C13E3DE00BBDE1B /* plane_turn_3.wav in Resources */ = {isa = PBXBuildFile; fileRef = D69654002C13E3DD00BBDE1B /* plane_turn_3.wav */; };
+		D69654062C13E3DE00BBDE1B /* plane_turn_1.wav in Resources */ = {isa = PBXBuildFile; fileRef = D69654012C13E3DE00BBDE1B /* plane_turn_1.wav */; };
+		D69654072C13E3DE00BBDE1B /* plane_turn_2.wav in Resources */ = {isa = PBXBuildFile; fileRef = D69654022C13E3DE00BBDE1B /* plane_turn_2.wav */; };
+		D69654082C13E3DE00BBDE1B /* plane_turn_4.wav in Resources */ = {isa = PBXBuildFile; fileRef = D69654032C13E3DE00BBDE1B /* plane_turn_4.wav */; };
+		D69654092C13E3DE00BBDE1B /* plane_turn_5.wav in Resources */ = {isa = PBXBuildFile; fileRef = D69654042C13E3DE00BBDE1B /* plane_turn_5.wav */; };
+		D696540F2C13E5BC00BBDE1B /* level_wind.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D696540E2C13E5BC00BBDE1B /* level_wind.mp3 */; };
+		D69654112C13E7A700BBDE1B /* sound_effect.wav in Resources */ = {isa = PBXBuildFile; fileRef = D69654102C13E7A700BBDE1B /* sound_effect.wav */; };
 		D6974235259C4C58006F6049 /* Asai-Analogue.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6974234259C4C58006F6049 /* Asai-Analogue.ttf */; };
 		D69BFEAF25AD79D500B99E91 /* GameScene Backup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */; };
-		D6A006572C01B3F800BFD5F1 /* plane_turn.wav in Resources */ = {isa = PBXBuildFile; fileRef = D6A006562C01B3F800BFD5F1 /* plane_turn.wav */; };
-		D6A0065C2C01B5FA00BFD5F1 /* level_wind.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D6A0065B2C01B5FA00BFD5F1 /* level_wind.mp3 */; };
+		D6A0065F2C01CCA600BFD5F1 /* SwiftySound in Frameworks */ = {isa = PBXBuildFile; productRef = D6A0065E2C01CCA600BFD5F1 /* SwiftySound */; };
 		D6A513E62913534F0098F2DD /* WorldSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513E52913534F0098F2DD /* WorldSelect.swift */; };
 		D6A513E8291353660098F2DD /* WorldSelect.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6A513E7291353660098F2DD /* WorldSelect.sks */; };
 		D6A513EC2914D3E70098F2DD /* Paper Plane Font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */; };
@@ -27,7 +36,6 @@
 		D6A513F42928D41E0098F2DD /* AdSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513F32928D41E0098F2DD /* AdSupport.swift */; };
 		D6A513F62939785D0098F2DD /* Instructions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513F52939785D0098F2DD /* Instructions.swift */; };
 		D6A513F8293EECEE0098F2DD /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513F7293EECEE0098F2DD /* Audio.swift */; };
-		D6A513FA293EEEFA0098F2DD /* Button Click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D6A513F9293EEEFA0098F2DD /* Button Click.mp3 */; };
 		D6A5144C295D551B0098F2DD /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = D6A5144B295D551B0098F2DD /* .gitignore */; };
 		D6AD9B3A24EFBAA000503775 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AD9B3924EFBAA000503775 /* AppDelegate.swift */; };
 		D6AD9B4224EFBAA000503775 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AD9B4124EFBAA000503775 /* GameViewController.swift */; };
@@ -46,16 +54,24 @@
 
 /* Begin PBXFileReference section */
 		D61C63B42A8B923C0070C55F /* funcBackupTemp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = funcBackupTemp.swift; sourceTree = "<group>"; };
+		D6333D0D2C1406A6006166CB /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		D6800753252AE6100090D16D /* DestroyPlane.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = DestroyPlane.sks; sourceTree = SOURCE_ROOT; };
 		D6800754252AE6100090D16D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		D68007642537E8DA0090D16D /* TitleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleScreen.swift; sourceTree = "<group>"; };
 		D68007692537F2CE0090D16D /* TitleScreen.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TitleScreen.sks; sourceTree = "<group>"; };
 		D68DA3582A50F6E9003EAE12 /* GameSceneRewrite.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameSceneRewrite.sks; sourceTree = "<group>"; };
-		D68DA35B2A57A0B4003EAE12 /* Chasm_Theme.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Chasm_Theme.mp3; sourceTree = "<group>"; };
+		D6934A6E2C15398500BC8F69 /* StoreKitHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitHelper.swift; sourceTree = "<group>"; };
+		D69653FA2C13E36900BBDE1B /* plane_crash.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = plane_crash.wav; sourceTree = "<group>"; };
+		D69653FE2C13E3D300BBDE1B /* button_click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = button_click.wav; sourceTree = "<group>"; };
+		D69654002C13E3DD00BBDE1B /* plane_turn_3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = plane_turn_3.wav; sourceTree = "<group>"; };
+		D69654012C13E3DE00BBDE1B /* plane_turn_1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = plane_turn_1.wav; sourceTree = "<group>"; };
+		D69654022C13E3DE00BBDE1B /* plane_turn_2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = plane_turn_2.wav; sourceTree = "<group>"; };
+		D69654032C13E3DE00BBDE1B /* plane_turn_4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = plane_turn_4.wav; sourceTree = "<group>"; };
+		D69654042C13E3DE00BBDE1B /* plane_turn_5.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = plane_turn_5.wav; sourceTree = "<group>"; };
+		D696540E2C13E5BC00BBDE1B /* level_wind.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = level_wind.mp3; sourceTree = "<group>"; };
+		D69654102C13E7A700BBDE1B /* sound_effect.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sound_effect.wav; sourceTree = "<group>"; };
 		D6974234259C4C58006F6049 /* Asai-Analogue.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Asai-Analogue.ttf"; sourceTree = "<group>"; };
 		D69BFEAE25AD79D500B99E91 /* GameScene Backup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameScene Backup.swift"; sourceTree = "<group>"; };
-		D6A006562C01B3F800BFD5F1 /* plane_turn.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = plane_turn.wav; sourceTree = "<group>"; };
-		D6A0065B2C01B5FA00BFD5F1 /* level_wind.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = level_wind.mp3; sourceTree = "<group>"; };
 		D6A513E52913534F0098F2DD /* WorldSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSelect.swift; sourceTree = "<group>"; };
 		D6A513E7291353660098F2DD /* WorldSelect.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = WorldSelect.sks; sourceTree = "<group>"; };
 		D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Paper Plane Font.ttf"; sourceTree = "<group>"; };
@@ -64,7 +80,6 @@
 		D6A513F32928D41E0098F2DD /* AdSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdSupport.swift; sourceTree = "<group>"; };
 		D6A513F52939785D0098F2DD /* Instructions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Instructions.swift; sourceTree = "<group>"; };
 		D6A513F7293EECEE0098F2DD /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
-		D6A513F9293EEEFA0098F2DD /* Button Click.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Button Click.mp3"; sourceTree = "<group>"; };
 		D6A5144B295D551B0098F2DD /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; name = .gitignore; path = "Paper Plane/.gitignore"; sourceTree = "<group>"; };
 		D6AD9B3624EFBAA000503775 /* Paper Plane.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Paper Plane.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6AD9B3924EFBAA000503775 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -85,7 +100,6 @@
 		D6EED41628DF40AF00A7F703 /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		D6EED41828DF458000A7F703 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		D6EED41A28E04CFB00A7F703 /* Temp Test Code.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Temp Test Code.swift"; sourceTree = "<group>"; };
-		D6FE94DD2BCBB696005260F9 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		D6FE94DE2BCBC52E005260F9 /* InAppPurchases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchases.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -94,6 +108,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6A0065F2C01CCA600BFD5F1 /* SwiftySound in Frameworks */,
 				D64616882B920E6000EFAAF8 /* GoogleMobileAds in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -104,10 +119,15 @@
 		D6974233259C4C41006F6049 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				D6A0065B2C01B5FA00BFD5F1 /* level_wind.mp3 */,
-				D6A006562C01B3F800BFD5F1 /* plane_turn.wav */,
-				D68DA35B2A57A0B4003EAE12 /* Chasm_Theme.mp3 */,
-				D6A513F9293EEEFA0098F2DD /* Button Click.mp3 */,
+				D696540E2C13E5BC00BBDE1B /* level_wind.mp3 */,
+				D69654102C13E7A700BBDE1B /* sound_effect.wav */,
+				D69654012C13E3DE00BBDE1B /* plane_turn_1.wav */,
+				D69654022C13E3DE00BBDE1B /* plane_turn_2.wav */,
+				D69654002C13E3DD00BBDE1B /* plane_turn_3.wav */,
+				D69654032C13E3DE00BBDE1B /* plane_turn_4.wav */,
+				D69654042C13E3DE00BBDE1B /* plane_turn_5.wav */,
+				D69653FE2C13E3D300BBDE1B /* button_click.wav */,
+				D69653FA2C13E36900BBDE1B /* plane_crash.wav */,
 				D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */,
 				D6974234259C4C58006F6049 /* Asai-Analogue.ttf */,
 			);
@@ -149,6 +169,7 @@
 		D6AD9B3824EFBAA000503775 /* Paper Plane */ = {
 			isa = PBXGroup;
 			children = (
+				D6333D0D2C1406A6006166CB /* Configuration.storekit */,
 				D6AD9B3924EFBAA000503775 /* AppDelegate.swift */,
 				D6AD9B4124EFBAA000503775 /* GameViewController.swift */,
 				D68007642537E8DA0090D16D /* TitleScreen.swift */,
@@ -166,7 +187,7 @@
 				D6B2F13E290DB04C0054D747 /* Assets.swift */,
 				D6A513ED291C5F130098F2DD /* SwitchScene.swift */,
 				D6FE94DE2BCBC52E005260F9 /* InAppPurchases.swift */,
-				D6FE94DD2BCBB696005260F9 /* Configuration.storekit */,
+				D6934A6E2C15398500BC8F69 /* StoreKitHelper.swift */,
 				D6A513F32928D41E0098F2DD /* AdSupport.swift */,
 				D6BAE9D52BA980A500E28628 /* AdMobDelegate.swift */,
 				D6800753252AE6100090D16D /* DestroyPlane.sks */,
@@ -199,6 +220,7 @@
 			name = "Paper Plane";
 			packageProductDependencies = (
 				D64616872B920E6000EFAAF8 /* GoogleMobileAds */,
+				D6A0065E2C01CCA600BFD5F1 /* SwiftySound */,
 			);
 			productName = PlaneTest;
 			productReference = D6AD9B3624EFBAA000503775 /* Paper Plane.app */;
@@ -230,6 +252,7 @@
 			mainGroup = D6AD9B2D24EFBA9F00503775;
 			packageReferences = (
 				D64616862B920E6000EFAAF8 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				D6A0065D2C01CCA600BFD5F1 /* XCRemoteSwiftPackageReference "SwiftySound" */,
 			);
 			productRefGroup = D6AD9B3724EFBAA000503775 /* Products */;
 			projectDirPath = "";
@@ -245,19 +268,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D69653FB2C13E36900BBDE1B /* plane_crash.wav in Resources */,
+				D69654052C13E3DE00BBDE1B /* plane_turn_3.wav in Resources */,
 				D6AD9B4524EFBAA000503775 /* Main.storyboard in Resources */,
 				D6A513E8291353660098F2DD /* WorldSelect.sks in Resources */,
 				D6EED41928DF458000A7F703 /* GameScene.sks in Resources */,
 				D680076A2537F2CE0090D16D /* TitleScreen.sks in Resources */,
-				D6A006572C01B3F800BFD5F1 /* plane_turn.wav in Resources */,
-				D6A0065C2C01B5FA00BFD5F1 /* level_wind.mp3 in Resources */,
-				D6A513FA293EEEFA0098F2DD /* Button Click.mp3 in Resources */,
 				D6AD9B4724EFBAA000503775 /* Assets.xcassets in Resources */,
 				D6974235259C4C58006F6049 /* Asai-Analogue.ttf in Resources */,
+				D69654072C13E3DE00BBDE1B /* plane_turn_2.wav in Resources */,
+				D6333D0E2C1406A6006166CB /* Configuration.storekit in Resources */,
+				D696540F2C13E5BC00BBDE1B /* level_wind.mp3 in Resources */,
+				D69654082C13E3DE00BBDE1B /* plane_turn_4.wav in Resources */,
+				D69654112C13E7A700BBDE1B /* sound_effect.wav in Resources */,
+				D69654062C13E3DE00BBDE1B /* plane_turn_1.wav in Resources */,
+				D69654092C13E3DE00BBDE1B /* plane_turn_5.wav in Resources */,
 				D6A513EC2914D3E70098F2DD /* Paper Plane Font.ttf in Resources */,
-				D68DA35C2A57A0B4003EAE12 /* Chasm_Theme.mp3 in Resources */,
 				D6AD9B4A24EFBAA000503775 /* LaunchScreen.storyboard in Resources */,
 				D6800756252AE6100090D16D /* Assets.xcassets in Resources */,
+				D69653FF2C13E3D300BBDE1B /* button_click.wav in Resources */,
 				D68DA35A2A50F6E9003EAE12 /* GameSceneRewrite.sks in Resources */,
 				D6A5144C295D551B0098F2DD /* .gitignore in Resources */,
 				D6800755252AE6100090D16D /* DestroyPlane.sks in Resources */,
@@ -288,6 +317,7 @@
 				D6A513EE291C5F130098F2DD /* SwitchScene.swift in Sources */,
 				D6A513F62939785D0098F2DD /* Instructions.swift in Sources */,
 				D6EED41728DF40AF00A7F703 /* GameScene.swift in Sources */,
+				D6934A6F2C15398500BC8F69 /* StoreKitHelper.swift in Sources */,
 				D61C63B52A8B923C0070C55F /* funcBackupTemp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -371,7 +401,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Debug;
 		};
@@ -439,7 +469,7 @@
 				DEVELOPMENT_TEAM = 9R9H53AU37;
 				INFOPLIST_FILE = "Paper Plane/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -465,7 +495,7 @@
 				DEVELOPMENT_TEAM = 9R9H53AU37;
 				INFOPLIST_FILE = "Paper Plane/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -514,6 +544,14 @@
 				minimumVersion = 11.0.1;
 			};
 		};
+		D6A0065D2C01CCA600BFD5F1 /* XCRemoteSwiftPackageReference "SwiftySound" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/adamcichy/SwiftySound";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -521,6 +559,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D64616862B920E6000EFAAF8 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
 			productName = GoogleMobileAds;
+		};
+		D6A0065E2C01CCA600BFD5F1 /* SwiftySound */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D6A0065D2C01CCA600BFD5F1 /* XCRemoteSwiftPackageReference "SwiftySound" */;
+			productName = SwiftySound;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

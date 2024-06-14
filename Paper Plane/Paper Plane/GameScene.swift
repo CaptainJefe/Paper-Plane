@@ -34,6 +34,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var howToPlay: SKSpriteNode!
     var gotIt: SKSpriteNode!
+    var dontShowAgain: SKSpriteNode!
+    var close: SKSpriteNode!
+    var noticeWindow: SKSpriteNode!
     
     var buttonRight: SKSpriteNode!
     var buttonLeft: SKSpriteNode!
@@ -133,6 +136,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var increaseWorldSpeed: Int = 0
     
     var gameHasStarted: Bool = false
+    
+    var planeTurnSoundState: Int = 1
+    
+    var soundStateLeft: Bool = true
+    var soundStateRight: Bool = true
     
     // ------------------------------------------------------------------------------------------------------------------------------------------
     //   MISC NODES & CONTAINERS
@@ -352,10 +360,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
             gotIt = SKSpriteNode(imageNamed: "got_it")
             gotIt.size = CGSize(width: gotIt.size.width, height: gotIt.size.height)
-            gotIt.position = CGPoint(x: howToPlay.position.x, y: howToPlay.position.y - (howToPlay.size.height * 0.38))
+            gotIt.position = CGPoint(x: howToPlay.position.x, y: howToPlay.position.y - (howToPlay.size.height * 0.25))
             gotIt.zPosition = 900
             gotIt.name = "gotIt"
             addChild(gotIt)
+            
+            dontShowAgain = SKSpriteNode(imageNamed: "dont_show_again")
+            dontShowAgain.size = CGSize(width: dontShowAgain.size.width, height: dontShowAgain.size.height)
+            dontShowAgain.position = CGPoint(x: howToPlay.position.x, y: gotIt.position.y - gotIt.size.height * 1.75)
+            dontShowAgain.zPosition = 900
+            dontShowAgain.name = "dontShowAgain"
+            addChild(dontShowAgain)
 
             Animations.shared.animateIntructions(node: howToPlay)
 
@@ -394,7 +409,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         countdownLabel.text = "\(count)"
         addChild(countdownLabel)
 
-        let decreaseCounter = SKAction.sequence([SKAction.wait(forDuration: 1), SKAction.run { [unowned self] in
+        let decreaseCounter = SKAction.sequence([SKAction.wait(forDuration: 0.75), SKAction.run { [unowned self] in
             self.count -= 1
         }])
 
@@ -421,7 +436,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         run(SKAction.sequence([SKAction.repeat(decreaseCounter, count: 3), endCountdown]))
         
-        Audio.shared.soundPlayer(soundName: "level_wind", shouldLoop: true)
+        Audio.shared.playWindSound()
     }
     
     
@@ -641,7 +656,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             plane.texture = planeTexture
 //            updatePlaneSprite(to: planeTexture, rotationAngle: hitBoxRotation)
             modX = 80
-            modY = 280
+            modY = 280 // 260 may be a better value, but hard to tell. 260 is the value between the previous and next value
 
         case 6:
             hitBoxSize = CGSize(width: plane.size.width, height: plane.size.height / 2)
@@ -1181,6 +1196,59 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     
+    func planeSoundRandomizer() {
+        var randomNumber: Int
+        
+        repeat {
+            randomNumber = Int.random(in: 1...5)
+        } while randomNumber == planeTurnSoundState
+        
+        planeTurnSoundState = randomNumber
+        
+        let soundName = "plane_turn_\(planeTurnSoundState)"
+        Audio.shared.playSFX(sound: soundName)
+    }
+    
+    
+    func showNotice() {
+        
+        noticeWindow = SKSpriteNode(imageNamed: "notice")
+        noticeWindow.size = CGSize(width: noticeWindow.size.width * 0.65, height: noticeWindow.size.height * 0.65)
+        noticeWindow.position = CGPoint(x: frame.midX, y: UINode.position.y + (frame.midY))
+        noticeWindow.alpha = 0
+        noticeWindow.zPosition = 800
+        noticeWindow.name = "noticeWindow"
+        addChild(noticeWindow)
+        
+        close = SKSpriteNode(imageNamed: "close")
+        close.size = CGSize(width: close.size.width, height: close.size.height)
+        close.position = CGPoint(x: noticeWindow.position.x, y: noticeWindow.position.y - (noticeWindow.size.height * 0.3))
+        close.alpha = 0
+        close.zPosition = 900
+        close.name = "close"
+        addChild(close)
+        
+        noticeWindow.setScale(0.25)
+        
+        let wait = SKAction.wait(forDuration: 0.35)
+        let scaleUp = SKAction.scale(by: 4, duration: 0.2)
+        let fadeAlphaIn = SKAction.fadeAlpha(to: 1, duration: 0.2)
+        
+        run(wait, completion: {
+            self.noticeWindow.run(scaleUp)
+            self.noticeWindow.run(fadeAlphaIn)
+            
+            self.close.run(SKAction.sequence([
+                SKAction.wait(forDuration: 1.5),
+                SKAction.fadeAlpha(to: 1, duration: 1.0)
+            ]))
+        })
+        
+        
+        
+    }
+    
+    
     // ------------------------------------------------------------------------------------------------------------------------------------------
     //   SCENE CHANGING METHODS
     // ------------------------------------------------------------------------------------------------------------------------------------------
@@ -1188,7 +1256,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     func restartGame() {
         
-        Audio.shared.stopSound()
+        Audio.shared.stopAllSounds()
         
         if let skView = self.view {
 
@@ -1208,7 +1276,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     func backToTitle() {
         
-        Audio.shared.stopSound()
+        Audio.shared.stopAllSounds()
         
         if let skView = self.view {
 
@@ -1228,7 +1296,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     func worldSelectMenu() {
         
-        Audio.shared.stopSound()
+        Audio.shared.stopAllSounds()
         
         if let skView = self.view {
 
@@ -1302,6 +1370,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func destroyPlane() {
+        
+        Audio.shared.playSFX(sound: "plane_crash")
         
         print("plane destroyed")
 
@@ -1479,6 +1549,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 node.isPaused = true
             }
         }
+        
+        if score >= 30 {
+            if adsRemoved == true || !(gamesUntilAd <= 0) {
+                StoreKitHelper.displayStoreKit()
+            }
+        }
     }
     
     
@@ -1594,28 +1670,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let repeatAction = SKAction.repeatForever(seq)
 
             
-            if gameHasStarted == false {
-                return
-            } else if touchedNode.name == "buttonLeft" {
-                isButtonTouched = "buttonLeft"
-                
-                if gameHasStarted == true {
+            if gameHasStarted == true {
+                if touchedNode.name == "buttonLeft" {
+                    isButtonTouched = "buttonLeft"
                     buttonLeft.run(repeatAction, withKey: "cycle")
                     if gameState != 1 {
-                        Audio.shared.soundPlayer(soundName: "plane_turn")
+                        planeSoundRandomizer()
                     }
                 }
             }
             
-            if gameHasStarted == false {
-                return
-            } else if touchedNode.name == "buttonRight" {
-                isButtonTouched = "buttonRight"
-
-                if gameHasStarted == true {
+            if gameHasStarted == true {
+                if touchedNode.name == "buttonRight" {
+                    isButtonTouched = "buttonRight"
                     buttonRight.run(repeatAction, withKey: "cycle")
                     if gameState != 1 {
-                        Audio.shared.soundPlayer(soundName: "plane_turn")
+                        planeSoundRandomizer()
                     }
                 }
             }
@@ -1626,16 +1696,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
 
             if touchedNode.name == "homeButton" {
+                Audio.shared.playSFX(sound: "button_click")
                 Animations.shared.shrink(node: homeButton)
                 isButtonTouched = "homeButton"
             }
 
             if touchedNode.name == "restartButton" {
+                Audio.shared.playSFX(sound: "button_click")
                 Animations.shared.shrink(node: restartButton)
                 isButtonTouched = "restartButton"
             }
 
             if touchedNode.name == "levelSelectButton" {
+                Audio.shared.playSFX(sound: "button_click")
                 Animations.shared.shrink(node: levelSelectButton)
                 isButtonTouched = "levelSelectButton"
             }
@@ -1646,8 +1719,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
 
             if touchedNode.name == "gotIt" {
+                Audio.shared.playSFX(sound: "button_click")
                 Animations.shared.shrink(node: gotIt)
                 isButtonTouched = "gotIt"
+            }
+            
+            if touchedNode.name == "dontShowAgain" {
+                Audio.shared.playSFX(sound: "button_click")
+                Animations.shared.shrink(node: dontShowAgain)
+                isButtonTouched = "dontShowAgain"
+            }
+            
+            if touchedNode.name == "close" {
+                Audio.shared.playSFX(sound: "button_click")
+                Animations.shared.shrink(node: close)
+                isButtonTouched = "close"
             }
         }
     }
@@ -1667,6 +1753,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             } else if touchedNode.name != "" && isButtonTouched == "noClip" {
                 Animations.shared.expand(node: toggleNoClip)
             }
+            
 
             if touchedNode.name == "pauseButton" && isButtonTouched == "pauseButton" {
                 gameIsPaused.toggle()
@@ -1689,6 +1776,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             } else if touchedNode.name != "" && isButtonTouched == "homeButton" {
                 Animations.shared.expand(node: homeButton)
             }
+            
 
             if touchedNode.name == "restartButton" {
                 let expand = SKAction.run {
@@ -1702,6 +1790,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             } else if touchedNode.name != "" && isButtonTouched == "restartButton" {
                 Animations.shared.expand(node: restartButton)
             }
+            
 
             if touchedNode.name == "levelSelectButton" {
                 let expand = SKAction.run {
@@ -1720,13 +1809,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if touchedNode.name == "noClip" {
                 noClip = !noClip
             }
+            
 
-            if touchedNode.name == "gotIt" {
-                Animations.shared.expand(node: gotIt)
+            // Dismisses tutorial window
+            
+            if touchedNode.name == "gotIt" || touchedNode.name == "dontShowAgain" {
+                if touchedNode.name == "gotIt" {
+                    Animations.shared.expand(node: gotIt)
+                } else if touchedNode.name == "dontShowAgain" {
+                    Animations.shared.expand(node: dontShowAgain)
+                }
 
                 let fadeOut = SKAction.run {
                     Animations.shared.fadeAlphaOut(node: self.howToPlay, duration: 0.25, waitTime: 0)
-                    Animations.shared.fadeAlphaOut(node: self.gotIt, duration: 0.25, waitTime: 0)
+                    Animations.shared.fadeAlphaOut(node: self.gotIt, duration: 0.20, waitTime: 0)
+                    Animations.shared.fadeAlphaOut(node: self.dontShowAgain, duration: 0.20, waitTime: 0)
                 }
 
                 let wait = SKAction.wait(forDuration: 0.25)
@@ -1734,6 +1831,73 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let remove = SKAction.run {
                     self.childNode(withName: "howToPlay")?.removeFromParent()
                     self.childNode(withName: "gotIt")?.removeFromParent()
+                    self.childNode(withName: "dontShowAgain")?.removeFromParent()
+                }
+
+                let seq = SKAction.sequence([fadeOut, wait, remove])
+                run(seq)
+
+                if touchedNode.name == "gotIt" {
+                    run(SKAction.wait(forDuration: 0.75), completion: { self.countdown() })
+                } else if touchedNode.name == "dontShowAgain" {
+                    showNotice()
+                }
+                
+                gotIt.isUserInteractionEnabled = true
+
+            } else if touchedNode.name != "" && isButtonTouched == "gotIt" || isButtonTouched == "dontShowAgain" {
+                if isButtonTouched == "gotIt"{
+                    Animations.shared.expand(node: gotIt)
+                } else if isButtonTouched == "dontShowAgain" {
+                    Animations.shared.expand(node: dontShowAgain)
+                }
+            }
+            
+            
+            // Dismisses and disables tutorial window
+            
+//            if touchedNode.name == "dontShowAgain" {
+//                Animations.shared.expand(node: dontShowAgain)
+//
+//                let fadeOut = SKAction.run {
+//                    Animations.shared.fadeAlphaOut(node: self.howToPlay, duration: 0.25, waitTime: 0)
+//                    Animations.shared.fadeAlphaOut(node: self.gotIt, duration: 0.20, waitTime: 0)
+//                    Animations.shared.fadeAlphaOut(node: self.dontShowAgain, duration: 0.20, waitTime: 0)
+//                }
+//
+//                let wait = SKAction.wait(forDuration: 0.25)
+//
+//                let remove = SKAction.run {
+//                    self.childNode(withName: "howToPlay")?.removeFromParent()
+//                    self.childNode(withName: "gotIt")?.removeFromParent()
+//                    self.childNode(withName: "dontShowAgain")?.removeFromParent()
+//                }
+//
+//                let seq = SKAction.sequence([fadeOut, wait, remove])
+//                run(seq)
+//
+//                showNotice()
+//                
+//                gotIt.isUserInteractionEnabled = true
+//
+//            } else if touchedNode.name != "" && isButtonTouched == "dontShowAgain" {
+//                Animations.shared.expand(node: dontShowAgain)
+//            }
+            
+            
+            if touchedNode.name == "close" {
+                Animations.shared.expand(node: close)
+
+                let fadeOut = SKAction.run {
+                    Animations.shared.fadeAlphaOut(node: self.noticeWindow, duration: 0.25, waitTime: 0)
+                    Animations.shared.fadeAlphaOut(node: self.close, duration: 0.20, waitTime: 0)
+                }
+
+                let wait = SKAction.wait(forDuration: 0.25)
+
+                let remove = SKAction.run {
+                    self.childNode(withName: "noticeWindow")?.removeFromParent()
+                    self.childNode(withName: "close")?.removeFromParent()
                 }
 
                 let seq = SKAction.sequence([fadeOut, wait, remove])
@@ -1741,13 +1905,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
                 firstTimePlaying.toggle()
                 SavedSettings.shared.setTutorialData()
-                countdown()
+                
+                run(SKAction.wait(forDuration: 0.75), completion: { self.countdown() })
+                
+                
+                firstTimePlaying = true
+                UserDefaults.standard.set(firstTimePlaying, forKey: "firstTimePlaying")
                 
                 gotIt.isUserInteractionEnabled = true
 
-            } else if touchedNode.name != "" && isButtonTouched == "gotIt" {
-                Animations.shared.expand(node: gotIt)
+            } else if touchedNode.name != "" && isButtonTouched == "close" {
+                Animations.shared.expand(node: close)
             }
+            
 
             buttonLeft.removeAction(forKey: "cycle")
             buttonRight.removeAction(forKey: "cycle")

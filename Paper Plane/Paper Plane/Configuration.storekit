@@ -1,5 +1,5 @@
 {
-  "identifier" : "E39AB650",
+  "identifier" : "7C1DD98F",
   "nonRenewingSubscriptions" : [
 
   ],
@@ -7,26 +7,21 @@
     {
       "displayPrice" : "0.99",
       "familyShareable" : false,
-      "internalID" : "6496865640",
+      "internalID" : "DA79D308",
       "localizations" : [
         {
-          "description" : "Removes all ads from the game.",
-          "displayName" : "Remove Ads",
+          "description" : "",
+          "displayName" : "",
           "locale" : "en_US"
         }
       ],
-      "productID" : "Remove_Ads",
+      "productID" : "remove_ads",
       "referenceName" : "Remove Ads",
       "type" : "NonConsumable"
     }
   ],
   "settings" : {
-    "_applicationInternalID" : "6478473435",
-    "_developerTeamID" : "9R9H53AU37",
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 734777314.89976895,
-    "_locale" : "en_US",
-    "_storefront" : "USA",
     "_storeKitErrors" : [
       {
         "current" : null,

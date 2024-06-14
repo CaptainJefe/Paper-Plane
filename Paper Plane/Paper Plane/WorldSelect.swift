@@ -42,6 +42,9 @@ class WorldSelect: SKScene {
     
     var lockSprite: SKSpriteNode!
     var lockedText: SKLabelNode!
+    var lockedText2: SKLabelNode!
+    var lockedText3: SKLabelNode!
+    var lockedTextNodes: [SKLabelNode]!
     
     var chasmUnlockReq: Int = 15
     
@@ -81,13 +84,31 @@ class WorldSelect: SKScene {
         
         // need to remake this if there are other locked levels
         lockedText = SKLabelNode(fontNamed: "Paper Plane Font")
-        lockedText.position = CGPoint(x: frame.midX, y: frame.maxY * 0.6)
+        lockedText.position = CGPoint(x: frame.midX, y: frame.maxY * 0.7)
         lockedText.fontSize = 32
         lockedText.zPosition = 250
         lockedText.alpha = 0
         lockedText.preferredMaxLayoutWidth = frame.width / 2
-        lockedText.numberOfLines = 2
+//        lockedTextNodes.append(lockedText)
         addChild(lockedText)
+
+        lockedText2 = SKLabelNode(fontNamed: "Paper Plane Font")
+        lockedText2.position = CGPoint(x: lockedText.position.x, y: frame.maxY * 0.665)
+        lockedText2.fontSize = 32
+        lockedText2.zPosition = 250
+        lockedText2.alpha = 0
+        lockedText2.preferredMaxLayoutWidth = frame.width / 2
+//        lockedTextNodes.append(lockedText2)
+        addChild(lockedText2)
+        
+        lockedText3 = SKLabelNode(fontNamed: "Paper Plane Font")
+        lockedText3.position = CGPoint(x: lockedText.position.x, y: frame.maxY * 0.63)
+        lockedText3.fontSize = 32
+        lockedText3.zPosition = 250
+        lockedText3.alpha = 0
+        lockedText3.preferredMaxLayoutWidth = frame.width / 2
+//        lockedTextNodes.append(lockedText3)
+        addChild(lockedText3)
         
         createUI()
         setPreview(currentPreview: "castle")
@@ -171,14 +192,21 @@ class WorldSelect: SKScene {
         if isSiloLocked == true {
             if theme == "silo" {
                 
-                lockedText.text = "Get a score of 50 or more to unlock!"
+                lockedText.text = "Get a score"
+                lockedText2.text = "of 50 or more"
+                lockedText3.text = "to unlock!"
+                
                 Animations.shared.fadeAlphaIn(node: lockSprite, duration: 0.4, waitTime: 0.3)
                 Animations.shared.colorize(node: previewBackground, color: .darkGray, colorBlendFactor: 0.85, duration: 0.3)
                 Animations.shared.fadeAlphaIn(node: lockedText, duration: 0.4, waitTime: 0.3)
+                Animations.shared.fadeAlphaIn(node: lockedText2, duration: 0.4, waitTime: 0.3)
+                Animations.shared.fadeAlphaIn(node: lockedText3, duration: 0.4, waitTime: 0.3)
             } else {
                 Animations.shared.fadeAlphaOut(node: lockSprite, duration: 0.4, waitTime: 0)
                 Animations.shared.colorize(node: previewBackground, color: .clear, colorBlendFactor: 0, duration: 0.3)
                 Animations.shared.fadeAlphaOut(node: lockedText, duration: 0.0, waitTime: 0)
+                Animations.shared.fadeAlphaOut(node: lockedText2, duration: 0.0, waitTime: 0)
+                Animations.shared.fadeAlphaOut(node: lockedText3, duration: 0.0, waitTime: 0)
             }
         }
             
@@ -187,18 +215,26 @@ class WorldSelect: SKScene {
                     
                 
                 if chasmUnlockReq - gamesPlayed == 1 {
-                    lockedText.text = "Play \(chasmUnlockReq - gamesPlayed) more round to unlock!"
+                    lockedText.text = "Play \(chasmUnlockReq - gamesPlayed)"
+                    lockedText2.text = "more round"
+                    lockedText3.text = "to unlock!"
                 } else {
-                    lockedText.text = "Play \(chasmUnlockReq - gamesPlayed) more rounds to unlock!"
+                    lockedText.text = "Play \(chasmUnlockReq - gamesPlayed)"
+                    lockedText2.text = "more rounds"
+                    lockedText3.text = "to unlock!"
                 }
                 
                 Animations.shared.fadeAlphaIn(node: lockSprite, duration: 0.4, waitTime: 0.3)
                 Animations.shared.colorize(node: previewBackground, color: .darkGray, colorBlendFactor: 0.85, duration: 0.3)
                 Animations.shared.fadeAlphaIn(node: lockedText, duration: 0.4, waitTime: 0.3)
+                Animations.shared.fadeAlphaIn(node: lockedText2, duration: 0.4, waitTime: 0.3)
+                Animations.shared.fadeAlphaIn(node: lockedText3, duration: 0.4, waitTime: 0.3)
             } else {
                 Animations.shared.fadeAlphaOut(node: lockSprite, duration: 0.4, waitTime: 0)
                 Animations.shared.colorize(node: previewBackground, color: .clear, colorBlendFactor: 0, duration: 0.3)
                 Animations.shared.fadeAlphaOut(node: lockedText, duration: 0.0, waitTime: 0)
+                Animations.shared.fadeAlphaOut(node: lockedText2, duration: 0.0, waitTime: 0)
+                Animations.shared.fadeAlphaOut(node: lockedText3, duration: 0.0, waitTime: 0)
             }
         }
     }
@@ -379,7 +415,7 @@ class WorldSelect: SKScene {
             let fadeIn = SKAction.run {
                 Animations.shared.fadeAlphaIn(node: self.previewBackground, duration: 0.25, waitTime: 0)
             }
-            let wait = SKAction.wait(forDuration: 0.25)
+            let wait = SKAction.wait(forDuration: 0.45)
             let sequence = SKAction.sequence([fadeIn, wait])
             
             // shakes text (and lock sprite) if level is locked
@@ -393,18 +429,28 @@ class WorldSelect: SKScene {
                 if theme == "chasm" {
                     if isChasmLocked == true {
                         lockedText.run(seq)
+                        lockedText2.run(seq)
+                        lockedText3.run(seq)
                         lockSprite.run(seq)
                     } else {
+                        previewBackground.isUserInteractionEnabled = true
+                        Audio.shared.playSFX(sound: "sound_effect")
                         run(sequence, completion: { self.startGame() } )
                     }
                 } else if theme == "silo" {
                     if isSiloLocked == true {
                         lockedText.run(seq)
+                        lockedText2.run(seq)
+                        lockedText3.run(seq)
                         lockSprite.run(seq)
                     } else {
+                        previewBackground.isUserInteractionEnabled = true
+                        Audio.shared.playSFX(sound: "sound_effect")
                         run(sequence, completion: { self.startGame() } )
                     }
                 } else {
+                    previewBackground.isUserInteractionEnabled = true
+                    Audio.shared.playSFX(sound: "sound_effect")
                     run(sequence, completion: { self.startGame() } )
                 }
             } else if touchedNode.name != "previewBackground" && isButtonTouched == "previewBackground" {

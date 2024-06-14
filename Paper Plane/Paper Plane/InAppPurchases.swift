@@ -36,7 +36,7 @@ class InAppPurchaseManager: NSObject, SKPaymentTransactionObserver, SKProductsRe
     
     
     func fetchProducts() {
-            let productIdentifiers = Set(["Remove_Ads"])
+            let productIdentifiers = Set(["remove_ads"])
             productRequest = SKProductsRequest(productIdentifiers: productIdentifiers)
             productRequest?.delegate = self
             productRequest?.start()
@@ -56,7 +56,7 @@ class InAppPurchaseManager: NSObject, SKPaymentTransactionObserver, SKProductsRe
     // These two methods below are to request a purchase/restore which are called from TitleScreen buttons "removeAdButton" and "restorePurchases"
     
     func requestPurchase() {
-        if let product = InAppPurchaseManager.shared.products.first(where: { $0.productIdentifier == "Remove_Ads" }) {
+        if let product = InAppPurchaseManager.shared.products.first(where: { $0.productIdentifier == "remove_ads" }) {
             Task {
                 do {
                     try await InAppPurchaseManager.shared.purchase(product)

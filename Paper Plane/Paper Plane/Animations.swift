@@ -41,6 +41,7 @@ class Animations: SKNode {
         node.run(colorize)
     }
     
+    
     // Shrinks a node for a short time. Best used alongside the expand() method
     func shrink(node: SKSpriteNode) {
         let shrink = SKAction.scale(to: 0.75, duration: 0.1)
@@ -68,6 +69,7 @@ class Animations: SKNode {
         node.run(sequence)
     }
     
+    
     // Rotates a node clockwise
     func rotateCW(node: SKSpriteNode) {
         let rotateCW = SKAction.rotate(byAngle: -.pi, duration: 0.4)
@@ -75,12 +77,14 @@ class Animations: SKNode {
         node.run(rotateCW)
     }
     
+    
     // Rotates a node counter-clockwise
     func rotateCCW(node: SKSpriteNode) {
         let rotateCCW = SKAction.rotate(byAngle: .pi, duration: 0.4)
         
         node.run(rotateCCW)
     }
+    
     
     // Moves a node to the inverse value of its current x-position / from positive to negative or from negative to positive
     func moveUIX(node: SKSpriteNode, duration: TimeInterval) {
@@ -90,6 +94,7 @@ class Animations: SKNode {
         node.run(moveNode)
     }
     
+    
     // Moves a node to the inverse value of its current y-position / from positive to negative or from negative to positive
     func moveUIY(node: SKSpriteNode, duration: TimeInterval) {
         let nodePositionY = node.position.y
@@ -97,6 +102,7 @@ class Animations: SKNode {
         let moveNode = SKAction.move(to: CGPoint(x: node.position.x, y: -nodePositionY), duration: duration)
         node.run(moveNode)
     }
+    
     
     // Fades a nodes alpha value to 0 over a duration
     func fadeAlphaOut(node: SKNode, duration: Double, waitTime: Double) {
@@ -107,6 +113,7 @@ class Animations: SKNode {
         node.run(seq)
     }
     
+    
     // Fades a nodes alpha value to 1 over a duration
     func fadeAlphaIn(node: SKNode, duration: Double, waitTime: Double) {
         let wait = SKAction.wait(forDuration: waitTime)
@@ -116,6 +123,7 @@ class Animations: SKNode {
         node.run(seq)
     }
     
+    
     func fadeAlphaTo(node: SKNode, alpha: Double, duration: Double, waitTime: Double) {
         let wait = SKAction.wait(forDuration: waitTime)
         let fadeTo = SKAction.fadeAlpha(to: alpha, duration: duration)
@@ -123,6 +131,7 @@ class Animations: SKNode {
         let seq = SKAction.sequence([wait, fadeTo])
         node.run(seq)
     }
+    
     
     func scaleUp(node: SKSpriteNode) {
         let scalePrelim = SKAction.scale(to: CGSize(width: 1, height: 1), duration: 0)
@@ -132,10 +141,12 @@ class Animations: SKNode {
         node.run(menuSequence)
     }
     
+    
     func animateTexture(node: SKSpriteNode, texture: [SKTexture]) {
         let animate = SKAction.animate(with: texture, timePerFrame: 0.05)
         node.run(animate)
     }
+    
     
     func animateIntructions(node: SKSpriteNode) {
         
@@ -154,6 +165,7 @@ class Animations: SKNode {
         node.run(repeatForever)
         
     }
+    
     
     func animateAndChangeScene(node: SKSpriteNode, changeScene: @escaping () -> Void) {
         let expand = SKAction.run { [unowned self] in

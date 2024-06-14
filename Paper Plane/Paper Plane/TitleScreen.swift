@@ -15,7 +15,7 @@ var isFirstLaunch: Bool = true
 class TitleScreen: SKScene {
     
     var howToPlay: SKSpriteNode!
-    var gotIt: SKSpriteNode!
+    var close: SKSpriteNode!
     
     var logo = SKSpriteNode(imageNamed: "Paper Plane Logo")
     var background: SKSpriteNode!
@@ -168,7 +168,7 @@ class TitleScreen: SKScene {
         addChild(background)
         mainUIContainer.append(logo)
         
-        logo.size = CGSize(width: logo.size.width * 0.8, height: logo.size.height * 0.8)
+        logo.size = CGSize(width: logo.size.width * 0.75, height: logo.size.height * 0.75) // was (logo.size._ * 0.8)
         logo.position = CGPoint(x: frame.midX, y: frame.maxY / 1.4)
         logo.alpha = 0
         addChild(logo)
@@ -476,14 +476,13 @@ class TitleScreen: SKScene {
         howToPlay.name = "howToPlay"
         addChild(howToPlay)
         
-        gotIt = SKSpriteNode(imageNamed: "got_it")
-        gotIt.size = CGSize(width: gotIt.size.width, height: gotIt.size.height)
-        gotIt.position = CGPoint(x: howToPlay.frame.midX, y: howToPlay.position.y - (howToPlay.size.height * 0.38)) // old y-value was: frame.maxY * 0.33
-        gotIt.alpha = 0
-        gotIt.zPosition = 810
-        gotIt.name = "gotIt"
-        addChild(gotIt)
-        
+        close = SKSpriteNode(imageNamed: "close")
+        close.size = CGSize(width: close.size.width * 1.25, height: close.size.height * 1.25)
+        close.position = CGPoint(x: howToPlay.frame.midX, y: howToPlay.position.y - (howToPlay.size.height * 0.31))
+        close.alpha = 0
+        close.zPosition = 810
+        close.name = "close"
+        addChild(close)
         
         
         let fadeOutOptions = SKAction.run { [unowned self] in
@@ -496,7 +495,7 @@ class TitleScreen: SKScene {
         
         let fadeInIntructions = SKAction.run { [unowned self] in
             Animations.shared.fadeAlphaIn(node: self.howToPlay, duration: 0.4, waitTime: 0)
-            Animations.shared.fadeAlphaIn(node: self.gotIt, duration: 0.4, waitTime: 0)
+            Animations.shared.fadeAlphaIn(node: self.close, duration: 0.4, waitTime: 0)
             Animations.shared.animateIntructions(node: self.howToPlay)
         }
         
@@ -588,70 +587,71 @@ class TitleScreen: SKScene {
 //            }
             
             if touchedNode.name == "Play" {
-                Audio.shared.soundPlayer(soundName: "Button Click")
+                Audio.shared.playSFX(sound: "button_click")
                 Animations.shared.shrink(node: playButton)
 //                Animations.shared.animateTexture(node: playButton, texture: [playButtonTexture2, playButtonTexture3])
                 isButtonTouched = "Play"
             }
             
             if touchedNode.name == "High Scores" {
-                Audio.shared.soundPlayer(soundName: "Button Click")
+                Audio.shared.playSFX(sound: "button_click")
                 Animations.shared.shrink(node: highScoresButton)
 //                Animations.shared.animateTexture(node: highScoresButton, texture: [highScoresTexture2, highScoresTexture3])
                 isButtonTouched = "High Scores"
             }
             
             if touchedNode.name == "Options" {
-                Audio.shared.soundPlayer(soundName: "Button Click")
+                Audio.shared.playSFX(sound: "button_click")
                 Animations.shared.shrink(node: optionsButton)
 //                Animations.shared.animateTexture(node: optionsButton, texture: [optionsTexture2, optionsTexture3])
                 isButtonTouched = "Options"
             }
             
             if touchedNode.name == "remove_ads" {
-                Audio.shared.soundPlayer(soundName: "Button Click")
+                Audio.shared.playSFX(sound: "button_click")
                 Animations.shared.shrink(node: removeAdsButton)
                 isButtonTouched = "remove_ads"
             }
             
             if touchedNode.name == "Music Button" {
-                Audio.shared.soundPlayer(soundName: "Button Click")
+                Audio.shared.playSFX(sound: "button_click")
                 Animations.shared.shrink(node: musicButton)
                 isButtonTouched = "Music Button"
             }
             
             if touchedNode.name == "sound_button" {
-                Audio.shared.soundPlayer(soundName: "Button Click")
+                Audio.shared.playSFX(sound: "button_click")
                 Animations.shared.shrink(node: soundButton)
                 isButtonTouched = "sound_button"
             }
             
             if touchedNode.name == "Controls Button" {
-                Audio.shared.soundPlayer(soundName: "Button Click")
+//                Audio.shared.soundPlayer(soundName: "Button Click")
+                Audio.shared.playSFX(sound: "button_click")
                 Animations.shared.shrink(node: controlsButton)
                 isButtonTouched = "Controls Button"
             }
             
             if touchedNode.name == "tutorial_button" {
-                Audio.shared.soundPlayer(soundName: "Button Click")
+                Audio.shared.playSFX(sound: "button_click")
                 Animations.shared.shrink(node: tutorialButton)
                 isButtonTouched = "tutorial_button"
             }
             
             if touchedNode.name == "restore_purchases" {
-                Audio.shared.soundPlayer(soundName: "Button Click")
+                Audio.shared.playSFX(sound: "button_click")
                 Animations.shared.shrink(node: restorePurchases)
                 isButtonTouched = "restore_purchases"
             }
             
-            if touchedNode.name == "gotIt" {
-                Audio.shared.soundPlayer(soundName: "Button Click")
-                Animations.shared.shrink(node: gotIt)
-                isButtonTouched = "gotIt"
+            if touchedNode.name == "close" {
+                Audio.shared.playSFX(sound: "button_click")
+                Animations.shared.shrink(node: close)
+                isButtonTouched = "close"
             }
             
             if touchedNode.name == "Close Button" {
-                Audio.shared.soundPlayer(soundName: "Button Click")
+                Audio.shared.playSFX(sound: "button_click")
                 Animations.shared.shrink(node: closeButton)
                 isButtonTouched = "Close Button"
             }
@@ -666,17 +666,6 @@ class TitleScreen: SKScene {
             
             if touchedNode.name == "Play" && isButtonTouched == "Play" {
                 
-//                let expand = SKAction.run { [unowned self] in
-//                    Animations.shared.animateTexture(node: playButton, texture: [playButtonTexture2, playButtonTexture1])
-//                }
-//                let wait = SKAction.wait(forDuration: 0.175)
-//                let openWorldSelect = SKAction.run { [unowned self] in
-//                    worldSelectMenu()
-//                }
-//                let sequence = SKAction.sequence([expand, wait, openWorldSelect])
-//                
-//                run(sequence)
-                
                 let expand = SKAction.run {
                     Animations.shared.expand(node: self.playButton)
                 }
@@ -684,10 +673,6 @@ class TitleScreen: SKScene {
                 let sequence = SKAction.sequence([expand, wait])
                 
                 run(sequence, completion: { self.worldSelectMenu() } )
-                
-//                Animations.shared.animateAndChangeScene(node: playButton) {
-//                    self.worldSelectMenu()
-//                }
                 
                 for node in mainUIContainer { node.isUserInteractionEnabled = true }
                 
@@ -801,13 +786,13 @@ class TitleScreen: SKScene {
             }
             
             
-            if touchedNode.name == "gotIt" && isButtonTouched == "gotIt" {
+            if touchedNode.name == "close" && isButtonTouched == "close" {
                 
-                Animations.shared.expand(node: gotIt)
+                Animations.shared.expand(node: close)
                 
                 let fadeOut = SKAction.run {
                     Animations.shared.fadeAlphaOut(node: self.howToPlay, duration: 0.25, waitTime: 0)
-                    Animations.shared.fadeAlphaOut(node: self.gotIt, duration: 0.25, waitTime: 0)
+                    Animations.shared.fadeAlphaOut(node: self.close, duration: 0.25, waitTime: 0)
                 }
                 
                 let wait = SKAction.wait(forDuration: 0.3)
@@ -820,7 +805,7 @@ class TitleScreen: SKScene {
                 
                 
                 let remove = SKAction.run {
-                    self.gotIt.removeFromParent()
+                    self.close.removeFromParent()
                     self.howToPlay.removeFromParent()
                 }
                 
@@ -828,8 +813,8 @@ class TitleScreen: SKScene {
                 
                 run(seq)
                 
-            } else if touchedNode.name != "gotIt" && isButtonTouched == "gotIt" {
-                Animations.shared.expand(node: gotIt)
+            } else if touchedNode.name != "close" && isButtonTouched == "close" {
+                Animations.shared.expand(node: close)
             }
             
             

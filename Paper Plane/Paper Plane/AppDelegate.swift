@@ -20,11 +20,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        print("Games Played: \(UserDefaults.standard.integer(forKey: "gamesPlayed"))")
+        
         GADMobileAds.sharedInstance().start(completionHandler: nil)
         
         UserDefaults.standard.register(defaults: ["firstTimePlaying" : true])
+        firstTimePlaying = true
+        UserDefaults.standard.set(firstTimePlaying, forKey: "firstTimePlaying")
         UserDefaults.standard.register(defaults: ["adsRemoved" : false]) // set to false to have ads on by default
         
+        UserDefaults.standard.register(defaults: ["gamesRequiredForRequest" : 2])
+        
+        Audio.shared.soundSetup()
         Audio.shared.audioSession()
         Audio.shared.initEngine()
         
