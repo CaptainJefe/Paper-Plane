@@ -73,6 +73,7 @@ class Audio {
             
         case "sound_effect":
             instancedSFX = Sound(url: Bundle.main.url(forResource: "sound_effect", withExtension: "wav")!)
+            instancedSFX.volume = 0.8
             
             DispatchQueue.global().async {
                 self.instancedSFX.play(numberOfLoops: 0)
@@ -80,6 +81,7 @@ class Audio {
             
         case "button_click":
             instancedSFX = Sound(url: Bundle.main.url(forResource: "button_click", withExtension: "wav")!)
+            instancedSFX.volume = 0.6
             
             DispatchQueue.global().async {
                 self.instancedSFX.play(numberOfLoops: 0)
@@ -87,6 +89,7 @@ class Audio {
             
         case "plane_crash":
             instancedSFX = Sound(url: Bundle.main.url(forResource: "plane_crash", withExtension: "wav")!)
+            instancedSFX.volume = 0.8
             
             DispatchQueue.global().async {
                 self.instancedSFX.play(numberOfLoops: 0)
@@ -97,15 +100,17 @@ class Audio {
             
         }
         
-        print("SFX played!")
+//        print("SFX played!")
     }
     
     
     func playWindSound() {
         guard isSoundMuted == false else { return }
         
+        self.windSound?.volume = 0.65
+        
         DispatchQueue.global().async {
-            Sound.play(file: "level_wind", fileExtension: "mp3", numberOfLoops: -1)
+            self.windSound?.play(numberOfLoops: -1)
         }
     }
     

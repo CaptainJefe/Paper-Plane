@@ -1,11 +1,12 @@
 {
   "images" : [
     {
+      "filename" : "Chasm Preview 2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Chasm Preview.png",
+      "filename" : "Chasm Preview 2@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

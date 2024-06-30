@@ -66,12 +66,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // ------------------------------------------------------------------------------------------------------------------------------------------
     
     var backgroundArray = [SKSpriteNode]()
+    var wallLeftArray = [SKSpriteNode]()
+    var wallRightArray = [SKSpriteNode]()
+    
     var lastBackgroundPosition: CGFloat!
+    var lastWallPosition: CGFloat!
     
     var backgroundTexture: SKTexture! { didSet { for background in backgroundArray { background.texture = backgroundTexture } } }
     var firstBackground: SKTexture!
     var secondBackground: SKTexture!
     var thirdBackground: SKTexture!
+    
+    var wallLeftTexture: SKTexture! { didSet { for wallLeft in wallLeftArray { wallLeft.texture = wallLeftTexture } } } // these two might conflict with the background loop
+    var firstWallLeft: SKTexture!
+    var secondWallLeft: SKTexture!
+    var thirdWallLeft: SKTexture!
+    
+    var wallRightTexture: SKTexture! { didSet { for wallRight in wallRightArray { wallRight.texture = wallRightTexture } } }
+    var firstWallRight: SKTexture!
+    var secondWallRight: SKTexture!
+    var thirdWallRight: SKTexture!
+    
+    var wallWidth: CGFloat!
     
     var plane: SKSpriteNode!
     
@@ -115,9 +131,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var mode = 8 { didSet { label.text = "Mode: \(mode)" } }
     
     var scoreLabel: SKLabelNode!
-    var score = 0 { didSet { scoreLabel.text = "\(score)" } }
+    var scoreLabelShadow: SKLabelNode!
+    var score = 0 { didSet { scoreLabel.text = "\(score)"; scoreLabelShadow.text = "\(score)" } }
     var finalScoreLabel: SKLabelNode!
     var bestScore: SKLabelNode!
+    var bestScoreShadow: SKLabelNode!
     
     var gameIsPaused = false
     
@@ -153,7 +171,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var gameOverUIContainer = [SKNode]()
 
     var countdownLabel: SKLabelNode!
-    var count = 3 { didSet { countdownLabel.text = "\(count)" } }
+    var countdownLabelShadow: SKLabelNode!
+    var count = 3 { didSet { countdownLabel.text = "\(count)" ; countdownLabelShadow.text = "\(count)"} }
     
     var planeTexture = SKTexture(imageNamed: "Plane 9")
     var planeSize: CGSize!
@@ -228,7 +247,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        lastPlatformPosition = frame.midY - (((transitionPlatform.size().height * 3) * CGFloat(min(platformCount,2))))
         
         lastBackgroundPosition = view.center.y * 3.5 // 1477.0 -- need to figure maybe a better offset to initalize background spawn position
-
+        lastWallPosition = view.center.y * 3.5
+        
         // INITIAL FUNCTIONS
         
 //        admobDelegate.createInterstitial()
@@ -239,6 +259,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createButtons()
         createBackground()
         createBackground()
+        createWalls()
+        createWalls()
         createSky()
 //        createPlatforms()
 //        createPlatforms()
@@ -344,6 +366,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             node.color = .darkGray
             node.colorBlendFactor = 0.65
         }
+        
+        for node in wallLeftArray {
+            node.color = .darkGray
+            node.colorBlendFactor = 0.65
+        }
+        
+        for node in wallRightArray {
+            node.color = .darkGray
+            node.colorBlendFactor = 0.65
+        }
 
         for node in cloudPieces {
             node.color = .darkGray
@@ -405,9 +437,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         countdownLabel = SKLabelNode(fontNamed: "Paper Plane Font")
         countdownLabel.position = CGPoint(x: frame.midX, y: frame.maxY * 0.75)
         countdownLabel.zPosition = 300
-        countdownLabel.fontSize = 100
+        countdownLabel.fontSize = 96
         countdownLabel.text = "\(count)"
         addChild(countdownLabel)
+        
+        countdownLabelShadow = SKLabelNode(fontNamed: "Paper Plane Font")
+        countdownLabelShadow.position = CGPoint(x: countdownLabel.position.x, y: countdownLabel.position.y - 8)
+        countdownLabelShadow.zPosition = 295
+        countdownLabelShadow.fontSize = 96
+        countdownLabelShadow.fontColor = .black
+        countdownLabelShadow.text = "\(count)"
+        addChild(countdownLabelShadow)
 
         let decreaseCounter = SKAction.sequence([SKAction.wait(forDuration: 0.75), SKAction.run { [unowned self] in
             self.count -= 1
@@ -415,6 +455,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         let endCountdown = SKAction.run { [unowned self] in
             self.countdownLabel.removeFromParent()
+            self.countdownLabelShadow.removeFromParent()
             childNode(withName: "barrier")?.removeFromParent()
 
             for node in platformGroup {
@@ -424,6 +465,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
             for node in backgroundArray {
+                node.colorBlendFactor = 0
+            }
+            
+            for node in wallLeftArray {
+                node.colorBlendFactor = 0
+            }
+            
+            for node in wallRightArray {
                 node.colorBlendFactor = 0
             }
 
@@ -476,6 +525,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             secondPlatform = SKTexture(imageNamed: "platform_2")
             thirdPlatform = SKTexture(imageNamed: "platform_3")
             transitionPlatform = SKTexture(imageNamed: "transition_platform")
+            
+            firstWallLeft = SKTexture(imageNamed: "castle_wall_1")
+            secondWallLeft = SKTexture(imageNamed: "castle_wall_2")
+            thirdWallLeft = SKTexture(imageNamed: "castle_wall_3")
+            
+            firstWallRight = SKTexture(imageNamed: "castle_wall_1")
+            secondWallRight = SKTexture(imageNamed: "castle_wall_2")
+            thirdWallRight = SKTexture(imageNamed: "castle_wall_3")
 
             skyTexture = SKTexture(imageNamed: "sky_background_day")
             cloudsTexture = SKTexture(imageNamed: "clouds_day")
@@ -489,6 +546,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             secondPlatform = SKTexture(imageNamed: "platform_2")
             thirdPlatform = SKTexture(imageNamed: "platform_3")
             transitionPlatform = SKTexture(imageNamed: "transition_platform")
+            
+            firstWallLeft = SKTexture(imageNamed: "chasm_wall_1")
+            secondWallLeft = SKTexture(imageNamed: "chasm_wall_2")
+            thirdWallLeft = SKTexture(imageNamed: "chasm_wall_3")
+            
+            firstWallRight = SKTexture(imageNamed: "chasm_wall_1")
+            secondWallRight = SKTexture(imageNamed: "chasm_wall_2")
+            thirdWallRight = SKTexture(imageNamed: "chasm_wall_3")
 
             skyTexture = SKTexture(imageNamed: "sky_background_night")
 
@@ -501,6 +566,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             secondPlatform = SKTexture(imageNamed: "platform_2")
             thirdPlatform = SKTexture(imageNamed: "platform_3")
             transitionPlatform = SKTexture(imageNamed: "transition_platform")
+            
+            firstWallLeft = SKTexture(imageNamed: "silo_wall_1")
+            secondWallLeft = SKTexture(imageNamed: "silo_wall_2")
+            thirdWallLeft = SKTexture(imageNamed: "silo_wall_3")
+            
+            firstWallRight = SKTexture(imageNamed: "silo_wall_1")
+            secondWallRight = SKTexture(imageNamed: "silo_wall_2")
+            thirdWallRight = SKTexture(imageNamed: "silo_wall_3")
 
             skyTexture = SKTexture(imageNamed: "sky_background_night")
             cloudsTexture = SKTexture(imageNamed: "clouds_night")
@@ -536,11 +609,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         switch currentBG { // previously currentStage
         case 1:
             backgroundTexture = firstBackground
+            wallLeftTexture = firstWallLeft
+            wallRightTexture = firstWallRight
         case 2:
             backgroundTexture = secondBackground
+            wallLeftTexture = secondWallLeft
+            wallRightTexture = secondWallRight
             //            animateBackground(texture: secondBackground)
         case 3...:
             backgroundTexture = thirdBackground
+            wallLeftTexture = thirdWallLeft
+            wallRightTexture = thirdWallRight
         default:
             break
         }
@@ -817,6 +896,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.fontSize = 60
         scoreLabel.zPosition = 220
         UINode.addChild(scoreLabel)
+        
+        scoreLabelShadow = SKLabelNode(fontNamed: "Paper Plane Font")
+        scoreLabelShadow.text = "\(score)"
+        scoreLabelShadow.position = CGPoint(x: scoreLabel.position.x, y: scoreLabel.position.y - 5)
+        scoreLabelShadow.fontSize = 60
+        scoreLabelShadow.fontColor = .black
+        scoreLabelShadow.zPosition = 215
+        UINode.addChild(scoreLabelShadow)
 
         label = SKLabelNode(fontNamed: "Paper Plane Font")
         label.text = "Mode: \(mode)"
@@ -856,6 +943,65 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let moveBackground = SKAction.moveBy(x: 0, y: -10, duration: 1)
         let repeatMove = SKAction.repeatForever(moveBackground)
         background.run(repeatMove)
+    }
+    
+    
+    func createWalls() {
+        
+        let wallLeft = SKSpriteNode(imageNamed: "chasm_wall_1") // Shouldn't have to declare the texture from here similar to background, but it doesn't show up otherwise
+        wallLeft.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        wallLeft.zPosition = 25
+        wallLeft.size = CGSize(width: wallLeft.size.width, height: frame.size.width * 2.5)
+        wallLeft.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: wallLeft.size.width, height: wallLeft.size.height))
+        wallLeft.physicsBody?.isDynamic = false
+        wallLeft.physicsBody?.affectedByGravity = false
+        wallLeft.physicsBody?.contactTestBitMask = planeCategory
+        wallLeft.physicsBody?.collisionBitMask = 0
+        wallLeft.name = "wallLeft"
+        wallLeftArray.append(wallLeft)
+        
+        let wallRight = SKSpriteNode(imageNamed: "chasm_wall_1")
+        wallRight.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        wallRight.zPosition = 25
+        wallRight.size = CGSize(width: wallRight.size.width, height: frame.size.width * 2.5)
+        wallRight.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: wallRight.size.width, height: wallRight.size.height))
+        wallRight.physicsBody?.isDynamic = false
+        wallRight.physicsBody?.affectedByGravity = false
+        wallRight.physicsBody?.contactTestBitMask = planeCategory
+        wallRight.physicsBody?.collisionBitMask = 0
+        wallRight.name = "wallRight"
+        wallRightArray.append(wallRight)
+        
+        // Doesn't get called at the same time as setBackground in createPlatforms when target score is reached
+        
+        for wallLeft in wallLeftArray {
+            wallLeft.texture = wallLeftTexture
+        }
+        
+        for wallRight in wallRightArray {
+            wallRight.texture = wallRightTexture
+        }
+        
+        var yPositionWalls = lastWallPosition - wallLeft.size.height
+        
+        wallLeft.position = CGPoint(x: view!.frame.minX, y: yPositionWalls)
+        wallRight.position = CGPoint(x: view!.frame.maxX, y: yPositionWalls)
+        
+        wallWidth = wallLeft.size.width
+        
+//        print("view.center.y \(view!.center.y)")
+
+        addChild(wallLeft)
+        addChild(wallRight)
+        nodeArray.append(wallLeft)
+        nodeArray.append(wallRight)
+        
+        // It works! Only issue is that the background moves by a constant y-amount no matter how fast the plane is moving downward. Might be worth looking into a solution to dynamically change the moveBy-y value in order to match plane speed.
+        
+//        let moveBackground = SKAction.moveBy(x: 0, y: -10, duration: 1)
+//        let repeatMove = SKAction.repeatForever(moveBackground)
+//        wallLeft.run(repeatMove)
+//        wallRight.run(repeatMove)
     }
                                       
 
@@ -990,7 +1136,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             platformRandomizer = 13
         }
 
-//        platformRandomizer = 1
+//        platformRandomizer = 13
         
         switch platformRandomizer {
             
@@ -1017,7 +1163,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if platformCount == 0 || platformCount == 19 {
                 xPosRandomizer = CGFloat.random(in: -(frame.midX * 0.75) ... -(frame.midX * 0.5 - horizontalPlatformGap))
             } else {
-                xPosRandomizer = CGFloat.random(in: -(frame.midX * 0.60 + horizontalPlatformGap) ... (frame.minX - horizontalPlatformGap))
+                xPosRandomizer = CGFloat.random(in: -(frame.midX * 0.60 + horizontalPlatformGap - wallWidth) ... (frame.minX - horizontalPlatformGap))
             }
             
 //            print("Spawn One Right Platform")
@@ -1029,7 +1175,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if platformCount == 0 || platformCount == 19 {
                 xPosRandomizer = CGFloat.random(in: -(frame.midX * 0.65) ... (frame.midX * 0.65 - horizontalPlatformGap))
             } else {
-                xPosRandomizer = CGFloat.random(in: -(frame.midX * 0.75) ... (frame.midX * 0.75 - horizontalPlatformGap))
+                xPosRandomizer = CGFloat.random(in: -(frame.midX * 0.75 - wallWidth) ... (frame.midX * 0.8 - horizontalPlatformGap))
             }
             
 //            print("Spawned Both Left and Right Platform")
@@ -1322,6 +1468,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func pauseGame() {
         
         scoreLabel.alpha = 0
+        scoreLabelShadow.alpha = 0
 
         homeButton.size = CGSize(width: 48, height: 48)
         homeButton.zPosition = 250
@@ -1385,9 +1532,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         rightControl.removeFromParent()
 
         Animations.shared.fadeAlphaOut(node: scoreLabel, duration: 0.5, waitTime: 0)
+        Animations.shared.fadeAlphaOut(node: scoreLabelShadow, duration: 0.4, waitTime: 0)
 
         // SKAction.colorize doesn't work for some reason
         for node in backgroundArray {
+            node.color = .darkGray
+            node.colorBlendFactor = 0.65
+        }
+        
+        for node in wallLeftArray {
+            node.color = .darkGray
+            node.colorBlendFactor = 0.65
+        }
+        
+        for node in wallRightArray {
             node.color = .darkGray
             node.colorBlendFactor = 0.65
         }
@@ -1450,11 +1608,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         buttonLeft.removeFromParent()
         buttonRight.removeFromParent()
-
-        SavedData.shared.setScore(score)
-        SavedData.shared.setScore(score)
-
-        SavedData.shared.setGamesPlayed()
+        
+        if noClip == false {
+            
+            SavedData.shared.setScore(score)
+            SavedData.shared.setScore(score)
+            
+            SavedData.shared.setGamesPlayed()
+        }
 
         let sortedScores = SavedData.shared.getScore()?.sorted(by: >).first
         let scoreAsString = sortedScores.map(String.init)
@@ -1509,12 +1670,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bestScore.text = scoreAsString
         bestScore.alpha = 0
         bestScore.zPosition = 210
-        bestScore.fontSize = 65
+        bestScore.fontSize = 60
         bestScore.fontColor = SKColor.white
         bestScore.position = CGPoint(x: gameOverWindow.frame.midX, y: gameOverWindow.frame.midY - 65)
         bestScore.name = "bestScore"
         addChild(bestScore)
         gameOverUIContainer.append(bestScore)
+        
+        bestScoreShadow = SKLabelNode(fontNamed: "Paper Plane Font")
+        bestScoreShadow.text = scoreAsString
+        bestScoreShadow.alpha = 0
+        bestScoreShadow.zPosition = 205
+        bestScoreShadow.fontSize = 60
+        bestScoreShadow.fontColor = SKColor.black
+        bestScoreShadow.position = CGPoint(x: bestScore.position.x, y: bestScore.position.y - 5)
+        bestScoreShadow.name = "bestScoreShadow"
+        addChild(bestScoreShadow)
+        gameOverUIContainer.append(bestScoreShadow)
         
         let buttonBarrier = SKSpriteNode()
         buttonBarrier.size = CGSize(width: frame.size.width, height: restartButton.size.height * 1.1)
@@ -1528,6 +1700,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene!.speed = 1.00
 
         scoreLabel.position = CGPoint(x: gameOverWindow.frame.midX, y: frame.maxY * 0.645) // not positioning correctly
+        scoreLabelShadow.position = CGPoint(x: scoreLabel.position.x, y: scoreLabel.position.y - 5)
 
         for node in gameOverUIContainer {
             Animations.shared.fadeAlphaIn(node: node, duration: 0.75, waitTime: 0)
@@ -1535,6 +1708,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         Animations.shared.fadeAlphaIn(node: gameOverLabel, duration: 0.75, waitTime: 0)
         Animations.shared.fadeAlphaIn(node: scoreLabel, duration: 0.75, waitTime: 0)
+        Animations.shared.fadeAlphaIn(node: scoreLabelShadow, duration: 0.75, waitTime: 0)
         
         let wait = SKAction.wait(forDuration: 1)
         let enableButtons = SKAction.run {
@@ -1566,6 +1740,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
 
         lastBackgroundPosition = backgroundArray.last?.position.y // Doesn't work when placed in createBackground() for some reason despite the logic feeling right
+        lastWallPosition = wallLeftArray.last?.position.y
         
         planeCoords.text = "\((Int)(plane.position.y))"
 //        print("Plane PosY \((Int)(plane.position.y))")
@@ -1597,12 +1772,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.createBackground()
         }
         
-        if isPlaneDestroyed == false {
-            if plane.position.x <= frame.minX + (plane.size.width / 7) || plane.position.x >= frame.maxX - (plane.size.width / 7) {
-                isPlaneDestroyed = true
-                destroyPlane()
-            }
+        if (wallLeftArray.last?.position.y)! + 480 > plane.position.y {
+            self.createWalls()
         }
+        
+        // Without walls or extra safety to prevent plane from going beyong walls, use this. Most like obsolete now that there are physical walls present
+        
+//        if isPlaneDestroyed == false {
+//            if plane.position.x <= frame.minX + (plane.size.width / 7) || plane.position.x >= frame.maxX - (plane.size.width / 7) {
+//                isPlaneDestroyed = true
+//                destroyPlane()
+//            }
+//        }
     }
 
 
@@ -1838,12 +2019,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 run(seq)
 
                 if touchedNode.name == "gotIt" {
+                    gotIt.isUserInteractionEnabled = true
                     run(SKAction.wait(forDuration: 0.75), completion: { self.countdown() })
                 } else if touchedNode.name == "dontShowAgain" {
+                    dontShowAgain.isUserInteractionEnabled = true
                     showNotice()
                 }
                 
-                gotIt.isUserInteractionEnabled = true
+                
 
             } else if touchedNode.name != "" && isButtonTouched == "gotIt" || isButtonTouched == "dontShowAgain" {
                 if isButtonTouched == "gotIt"{
@@ -1852,37 +2035,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     Animations.shared.expand(node: dontShowAgain)
                 }
             }
-            
-            
-            // Dismisses and disables tutorial window
-            
-//            if touchedNode.name == "dontShowAgain" {
-//                Animations.shared.expand(node: dontShowAgain)
-//
-//                let fadeOut = SKAction.run {
-//                    Animations.shared.fadeAlphaOut(node: self.howToPlay, duration: 0.25, waitTime: 0)
-//                    Animations.shared.fadeAlphaOut(node: self.gotIt, duration: 0.20, waitTime: 0)
-//                    Animations.shared.fadeAlphaOut(node: self.dontShowAgain, duration: 0.20, waitTime: 0)
-//                }
-//
-//                let wait = SKAction.wait(forDuration: 0.25)
-//
-//                let remove = SKAction.run {
-//                    self.childNode(withName: "howToPlay")?.removeFromParent()
-//                    self.childNode(withName: "gotIt")?.removeFromParent()
-//                    self.childNode(withName: "dontShowAgain")?.removeFromParent()
-//                }
-//
-//                let seq = SKAction.sequence([fadeOut, wait, remove])
-//                run(seq)
-//
-//                showNotice()
-//                
-//                gotIt.isUserInteractionEnabled = true
-//
-//            } else if touchedNode.name != "" && isButtonTouched == "dontShowAgain" {
-//                Animations.shared.expand(node: dontShowAgain)
-//            }
             
             
             if touchedNode.name == "close" {
@@ -1900,17 +2052,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     self.childNode(withName: "close")?.removeFromParent()
                 }
 
-                let seq = SKAction.sequence([fadeOut, wait, remove])
+                let seq = SKAction.sequence([wait, fadeOut, wait, remove])
                 run(seq)
 
-                firstTimePlaying.toggle()
+                firstTimePlaying = false
                 SavedSettings.shared.setTutorialData()
                 
                 run(SKAction.wait(forDuration: 0.75), completion: { self.countdown() })
                 
-                
-                firstTimePlaying = true
-                UserDefaults.standard.set(firstTimePlaying, forKey: "firstTimePlaying")
+//                firstTimePlaying = true
+//                UserDefaults.standard.set(firstTimePlaying, forKey: "firstTimePlaying")
                 
                 gotIt.isUserInteractionEnabled = true
 
@@ -1925,6 +2076,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             isButtonTouched = ""
         }
     }
+    
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         

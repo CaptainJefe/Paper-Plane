@@ -81,7 +81,7 @@ var isSoundMuted = false
 
 var areControlsHidden = false
 
-var firstTimePlaying = true
+var firstTimePlaying = UserDefaults.standard.bool(forKey: "firstTimePlaying")
 
 class SavedSettings {
     

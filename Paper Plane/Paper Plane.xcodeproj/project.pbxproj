@@ -31,7 +31,6 @@
 		D6A513E62913534F0098F2DD /* WorldSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513E52913534F0098F2DD /* WorldSelect.swift */; };
 		D6A513E8291353660098F2DD /* WorldSelect.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6A513E7291353660098F2DD /* WorldSelect.sks */; };
 		D6A513EC2914D3E70098F2DD /* Paper Plane Font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */; };
-		D6A513EE291C5F130098F2DD /* SwitchScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513ED291C5F130098F2DD /* SwitchScene.swift */; };
 		D6A513F0291F42610098F2DD /* SavedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513EF291F42610098F2DD /* SavedData.swift */; };
 		D6A513F42928D41E0098F2DD /* AdSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513F32928D41E0098F2DD /* AdSupport.swift */; };
 		D6A513F62939785D0098F2DD /* Instructions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A513F52939785D0098F2DD /* Instructions.swift */; };
@@ -75,7 +74,6 @@
 		D6A513E52913534F0098F2DD /* WorldSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSelect.swift; sourceTree = "<group>"; };
 		D6A513E7291353660098F2DD /* WorldSelect.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = WorldSelect.sks; sourceTree = "<group>"; };
 		D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Paper Plane Font.ttf"; sourceTree = "<group>"; };
-		D6A513ED291C5F130098F2DD /* SwitchScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchScene.swift; sourceTree = "<group>"; };
 		D6A513EF291F42610098F2DD /* SavedData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedData.swift; sourceTree = "<group>"; };
 		D6A513F32928D41E0098F2DD /* AdSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdSupport.swift; sourceTree = "<group>"; };
 		D6A513F52939785D0098F2DD /* Instructions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Instructions.swift; sourceTree = "<group>"; };
@@ -185,7 +183,6 @@
 				D6A513F7293EECEE0098F2DD /* Audio.swift */,
 				D6A513F52939785D0098F2DD /* Instructions.swift */,
 				D6B2F13E290DB04C0054D747 /* Assets.swift */,
-				D6A513ED291C5F130098F2DD /* SwitchScene.swift */,
 				D6FE94DE2BCBC52E005260F9 /* InAppPurchases.swift */,
 				D6934A6E2C15398500BC8F69 /* StoreKitHelper.swift */,
 				D6A513F32928D41E0098F2DD /* AdSupport.swift */,
@@ -314,7 +311,6 @@
 				D6BAE9D62BA980A500E28628 /* AdMobDelegate.swift in Sources */,
 				D6AD9B3A24EFBAA000503775 /* AppDelegate.swift in Sources */,
 				D6FE94DF2BCBC52E005260F9 /* InAppPurchases.swift in Sources */,
-				D6A513EE291C5F130098F2DD /* SwitchScene.swift in Sources */,
 				D6A513F62939785D0098F2DD /* Instructions.swift in Sources */,
 				D6EED41728DF40AF00A7F703 /* GameScene.swift in Sources */,
 				D6934A6F2C15398500BC8F69 /* StoreKitHelper.swift in Sources */,
@@ -395,7 +391,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -450,7 +446,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -468,6 +464,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9R9H53AU37;
 				INFOPLIST_FILE = "Paper Plane/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Paper Plane Redux";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -480,7 +477,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -494,6 +491,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9R9H53AU37;
 				INFOPLIST_FILE = "Paper Plane/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Paper Plane Redux";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -506,7 +504,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

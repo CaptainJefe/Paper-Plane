@@ -56,7 +56,7 @@ class WorldSelect: SKScene {
         
         for value in scores ?? [] {
             if isSiloLocked == true {
-                if value >= 50 {
+                if value >= 60 {
                     isSiloLocked = false
                     UserDefaults.standard.set(isSiloLocked, forKey: "isSiloLocked")
                 }
@@ -192,9 +192,13 @@ class WorldSelect: SKScene {
         if isSiloLocked == true {
             if theme == "silo" {
                 
-                lockedText.text = "Get a score"
-                lockedText2.text = "of 50 or more"
-                lockedText3.text = "to unlock!"
+                let textAction = SKAction.run {
+                    self.lockedText.text = "Get a score"
+                    self.lockedText2.text = "of 60 or more"
+                    self.lockedText3.text = "to unlock!"
+                }
+                
+                run(SKAction.sequence([SKAction.wait(forDuration: 0.1), textAction]))
                 
                 Animations.shared.fadeAlphaIn(node: lockSprite, duration: 0.4, waitTime: 0.3)
                 Animations.shared.colorize(node: previewBackground, color: .darkGray, colorBlendFactor: 0.85, duration: 0.3)
@@ -215,13 +219,22 @@ class WorldSelect: SKScene {
                     
                 
                 if chasmUnlockReq - gamesPlayed == 1 {
-                    lockedText.text = "Play \(chasmUnlockReq - gamesPlayed)"
-                    lockedText2.text = "more round"
-                    lockedText3.text = "to unlock!"
+                    let textAction = SKAction.run {
+                        self.lockedText.text = "Play \(self.chasmUnlockReq - gamesPlayed)"
+                        self.lockedText2.text = "more round"
+                        self.lockedText3.text = "to unlock!"
+                    }
+                    
+                    run(SKAction.sequence([SKAction.wait(forDuration: 0.1), textAction]))
+                    
                 } else {
-                    lockedText.text = "Play \(chasmUnlockReq - gamesPlayed)"
-                    lockedText2.text = "more rounds"
-                    lockedText3.text = "to unlock!"
+                    let textAction = SKAction.run {
+                        self.lockedText.text = "Play \(self.chasmUnlockReq - gamesPlayed)"
+                        self.lockedText2.text = "more rounds"
+                        self.lockedText3.text = "to unlock!"
+                    }
+                    
+                    run(SKAction.sequence([SKAction.wait(forDuration: 0.1), textAction]))
                 }
                 
                 Animations.shared.fadeAlphaIn(node: lockSprite, duration: 0.4, waitTime: 0.3)

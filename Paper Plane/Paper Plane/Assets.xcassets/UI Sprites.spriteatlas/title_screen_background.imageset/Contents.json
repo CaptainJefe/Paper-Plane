@@ -1,11 +1,12 @@
 {
   "images" : [
     {
+      "filename" : "title_screen_new_day.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "title_screen_new_day.png",
+      "filename" : "title_screen_new_day@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

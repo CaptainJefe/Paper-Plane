@@ -20,8 +20,18 @@ class GameViewController: UIViewController {
     var bannerView: GADBannerView!
     private var interstitial: GADInterstitialAd?
 
+//    override var prefersHomeIndicatorAutoHidden: Bool {
+//        return true
+//    }
+//    
+//    override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
+//        return .bottom
+//    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
 //        SavedSettings.shared.setTutorialData() // Resets saved tutorial setting so it shows tutorial again
                 
@@ -43,6 +53,7 @@ class GameViewController: UIViewController {
         admobDelegate.createInterstitial()
         
         InAppPurchaseManager.shared.fetchProducts()
+        
         
         if let view = self.view as! SKView? {
             // Load the SKScene from 'GameScene.sks'
