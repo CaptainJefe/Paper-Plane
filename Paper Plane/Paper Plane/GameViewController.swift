@@ -19,6 +19,9 @@ class GameViewController: UIViewController {
     
     var bannerView: GADBannerView!
     private var interstitial: GADInterstitialAd?
+    
+    let bannerTestID: String = "ca-app-pub-3940256099942544/2435281174"
+    let bannerLiveID: String = "ca-app-pub-9274819218051102/8921488618"
 
 //    override var prefersHomeIndicatorAutoHidden: Bool {
 //        return true
@@ -52,8 +55,6 @@ class GameViewController: UIViewController {
         createBanner()
         admobDelegate.createInterstitial()
         
-        InAppPurchaseManager.shared.fetchProducts()
-        
         
         if let view = self.view as! SKView? {
             // Load the SKScene from 'GameScene.sks'
@@ -85,7 +86,10 @@ class GameViewController: UIViewController {
         addBannerViewToView(bannerView)
         
         // Set the ad unit ID
-        bannerView.adUnitID = "ca-app-pub-3940256099942544/2435281174"
+        
+        // test ID: "ca-app-pub-3940256099942544/2435281174"
+        
+        bannerView.adUnitID = bannerLiveID
         
         let adRemovalPurchased = UserDefaults.standard
         

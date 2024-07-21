@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "Restart Button.png",
+      "filename" : "restart_button.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Restart Button@2x.png",
+      "filename" : "restart_button@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

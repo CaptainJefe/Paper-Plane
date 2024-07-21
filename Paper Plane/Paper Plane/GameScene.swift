@@ -95,7 +95,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //   PLATFORMS
     // ------------------------------------------------------------------------------------------------------------------------------------------
     
-    var lastPlatformPosition: CGFloat = 662.0 // Needs to start at y-pos 422, so I made it 662 because of how yPosition is calculated. May be changed.
+    var lastPlatformPosition: CGFloat! // Needs to start at y-pos 422, so I made it 662 because of how yPosition is calculated. May be changed.
     var distanceBetweenPlatforms: CGFloat = 240.0
     
     var platformGroup = Set<SKSpriteNode>()
@@ -182,6 +182,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // ------------------------------------------------------------------------------------------------------------------------------------------
     
     var shouldDetectScore: Bool = true
+    var shouldChangeBackgrounds: Bool = true
     
     var isPlaneDestroyed: Bool = false
     
@@ -200,6 +201,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let platformCategory: UInt32 = 1 << 2
     let scoreCategory: UInt32 = 1 << 3
     
+    var timesSpawned: Int = 0
+    
     var screenBoundsNode: SKSpriteNode! { didSet { screenBoundsNode.position.y = frame.midY } }
     
     // ------------------------------------------------------------------------------------------------------------------------------------------
@@ -208,6 +211,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     
     override func didMove(to view: SKView) {
+        
+//        print("Total Score: \(SavedData.shared.getTotalScore())")
         
         print("gettutorial \(SavedSettings.shared.getTutorialData())")
         
@@ -219,7 +224,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         visualPlatformTrigger = SKSpriteNode()
         visualPlatformTrigger.color = .clear
         visualPlatformTrigger.alpha = 0.5
-        addChild(visualPlatformTrigger)
+//        addChild(visualPlatformTrigger)
 
 //        print("transitionPlat height\(transitionPlatform.size().height)")
         
@@ -240,9 +245,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         topBar.zPosition = 10
         //        addChild(topBar)
 
-        print("When lowestPlatform is greater than this point \((self.frame.midY / 2) - self.transitionPlatform.size().height * 3)")
+//        print("When lowestPlatform is greater than this point \((self.frame.midY / 2) - self.transitionPlatform.size().height * 3)")
         platformGap = frame.midY - (((transitionPlatform.size().height * 3) * CGFloat(min(platformCount,2))))
-        print ("platformGap \(platformGap)") // 422.0 initially
+//        print ("platformGap \(platformGap)") // 422.0 initially
 
 //        lastPlatformPosition = frame.midY - (((transitionPlatform.size().height * 3) * CGFloat(min(platformCount,2))))
         
@@ -254,17 +259,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        admobDelegate.createInterstitial()
         
         initiateTextures()
-        createPlane()
         createLabels()
         createButtons()
         createBackground()
         createBackground()
+        createPlane()
         createWalls()
         createWalls()
         createSky()
-//        createPlatforms()
-//        createPlatforms()
-//        createPlatforms()
+        createPlatforms()
         createPlatforms()
         createPlatforms()
         createPlatforms()
@@ -385,24 +388,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if firstTimePlaying == true {
             howToPlay = SKSpriteNode(imageNamed: "how_to0")
             howToPlay.size = CGSize(width: howToPlay.size.width * 0.65, height: howToPlay.size.height * 0.65)
-            howToPlay.position = CGPoint(x: frame.midX, y: UINode.position.y + (frame.midY * 1.2))
+            howToPlay.position = CGPoint(x: frame.midX, y: frame.midY)
             howToPlay.zPosition = 800
             howToPlay.name = "howToPlay"
-            addChild(howToPlay)
+            UINode.addChild(howToPlay)
 
             gotIt = SKSpriteNode(imageNamed: "got_it")
             gotIt.size = CGSize(width: gotIt.size.width, height: gotIt.size.height)
             gotIt.position = CGPoint(x: howToPlay.position.x, y: howToPlay.position.y - (howToPlay.size.height * 0.25))
             gotIt.zPosition = 900
             gotIt.name = "gotIt"
-            addChild(gotIt)
+            UINode.addChild(gotIt)
             
             dontShowAgain = SKSpriteNode(imageNamed: "dont_show_again")
             dontShowAgain.size = CGSize(width: dontShowAgain.size.width, height: dontShowAgain.size.height)
             dontShowAgain.position = CGPoint(x: howToPlay.position.x, y: gotIt.position.y - gotIt.size.height * 1.75)
             dontShowAgain.zPosition = 900
             dontShowAgain.name = "dontShowAgain"
-            addChild(dontShowAgain)
+            UINode.addChild(dontShowAgain)
 
             Animations.shared.animateIntructions(node: howToPlay)
 
@@ -435,7 +438,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func countdown() {
 
         countdownLabel = SKLabelNode(fontNamed: "Paper Plane Font")
-        countdownLabel.position = CGPoint(x: frame.midX, y: frame.maxY * 0.75)
+        countdownLabel.position = CGPoint(x: frame.midX, y: plane.position.y)
         countdownLabel.zPosition = 300
         countdownLabel.fontSize = 96
         countdownLabel.text = "\(count)"
@@ -815,7 +818,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         plane = SKSpriteNode()
         plane.texture = planeTexture
-        plane.position = CGPoint(x: frame.midX / 2, y: frame.maxY - frame.maxY / 4)
+        plane.position = CGPoint(x: frame.midX / 2, y: (backgroundArray.first?.position.y)! + ((backgroundArray.first?.size.height)! * 0.145))
         plane.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         plane.zPosition = 5
         plane.alpha = 1
@@ -824,12 +827,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(plane)
         nodeArray.append(plane)
 
-//        plane.physicsBody = SKPhysicsBody(circleOfRadius: plane.size.width / 7)
         plane.physicsBody = createPhysicsBody(for: plane)
         plane.physicsBody!.contactTestBitMask = plane.physicsBody!.collisionBitMask
         plane.physicsBody?.categoryBitMask = planeCategory
         plane.physicsBody?.collisionBitMask = 0
         plane.physicsBody?.isDynamic = true
+        
+        lastPlatformPosition = plane.position.y + (distanceBetweenPlatforms / 4)
     }
     
     
@@ -948,10 +952,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func createWalls() {
         
+        let wallHeight = (view?.frame.size.width)! * 2.5
+        wallWidth = wallHeight / 40
+        
         let wallLeft = SKSpriteNode(imageNamed: "chasm_wall_1") // Shouldn't have to declare the texture from here similar to background, but it doesn't show up otherwise
         wallLeft.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         wallLeft.zPosition = 25
-        wallLeft.size = CGSize(width: wallLeft.size.width, height: frame.size.width * 2.5)
+        wallLeft.size = CGSize(width: wallWidth, height: wallHeight)
         wallLeft.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: wallLeft.size.width, height: wallLeft.size.height))
         wallLeft.physicsBody?.isDynamic = false
         wallLeft.physicsBody?.affectedByGravity = false
@@ -963,7 +970,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let wallRight = SKSpriteNode(imageNamed: "chasm_wall_1")
         wallRight.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         wallRight.zPosition = 25
-        wallRight.size = CGSize(width: wallRight.size.width, height: frame.size.width * 2.5)
+        wallRight.size = CGSize(width: wallWidth, height: wallHeight)
         wallRight.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: wallRight.size.width, height: wallRight.size.height))
         wallRight.physicsBody?.isDynamic = false
         wallRight.physicsBody?.affectedByGravity = false
@@ -986,8 +993,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         wallLeft.position = CGPoint(x: view!.frame.minX, y: yPositionWalls)
         wallRight.position = CGPoint(x: view!.frame.maxX, y: yPositionWalls)
-        
-        wallWidth = wallLeft.size.width
         
 //        print("view.center.y \(view!.center.y)")
 
@@ -1040,9 +1045,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func createPlatforms() {
         
+        var platformWidth = UIScreen.main.bounds.width // making the platform the exact same width as the screen for scaling purposes
+        var platformHeight: CGFloat // initial height using platform_1's height to width ratio
+        
+        distanceBetweenPlatforms = platformWidth * 0.5625 // instead of using static numbers, this is a ratio of transitionPlatform's height to width ratio
+        
         var yPosition = lastPlatformPosition - distanceBetweenPlatforms // distanceBetweenPlatforms may need to be size relative like transitionPlatform.size.height
         
+        
+        
         let newNodes: Set<SKSpriteNode>
+        
+        if score > 30 { // iPhone SE calls setBackground() twice during the first transition, so this is an extra layer of safety to maintain the sequence
+            shouldChangeBackgrounds = true
+        }
         
         var randMin: Int = 1
         var randMax: Int = 18
@@ -1077,7 +1093,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
 
         if score == 30 || score == 60 {
-            setBackground()
+            if shouldChangeBackgrounds == true {
+                setBackground()
+                shouldChangeBackgrounds = false
+            }
         }
         
         if transitionCheck == true {
@@ -1085,8 +1104,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             randMax = 7
         }
         
+        switch currentStage {
+        case 1:
+            platformHeight = platformWidth * 0.078125
+        case 2:
+            platformHeight = platformWidth * 0.171875
+        case 3...:
+            platformHeight = platformWidth * 0.265625
+        case ..<0:
+            platformHeight = platformWidth * 0.5625
+        default:
+            platformHeight = platformWidth * 0.078125
+        }
+        
         let platformLeft = SKSpriteNode(texture: platformTexture)
-        platformLeft.setScale(3.0)
+        platformLeft.size = CGSize(width: platformWidth, height: platformHeight)
         platformLeft.physicsBody = SKPhysicsBody(rectangleOf: platformLeft.size)
         platformLeft.physicsBody?.isDynamic = false
         platformLeft.physicsBody?.affectedByGravity = false
@@ -1098,7 +1130,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         platformArray.append(platformLeft)
         
         let platformRight = SKSpriteNode(texture: platformTexture)
-        platformRight.setScale(3.0)
+        platformRight.size = CGSize(width: platformWidth, height: platformHeight)
         platformRight.physicsBody = SKPhysicsBody(rectangleOf: platformRight.size)
         platformRight.physicsBody?.isDynamic = false
         platformRight.physicsBody?.affectedByGravity = false
@@ -1136,49 +1168,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             platformRandomizer = 13
         }
 
-//        platformRandomizer = 13
+//        platformRandomizer = 7
         
         switch platformRandomizer {
             
         case 1...6: // A Single Left Platform Spawns
             
+//            print("Spawned One Left Platform")
+            
             newNodes = [platformLeft, scoreNode]
             
-            xPosRandomizer = CGFloat.random(in: (frame.midX * 0.75) ... (frame.midX * 0.75))
+//            xPosRandomizer = CGFloat.random(in: (frame.midX * 0.75) ... (frame.midX * 0.75)) // not sure why this is here
             
             if platformCount == 0 && platformArray.count <= 1 {
                 xPosRandomizer = frame.midX * 0.70 - horizontalPlatformGap
-            } else if platformCount == 0 || platformCount == 19 {
-                xPosRandomizer = CGFloat.random(in: -(frame.midX * 0.75 - horizontalPlatformGap) ... (frame.minX))
             } else {
-                xPosRandomizer = CGFloat.random(in: frame.minX ... (frame.midX * 0.60)) // old value was * frame.midX 0.65 (for right platform as well)
+                xPosRandomizer = CGFloat.random(in: (view?.frame.minX)! ... (view?.frame.midX)! - horizontalPlatformGap) // old value was * frame.midX 0.65 (for right platform as well)
             }
-            
-//            print("Spawned One Left Platform")
 
         case 7...12: // A Single Right Platform Spawns
             
+//            print("Spawn One Right Platform")
+            
             newNodes = [platformRight, scoreNode]
             
-            if platformCount == 0 || platformCount == 19 {
-                xPosRandomizer = CGFloat.random(in: -(frame.midX * 0.75) ... -(frame.midX * 0.5 - horizontalPlatformGap))
-            } else {
-                xPosRandomizer = CGFloat.random(in: -(frame.midX * 0.60 + horizontalPlatformGap - wallWidth) ... (frame.minX - horizontalPlatformGap))
-            }
+            xPosRandomizer = CGFloat.random(in: -((view?.frame.midX)! * 0.5 + horizontalPlatformGap) ... (view?.frame.minX)! - horizontalPlatformGap)
             
-//            print("Spawn One Right Platform")
-
         default: // 13...18 | Both Platforms Spawn
+            
+//            print("Spawned Both Left and Right Platform")
             
             newNodes = [platformLeft, platformRight, scoreNode]
             
-            if platformCount == 0 || platformCount == 19 {
-                xPosRandomizer = CGFloat.random(in: -(frame.midX * 0.65) ... (frame.midX * 0.65 - horizontalPlatformGap))
-            } else {
-                xPosRandomizer = CGFloat.random(in: -(frame.midX * 0.75 - wallWidth) ... (frame.midX * 0.8 - horizontalPlatformGap))
-            }
-            
-//            print("Spawned Both Left and Right Platform")
+            xPosRandomizer = CGFloat.random(in: -(frame.midX * 0.75 - wallWidth) ... (frame.midX * 0.8 - horizontalPlatformGap))
         }
         
 //        print("currentStage post: \(currentStage)")
@@ -1192,7 +1214,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         getSpriteDetails(node: platformLeft)
         getSpriteDetails(node: platformRight)
         
-        let minGapSize: CGFloat = (platformLeft.size.width / 2) // - (platformLeft.size.width / 8) for perfect window width
+        let minGapSize: CGFloat = (platformLeft.size.width * 0.35) // new correct ratio (from previous value of * 0.5) would be 0.375, however since platforms are now slightly bigger, * 0.35 is more similar to the old version
         
         platformLeft.position = CGPoint(x: xPosRandomizer, y: yPosition)
         platformRight.position = CGPoint(x: xPosRandomizer + platformLeft.size.width + horizontalPlatformGap, y: yPosition)
@@ -1208,6 +1230,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
            // Set the positions of the platforms
            platformLeft.position = CGPoint(x: startX, y: yPosition)
            platformRight.position = CGPoint(x: startX + platformLeft.size.width + minGapSize, y: yPosition)
+           
+//           print("tran height \(platformLeft.size.height)")
         }
         
         scoreNode.position = CGPoint(x: frame.midX, y: platformLeft.position.y)
@@ -1249,15 +1273,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         lastRandom = platformRandomizer
         
-//        scene!.speed = 0.4
+//        scene!.speed = 0.3
+        
+        timesSpawned += 1
 
-        increaseWorldSpeed += 1
-        if increaseWorldSpeed % 10 == 0 {
-            if scene!.speed <= 1.75 {
-                scene?.speed = scene!.speed + 0.05
-                print("Game Speed: \(scene!.speed)")
-                if scene!.speed > 1.75 {
-                    scene?.speed = 1.75
+        if timesSpawned > 3 { // this offsets the inital 3 platform spawns so speed doesn't increase in odd weird intervals
+            increaseWorldSpeed += 1
+            if increaseWorldSpeed % 10 == 0 {
+                if scene!.speed < 1.75 {
+                    scene!.speed = scene!.speed + 0.05
+                    print("Game Speed: \(scene!.speed)")
+                    print("Score \(score)")
+                    if scene!.speed > 1.75 { // this doesn't seem to be called immediately but after one more interval
+                        scene!.speed = 1.75
+                        print("Game Speed - final speed: \(scene!.speed)")
+                    }
                 }
             }
         }
@@ -1571,11 +1601,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         continueLabel.position = CGPoint(x: frame.midX, y: UINode.position.y + (frame.maxY * 0.725))
         continueLabel.fontSize = 45
         continueLabel.text = "Tap to continue"
-        continueLabel.color = .black
         continueLabel.alpha = 0
         continueLabel.zPosition = 70
         continueLabel.name = "continueLabel"
         addChild(continueLabel)
+        
+        let continueLabelShadow = SKLabelNode(fontNamed: "Paper Plane Font")
+        continueLabelShadow.position = CGPoint(x: frame.midX, y: continueLabel.position.y - 4)
+        continueLabelShadow.fontSize = 45
+        continueLabelShadow.text = "Tap to continue"
+        continueLabelShadow.fontColor = .black
+        continueLabelShadow.alpha = 0
+        continueLabelShadow.zPosition = 69
+        continueLabelShadow.name = "continueLabelShadow"
+        addChild(continueLabelShadow)
 
         _ = SKAction.fadeAlpha(to: 0.5, duration: 1)
         let fadeIn = SKAction.fadeIn(withDuration: 1.5)
@@ -1585,6 +1624,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let repeatForever = SKAction.repeatForever(fadeInFadeOut)
 
         continueLabel.run(repeatForever)
+        continueLabelShadow.run(repeatForever)
 
         for node in nodeArray {
             if node.name != "clouds" {
@@ -1612,8 +1652,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if noClip == false {
             
             SavedData.shared.setScore(score)
-            SavedData.shared.setScore(score)
-            
+            SavedData.shared.setTotalScore(score)
             SavedData.shared.setGamesPlayed()
         }
 
@@ -1622,11 +1661,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         childNode(withName: "continueLabel")?.removeFromParent()
         childNode(withName: "continueLabel")?.removeAllActions()
+        childNode(withName: "continueLabelShadow")?.removeFromParent()
+        childNode(withName: "continueLabelShadow")?.removeAllActions()
         childNode(withName: "gameOverLabel")?.removeFromParent()
 
         let gameOverLabel = SKSpriteNode(imageNamed: "game_over_label")
-        gameOverLabel.position = CGPoint(x: frame.midX, y: UINode.position.y + frame.maxY * 0.825)
         gameOverLabel.size = CGSize(width: gameOverLabel.size.width * 1.5, height: gameOverLabel.size.height * 1.5)
+        gameOverLabel.position = CGPoint(x: frame.midX, y: UINode.position.y + frame.maxY * 0.8)
         gameOverLabel.zPosition = 200
         gameOverLabel.alpha = 0
         gameOverLabel.name = "gameOverLabel"
@@ -1634,14 +1675,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameOverUIContainer.append(gameOverLabel)
 
         gameOverWindow = SKSpriteNode(imageNamed: "game_over_window")
-        gameOverWindow.position = CGPoint(x: frame.midX, y: UINode.position.y + (frame.midY * 1.1))
-        gameOverWindow.size = CGSize(width: gameOverWindow.size.width * 1.8, height: gameOverWindow.size.height * 1.8)
+        gameOverWindow.size = CGSize(width: view!.frame.size.width * 0.75, height: view!.frame.size.width * 0.75)
+        gameOverWindow.position = CGPoint(x: frame.midX, y: gameOverLabel.position.y - (gameOverWindow.size.height / 1.4))
         gameOverWindow.zPosition = 170
         gameOverWindow.alpha = 0
         gameOverWindow.name = "gameOverWindow"
         addChild(gameOverWindow)
         gameOverUIContainer.append(gameOverWindow)
-
+        
         restartButton.size = CGSize(width: 80, height: 80)
         restartButton.position = CGPoint(x: gameOverWindow.frame.minX + (restartButton.frame.width / 2), y: gameOverWindow.frame.minY - 70)
         restartButton.alpha = 0
@@ -1649,22 +1690,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         restartButton.name = "restartButton"
         addChild(restartButton)
         gameOverUIContainer.append(restartButton)
+        
+        homeButton.size = CGSize(width: 80, height: 80)
+        homeButton.position = CGPoint(x: gameOverWindow.frame.midX, y: gameOverWindow.frame.minY - 70)
+        homeButton.zPosition = 210
+        homeButton.alpha = 0
+        homeButton.name = "homeButton"
+        addChild(homeButton)
+        gameOverUIContainer.append(homeButton)
 
         levelSelectButton.size = CGSize(width: 80, height: 80)
-        levelSelectButton.position = CGPoint(x: gameOverWindow.frame.midX, y: gameOverWindow.frame.minY - 70)
+        levelSelectButton.position = CGPoint(x: gameOverWindow.frame.maxX - (levelSelectButton.frame.width / 2), y: gameOverWindow.frame.minY - 70)
         levelSelectButton.alpha = 0
         levelSelectButton.zPosition = 210
         levelSelectButton.name = "levelSelectButton"
         addChild(levelSelectButton)
         gameOverUIContainer.append(levelSelectButton)
 
-        homeButton.size = CGSize(width: 80, height: 80)
-        homeButton.position = CGPoint(x: gameOverWindow.frame.maxX - (homeButton.frame.width / 2), y: gameOverWindow.frame.minY - 70)
-        homeButton.zPosition = 210
-        homeButton.alpha = 0
-        homeButton.name = "homeButton"
-        addChild(homeButton)
-        gameOverUIContainer.append(homeButton)
+        
 
         bestScore = SKLabelNode(fontNamed: "Paper Plane Font")
         bestScore.text = scoreAsString
@@ -1672,7 +1715,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bestScore.zPosition = 210
         bestScore.fontSize = 60
         bestScore.fontColor = SKColor.white
-        bestScore.position = CGPoint(x: gameOverWindow.frame.midX, y: gameOverWindow.frame.midY - 65)
+        bestScore.position = CGPoint(x: gameOverWindow.frame.midX, y: gameOverWindow.position.y - gameOverWindow.size.height * 0.2)
         bestScore.name = "bestScore"
         addChild(bestScore)
         gameOverUIContainer.append(bestScore)
@@ -1699,8 +1742,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         scene!.speed = 1.00
 
-        scoreLabel.position = CGPoint(x: gameOverWindow.frame.midX, y: frame.maxY * 0.645) // not positioning correctly
+        scoreLabel.position = CGPoint(x: gameOverWindow.frame.midX, y: (gameOverWindow.position.y + gameOverWindow.size.height * 0.2675) - UINode.position.y)  // the odd repositioning of scoreLabel and why it needs to UINode.position.y needs to be subtracted from it is because scoreLabel is initially added as a child of UINode
         scoreLabelShadow.position = CGPoint(x: scoreLabel.position.x, y: scoreLabel.position.y - 5)
+        
+//        print("go pos \(gameOverWindow.position.y)")
+//        print("best score: \(bestScore.position.y)")
+//        print("score score: \(scoreLabel.position.y)")
 
         for node in gameOverUIContainer {
             Animations.shared.fadeAlphaIn(node: node, duration: 0.75, waitTime: 0)
@@ -1754,6 +1801,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             i.position.y = playerCamera.position.y - frame.midY
         }
         
+//        playerCamera.setScale(2)
+        
         
 //        print("platformCount \(platformGroup.count)")
 
@@ -1764,7 +1813,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         visualPlatformTrigger.size = CGSize(width: frame.size.width, height: 10)
         visualPlatformTrigger.position = CGPoint(x: frame.midX, y: (platformArray.last?.position.y)! + 480)
         
-        if (platformArray.last?.position.y)! + 480 > plane.position.y {
+        if (platformArray.last?.position.y)! + 480 > plane.position.y { // might need to change the static value on this. At slow-mo speeds, you can see transitionPlatform spawn, but at normal speeds, it's nearly unnoticeable
             self.createPlatforms()
         }
         
@@ -1778,12 +1827,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Without walls or extra safety to prevent plane from going beyong walls, use this. Most like obsolete now that there are physical walls present
         
-//        if isPlaneDestroyed == false {
-//            if plane.position.x <= frame.minX + (plane.size.width / 7) || plane.position.x >= frame.maxX - (plane.size.width / 7) {
-//                isPlaneDestroyed = true
-//                destroyPlane()
-//            }
-//        }
+        if isPlaneDestroyed == false {
+            if plane.position.x <= frame.minX + (plane.size.width / 7) || plane.position.x >= frame.maxX - (plane.size.width / 7) {
+                isPlaneDestroyed = true
+                destroyPlane()
+            }
+        }
     }
 
 
@@ -1842,6 +1891,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for touch in touches {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
+            
+//            print("touchedNode: \(touchedNode.name)")
 
             let cycle = SKAction.run {
                 self.changeMode(node: touchedNode as! SKSpriteNode)
@@ -2038,7 +2089,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             
             if touchedNode.name == "close" {
-                Animations.shared.expand(node: close)
+                let expand = SKAction.run {
+                    Animations.shared.expand(node: self.close)
+                }
 
                 let fadeOut = SKAction.run {
                     Animations.shared.fadeAlphaOut(node: self.noticeWindow, duration: 0.25, waitTime: 0)
@@ -2052,7 +2105,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     self.childNode(withName: "close")?.removeFromParent()
                 }
 
-                let seq = SKAction.sequence([wait, fadeOut, wait, remove])
+                let seq = SKAction.sequence([expand, wait, fadeOut, wait, remove])
                 run(seq)
 
                 firstTimePlaying = false
@@ -2091,7 +2144,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
 
             if touchedNode.name != "buttonRight" {
-                buttonLeft.removeAction(forKey: "cycle")
+                buttonRight.removeAction(forKey: "cycle")
             }
         }
     }

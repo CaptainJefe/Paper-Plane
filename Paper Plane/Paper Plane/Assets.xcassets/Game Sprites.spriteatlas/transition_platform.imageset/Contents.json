@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "transition_platform.png",
+      "filename" : "transition_platform_128px.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "transition_platform@2x.png",
+      "filename" : "transition_platform_128px@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

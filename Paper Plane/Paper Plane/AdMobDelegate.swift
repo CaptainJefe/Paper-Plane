@@ -25,13 +25,15 @@ class AdMobDelegate: SKScene, GADFullScreenContentDelegate {
     var bannerView: GADBannerView!
     var interstitial: GADInterstitialAd?
     
+    let interstitialTestID: String = "ca-app-pub-3940256099942544/4411468910"
+    let interstitialLiveID: String = "ca-app-pub-9274819218051102/9956721696"
     
     func createInterstitial() {
         if interstitial != nil {
             print("Ad already loaded")
         } else {
             let request = GADRequest()
-            GADInterstitialAd.load(withAdUnitID: "ca-app-pub-3940256099942544/4411468910",
+            GADInterstitialAd.load(withAdUnitID: interstitialLiveID,
                                    request: request,
                                    completionHandler: { [self] ad, error in
                 if let error = error {

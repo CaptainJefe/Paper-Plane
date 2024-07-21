@@ -13,6 +13,9 @@ let gameGetScore = "getScore"
 let gameScore = "gameScore"
 let gameHighScore = "highScore"
 
+let totalScore = "totalScore"
+var totalScoreAsInt = UserDefaults.standard.integer(forKey: totalScore)
+
 //var highScores = [Int?](repeating: 0, count: 10)
 var highScores = UserDefaults.standard.array(forKey: "gameScore") ?? []
 
@@ -57,6 +60,16 @@ class SavedData {
     
     func getHighscore() -> Int {
         return UserDefaults.standard.integer(forKey: gameHighScore)
+    }
+    
+    func setTotalScore(_ value: Int) {
+        UserDefaults.standard.set(totalScoreAsInt + value, forKey: totalScore)
+        totalScoreAsInt = UserDefaults.standard.integer(forKey: totalScore)
+        UserDefaults.standard.synchronize()
+    }
+    
+    func getTotalScore() -> Int {
+        return UserDefaults.standard.integer(forKey: totalScore)
     }
     
     // Other stats

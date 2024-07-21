@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "Home Button.png",
+      "filename" : "home_button_2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Home Button@2x.png",
+      "filename" : "home_button_2@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

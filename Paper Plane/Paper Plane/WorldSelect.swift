@@ -52,6 +52,14 @@ class WorldSelect: SKScene {
     
     override func didMove(to view: SKView) {
         
+        let wait = SKAction.wait(forDuration: 0.35)
+        let showBanner = SKAction.run {
+            GameViewController.shared.showBannerAds()
+        }
+        let seq = SKAction.sequence([wait, showBanner])
+        
+        run(seq)
+        
         let scores = SavedData.shared.getScore()
         
         for value in scores ?? [] {
@@ -417,8 +425,15 @@ class WorldSelect: SKScene {
             let touchedNode = atPoint(location)
             
             if touchedNode.name == "homeButton" {
-                Animations.shared.expand(node: homeButton)
-                backToTitle(node: homeButton)
+                
+                let expand = SKAction.run {
+                    Animations.shared.expand(node: self.homeButton)
+                }
+                let wait = SKAction.wait(forDuration: 0.175)
+                let sequence = SKAction.sequence([expand, wait])
+                
+                run(sequence, completion: { self.backToTitle(node: self.homeButton) } )
+                
             } else if touchedNode.name != "" && isButtonTouched == "homeButton" {
                 Animations.shared.expand(node: homeButton)
             }

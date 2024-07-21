@@ -9,6 +9,7 @@
 import UIKit
 import GoogleMobileAds
 import AVFoundation
+import StoreKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     var audioPlayer: AVAudioPlayer?
+    
+    private var inAppPurchases = InAppPurchases()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -23,6 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("Games Played: \(UserDefaults.standard.integer(forKey: "gamesPlayed"))")
         
         GADMobileAds.sharedInstance().start(completionHandler: nil)
+        
         
         UserDefaults.standard.register(defaults: ["firstTimePlaying" : true])
         UserDefaults.standard.set(firstTimePlaying, forKey: "firstTimePlaying")
@@ -36,6 +40,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         return true
+    }
+    
+    
+    func applicationWillTerminate(_ application: UIApplication) {
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

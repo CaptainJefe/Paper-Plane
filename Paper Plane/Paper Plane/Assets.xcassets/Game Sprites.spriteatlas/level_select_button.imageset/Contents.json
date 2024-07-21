@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "Level Select Button.png",
+      "filename" : "level_select_button.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Level Select Button@2x.png",
+      "filename" : "level_select_button@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

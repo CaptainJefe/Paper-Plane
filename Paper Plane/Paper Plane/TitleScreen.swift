@@ -9,6 +9,7 @@
 import SpriteKit
 import UIKit
 import SceneKit
+import StoreKit
 
 var isFirstLaunch: Bool = true
 
@@ -80,6 +81,8 @@ class TitleScreen: SKScene {
     var appVersion: String!
     
     static var shared = TitleScreen()
+    
+    private var inAppPurchases = InAppPurchases()
     
     
     override func didMove(to view: SKView) {
@@ -173,10 +176,10 @@ class TitleScreen: SKScene {
         logo.alpha = 0
         addChild(logo)
         
-        print("center \(view!.center.y)")
-        print("view diff \(view!.frame.maxY - background.frame.maxY)") // values change if written above background.position
-        print("background.frame.maxY\(background.frame.maxY)")
-        print("view.frame.maxY \(view!.frame.maxY)")
+//        print("center \(view!.center.y)")
+//        print("view diff \(view!.frame.maxY - background.frame.maxY)") // values change if written above background.position
+//        print("background.frame.maxY\(background.frame.maxY)")
+//        print("view.frame.maxY \(view!.frame.maxY)")
     }
     
     
@@ -213,7 +216,7 @@ class TitleScreen: SKScene {
         mainUIContainer.append(optionsButton)
         
         removeAdsButton.size = CGSize(width: removeAdsButton.size.width * 1.5, height: removeAdsButton.size.height * 1.5)
-        removeAdsButton.position = CGPoint(x: playButton.position.x, y: optionsButton.position.y - 120)
+        removeAdsButton.position = CGPoint(x: playButton.position.x, y: optionsButton.position.y - 70)
         removeAdsButton.colorBlendFactor = 0
         removeAdsButton.zPosition = 10
         removeAdsButton.alpha = 0
@@ -290,14 +293,15 @@ class TitleScreen: SKScene {
         var counter: CGFloat = 0
         var counter2: Int = 0 // counter doesn't compile (takes too long) when set as an Int. This is a temp solution
         
-        for highscore in displayScores.prefix(10) { // scoresAsString[0...4] is also a valid call
-            
+        let scaleFactor = (UIScreen.main.bounds.size.height / 800) // 667.0 is the height of the base device (iPhone 6/7/8)
+
+        for highscore in displayScores.prefix(10) {
             hsLabel = SKLabelNode(fontNamed: "Paper Plane Font")
             hsLabel.text = highscore as String
             hsLabel.alpha = 0
-            hsLabel.fontSize = 40
+            hsLabel.fontSize = 40 * scaleFactor // scale font size
             hsLabel.fontColor = SKColor.white
-            hsLabel.position = CGPoint(x: self.frame.maxX * 0.8, y: ((frame.maxY) + (counter * -75)) / 1.25)
+            hsLabel.position = CGPoint(x: self.frame.maxX * 0.8, y: ((frame.maxY) + (counter * -75 * scaleFactor)) / 1.25) // scale position
             hsLabel.zPosition = 160
             hsLabel.name = "hsLabel"
             addChild(hsLabel)
@@ -308,17 +312,17 @@ class TitleScreen: SKScene {
             hsNumberLabel = SKLabelNode(fontNamed: "Paper Plane Font")
             hsNumberLabel.text = "\(counter2 + 1)."
             hsNumberLabel.alpha = 0
-            hsNumberLabel.fontSize = 40
+            hsNumberLabel.fontSize = 40 * scaleFactor // scale font size
             hsNumberLabel.fontColor = colorArray[counter2]
-            hsNumberLabel.position = CGPoint(x: self.frame.maxX * 0.2, y: hsLabel.position.y)
+            hsNumberLabel.position = CGPoint(x: self.frame.maxX * 0.2, y: hsLabel.position.y) // position is relative to hsLabel, so no need to scale
             hsNumberLabel.zPosition = 160
             hsNumberLabel.name = "hsNumberLabel"
             addChild(hsNumberLabel)
             highScoresUIContainer.append(hsNumberLabel)
             
             separator = SKSpriteNode(imageNamed: "separator")
-            separator.position = CGPoint(x: self.frame.midX, y: hsLabel.position.y - 40)
-            separator.size = CGSize(width: frame.width / 1.2, height: separator.size.height)
+            separator.position = CGPoint(x: self.frame.midX, y: hsLabel.position.y - 40 * scaleFactor) // scale position
+            separator.size = CGSize(width: frame.width / 1.2, height: separator.size.height * scaleFactor) // scale size
             separator.alpha = 0
             separator.colorBlendFactor = 0.25
             addChild(separator)
@@ -327,6 +331,7 @@ class TitleScreen: SKScene {
             counter += 1
             counter2 += 1
         }
+
         
         closeButton.size = CGSize(width: 48, height: 48)
         closeButton.alpha = 0
@@ -713,7 +718,10 @@ class TitleScreen: SKScene {
             if touchedNode.name == "remove_ads" && isButtonTouched == "remove_ads" {
                 Animations.shared.expand(node: removeAdsButton)
                 
-                InAppPurchaseManager.shared.requestPurchase()
+                inAppPurchases.requestProduct(productName: "remove_ads")
+                
+            } else if touchedNode.name != "remove_ads" && isButtonTouched == "remove_ads" {
+                Animations.shared.expand(node: removeAdsButton)
             }
 
             
@@ -779,7 +787,8 @@ class TitleScreen: SKScene {
             
             if touchedNode.name == "restore_purchases" && isButtonTouched == "restore_purchases" {
                 Animations.shared.expand(node: restorePurchases)
-                InAppPurchaseManager.shared.restorePurchases()
+                
+                inAppPurchases.restorePurchases()
                 
             } else if touchedNode.name != "restore_purchases" && isButtonTouched == "restore_purchases" {
                 Animations.shared.expand(node: restorePurchases)
@@ -842,13 +851,7 @@ class TitleScreen: SKScene {
     }
     
     
-    override func update(_ currentTime: TimeInterval) {
-//        print(buttonIsPressed)
-//        print(optionsButton.isUserInteractionEnabled)
-    }
-    
-    
     deinit {
-        print("All Good")
+//        print("All Good")
     }
 }

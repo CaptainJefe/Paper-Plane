@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "castle_wall_1 - v3.png",
+      "filename" : "castle_wall_1.1 - v3.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "castle_wall_1 - v3@2x.png",
+      "filename" : "castle_wall_1.1 - v3@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "castle_wall_1 - v3@3x.png",
+      "filename" : "castle_wall_1.1 - v3@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
