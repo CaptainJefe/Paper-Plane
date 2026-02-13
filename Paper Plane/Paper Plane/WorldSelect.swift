@@ -6,10 +6,6 @@
 //  Copyright © 2022 Cade Williams. All rights reserved.
 //
 
-func rad2deg(number: Double) -> Double {
-    return number * 180 / .pi
-}
-
 import Foundation
 import SpriteKit
 
@@ -387,21 +383,26 @@ class WorldSelect: SKScene {
                 isButtonTouched = "homeButton"
             }
             
-            if touchedNode.name == "previewBackground" {
+            if touchedNode.name == "previewBackground" || touchedNode.name == "previewLabel" {
                 if theme == "chasm" {
                     if isChasmLocked == true {
                         return
                     } else {
                         Animations.shared.fadeAlphaTo(node: previewBackground, alpha: 0.5, duration: 0.1, waitTime: 0)
+                        Animations.shared.fadeAlphaTo(node: previewLabel, alpha: 0.5, duration: 0.1, waitTime: 0)
                     }
                 } else if theme == "silo" {
                     if isSiloLocked == true {
                         return
                     } else {
                         Animations.shared.fadeAlphaTo(node: previewBackground, alpha: 0.5, duration: 0.1, waitTime: 0)
+                        Animations.shared.fadeAlphaTo(node: previewLabel, alpha: 0.5, duration: 0.1, waitTime: 0)
+
                     }
                 } else {
                     Animations.shared.fadeAlphaTo(node: previewBackground, alpha: 0.5, duration: 0.1, waitTime: 0)
+                    Animations.shared.fadeAlphaTo(node: previewLabel, alpha: 0.5, duration: 0.1, waitTime: 0)
+
                 }
                     
                 isButtonTouched = "previewBackground"
@@ -442,6 +443,7 @@ class WorldSelect: SKScene {
             
             let fadeIn = SKAction.run {
                 Animations.shared.fadeAlphaIn(node: self.previewBackground, duration: 0.25, waitTime: 0)
+                Animations.shared.fadeAlphaIn(node: self.previewLabel, duration: 0.25, waitTime: 0)
             }
             let wait = SKAction.wait(forDuration: 0.45)
             let sequence = SKAction.sequence([fadeIn, wait])
@@ -453,7 +455,7 @@ class WorldSelect: SKScene {
             let center = SKAction.rotate(toAngle: 0, duration: 0.06, shortestUnitArc: true)
             let seq = SKAction.sequence([shakeLeft, shakeRight, center])
             
-            if touchedNode.name == "previewBackground" {
+            if touchedNode.name == "previewBackground" || touchedNode.name == "previewLabel" {
                 if theme == "chasm" {
                     if isChasmLocked == true {
                         lockedText.run(seq)
@@ -481,7 +483,7 @@ class WorldSelect: SKScene {
                     Audio.shared.playSFX(sound: "sound_effect")
                     run(sequence, completion: { self.startGame() } )
                 }
-            } else if touchedNode.name != "previewBackground" && isButtonTouched == "previewBackground" {
+            } else if touchedNode.name != "previewBackground" && isButtonTouched == "previewBackground" || touchedNode.name != "previewBackground" && isButtonTouched == "previewBackground" {
                 run(fadeIn)
             }
             

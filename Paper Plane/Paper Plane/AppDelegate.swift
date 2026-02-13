@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UserDefaults.standard.register(defaults: ["firstTimePlaying" : true])
         UserDefaults.standard.set(firstTimePlaying, forKey: "firstTimePlaying")
-        UserDefaults.standard.register(defaults: ["adsRemoved" : false]) // set to false to have ads on by default
+        UserDefaults.standard.register(defaults: ["adsRemoved" : true]) // set to false to have ads on by default
         
         UserDefaults.standard.register(defaults: ["gamesRequiredForRequest" : 25])
         

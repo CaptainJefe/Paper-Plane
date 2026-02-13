@@ -33,7 +33,7 @@ class AdMobDelegate: SKScene, GADFullScreenContentDelegate {
             print("Ad already loaded")
         } else {
             let request = GADRequest()
-            GADInterstitialAd.load(withAdUnitID: interstitialLiveID,
+            GADInterstitialAd.load(withAdUnitID: interstitialTestID,
                                    request: request,
                                    completionHandler: { [self] ad, error in
                 if let error = error {

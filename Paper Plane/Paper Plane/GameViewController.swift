@@ -34,8 +34,6 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
 //        SavedSettings.shared.setTutorialData() // Resets saved tutorial setting so it shows tutorial again
                 
         areControlsHidden = SavedSettings.shared.getControlsSettings()

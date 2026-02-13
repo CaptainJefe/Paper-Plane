@@ -163,7 +163,6 @@ class Animations: SKNode {
         let repeatForever = SKAction.repeatForever(seq)
         
         node.run(repeatForever)
-        
     }
     
     

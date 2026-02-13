@@ -15,6 +15,7 @@
 		D680076A2537F2CE0090D16D /* TitleScreen.sks in Resources */ = {isa = PBXBuildFile; fileRef = D68007692537F2CE0090D16D /* TitleScreen.sks */; };
 		D68DA35A2A50F6E9003EAE12 /* GameSceneRewrite.sks in Resources */ = {isa = PBXBuildFile; fileRef = D68DA3582A50F6E9003EAE12 /* GameSceneRewrite.sks */; };
 		D6934A6F2C15398500BC8F69 /* StoreKitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6934A6E2C15398500BC8F69 /* StoreKitHelper.swift */; };
+		D6954D672DAA591E00CC44A5 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6954D662DAA591E00CC44A5 /* Language.swift */; };
 		D69653FB2C13E36900BBDE1B /* plane_crash.wav in Resources */ = {isa = PBXBuildFile; fileRef = D69653FA2C13E36900BBDE1B /* plane_crash.wav */; };
 		D69653FF2C13E3D300BBDE1B /* button_click.wav in Resources */ = {isa = PBXBuildFile; fileRef = D69653FE2C13E3D300BBDE1B /* button_click.wav */; };
 		D69654052C13E3DE00BBDE1B /* plane_turn_3.wav in Resources */ = {isa = PBXBuildFile; fileRef = D69654002C13E3DD00BBDE1B /* plane_turn_3.wav */; };
@@ -56,6 +57,7 @@
 		D68007692537F2CE0090D16D /* TitleScreen.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TitleScreen.sks; sourceTree = "<group>"; };
 		D68DA3582A50F6E9003EAE12 /* GameSceneRewrite.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameSceneRewrite.sks; sourceTree = "<group>"; };
 		D6934A6E2C15398500BC8F69 /* StoreKitHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitHelper.swift; sourceTree = "<group>"; };
+		D6954D662DAA591E00CC44A5 /* Language.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
 		D69653FA2C13E36900BBDE1B /* plane_crash.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = plane_crash.wav; sourceTree = "<group>"; };
 		D69653FE2C13E3D300BBDE1B /* button_click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = button_click.wav; sourceTree = "<group>"; };
 		D69654002C13E3DD00BBDE1B /* plane_turn_3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = plane_turn_3.wav; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 				D68DA3582A50F6E9003EAE12 /* GameSceneRewrite.sks */,
 				D6A513EF291F42610098F2DD /* SavedData.swift */,
 				D6EED41228D6DCBC00A7F703 /* Animations.swift */,
+				D6954D662DAA591E00CC44A5 /* Language.swift */,
 				D6A513F7293EECEE0098F2DD /* Audio.swift */,
 				D6A513F52939785D0098F2DD /* Instructions.swift */,
 				D6B2F13E290DB04C0054D747 /* Assets.swift */,
@@ -277,6 +280,7 @@
 				D6E71F2A2C3A577000A7EECF /* Extensions.swift in Sources */,
 				D6A513F42928D41E0098F2DD /* AdSupport.swift in Sources */,
 				D6EED41328D6DCBC00A7F703 /* Animations.swift in Sources */,
+				D6954D672DAA591E00CC44A5 /* Language.swift in Sources */,
 				D6B2F13F290DB04C0054D747 /* Assets.swift in Sources */,
 				D6BAE9D62BA980A500E28628 /* AdMobDelegate.swift in Sources */,
 				D6AD9B3A24EFBAA000503775 /* AppDelegate.swift in Sources */,
