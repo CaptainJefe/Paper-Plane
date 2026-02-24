@@ -29,6 +29,7 @@ class AdMobDelegate: SKScene, GADFullScreenContentDelegate {
     let interstitialLiveID: String = "ca-app-pub-9274819218051102/9956721696"
     
     func createInterstitial() {
+		
         if interstitial != nil {
             print("Ad already loaded")
         } else {
@@ -48,7 +49,7 @@ class AdMobDelegate: SKScene, GADFullScreenContentDelegate {
     
     
     func showInterstitial() {
-        guard UserDefaults.standard.bool(forKey: "adsRemoved") == false else { return }
+		guard SavedSettings.shared.areAdsRemoved == false else { return }
         
         if interstitial != nil {
             interstitial?.present(fromRootViewController: currentViewController)

@@ -40,8 +40,10 @@ class GameViewController: UIViewController {
         isMusicMuted = SavedSettings.shared.getMusicSettings() // retrieves and sets value that was last saved
         isSoundMuted = SavedSettings.shared.getSoundSettings() //
         gamesPlayed = SavedData.shared.getGamesPlayed()
-        firstTimePlaying = SavedSettings.shared.getTutorialData()
+//        firstTimePlaying = SavedSettings.shared.getTutorialData()
+		SavedSettings.shared.firstTimePlaying
         adsRemoved = SavedSettings.shared.getAdsSettings()
+		SavedSettings.shared.areAdsRemoved
         
         
         GameViewController.shared = self
@@ -106,7 +108,7 @@ class GameViewController: UIViewController {
     // Change to two functions for extra safety
     
     func hideBannerAds() {
-        guard UserDefaults.standard.bool(forKey: "adsRemoved") == false else { return }
+		guard SavedSettings.shared.areAdsRemoved == false else { return }
         
         if let bannerView = bannerView {
             bannerView.isHidden = true
@@ -114,9 +116,10 @@ class GameViewController: UIViewController {
             print("bannerView is nil")
         }
     }
+	
     
     func showBannerAds() {
-        guard UserDefaults.standard.bool(forKey: "adsRemoved") == false else { return }
+        guard SavedSettings.shared.areAdsRemoved == false else { return }
         
         if let bannerView = bannerView {
             bannerView.isHidden = false

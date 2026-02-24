@@ -9,19 +9,75 @@
 import Foundation
 import SpriteKit
 
+enum LockCondition {
+    case none // Level 1 is always unlocked
+    case gamesPlayed(count: Int)
+    case highScore(score: Int)
+}
+
+struct LevelConfig {
+    let id: String // e.g. "level_2"
+    let condition: LockCondition
+    
+    // Helper to check if this specific level is unlocked
+    var isUnlocked: Bool {
+        let key = "unlocked_\(id)"
+        
+        // 1. FAST CHECK: Did we already unlock and save this?
+        if UserDefaults.standard.bool(forKey: key) {
+            return true
+        }
+        
+        // 2. LOGIC CHECK: Do we meet the requirements right now?
+        var passed = false
+        switch condition {
+        case .none:
+            passed = true
+        case .gamesPlayed(let count):
+            passed = SavedData.shared.getGamesPlayed() >= count
+        case .highScore(let score):
+            passed = SavedData.shared.getHighscore() >= score
+        }
+        
+        // 3. AUTO-SAVE: If we pass, save it forever so step 1 works next time.
+        if passed {
+            UserDefaults.standard.set(true, forKey: key)
+            print("Achievement Unlocked: \(id)") // Optional debug log
+        }
+        
+        return passed
+    }
+    
+    // Helper to get the text for the UI
+    func getLockText() -> (line1: String, line2: String, line3: String) {
+        
+        switch condition {
+        case .none:
+            return ("", "", "")
+        case .gamesPlayed(let count):
+            let remaining = count - SavedData.shared.getGamesPlayed()
+            let s = remaining == 1 ? "" : "s" // Handle plural
+            return ("Play \(remaining)", "more round\(s)", "to unlock!")
+        case .highScore(let score):
+            return ("Get a score", "of \(score) or more", "to unlock!")
+        }
+    }
+}
+
+
 class WorldSelect: SKScene {
     
     var previewBackground = SKSpriteNode(imageNamed: "castle_preview")
     var previewLabel = SKSpriteNode(imageNamed: "castle_label")
     
-    let castlePreview = SKTexture(imageNamed: "castle_preview")
-    let castleLabel = SKTexture(imageNamed: "castle_label")
+    let level1Preview = SKTexture(imageNamed: "castle_preview")
+    let level1Label = SKTexture(imageNamed: "castle_label")
     
-    let chasmPreview = SKTexture(imageNamed: "chasm_preview")
-    let chasmLabel = SKTexture(imageNamed: "chasm_label")
+    let level2Preview = SKTexture(imageNamed: "chasm_preview")
+    let level2Label = SKTexture(imageNamed: "chasm_label")
     
-    let siloPreview = SKTexture(imageNamed: "silo_preview")
-    let siloLabel = SKTexture(imageNamed: "silo_label")
+    let level3Preview = SKTexture(imageNamed: "silo_preview")
+    let level3Label = SKTexture(imageNamed: "silo_label")
     
     var previewBackgroundTexture: SKTexture! { didSet { previewBackground.texture = previewBackgroundTexture } }
     var previewLabelTexture: SKTexture! { didSet { previewLabel.texture = previewLabelTexture } }
@@ -42,9 +98,17 @@ class WorldSelect: SKScene {
     var lockedText3: SKLabelNode!
     var lockedTextNodes: [SKLabelNode]!
     
-    var chasmUnlockReq: Int = 15
+    var level2UnlockReq: Int = 15
     
     var levelIndicator = SKSpriteNode(imageNamed: "level_indicator_1")
+    
+    // Define your level order and rules here
+    let allLevels: [LevelConfig] = [
+        LevelConfig(id: "level_1", condition: .none),
+        LevelConfig(id: "level_2", condition: .gamesPlayed(count: 15)),
+        LevelConfig(id: "level_3", condition: .highScore(score: 60))
+    ]
+    
     
     override func didMove(to view: SKView) {
         
@@ -52,27 +116,10 @@ class WorldSelect: SKScene {
         let showBanner = SKAction.run {
             GameViewController.shared.showBannerAds()
         }
-        let seq = SKAction.sequence([wait, showBanner])
         
+        let seq = SKAction.sequence([wait, showBanner])
         run(seq)
         
-        let scores = SavedData.shared.getScore()
-        
-        for value in scores ?? [] {
-            if isSiloLocked == true {
-                if value >= 60 {
-                    isSiloLocked = false
-                    UserDefaults.standard.set(isSiloLocked, forKey: "isSiloLocked")
-                }
-            }
-        }
-        
-        if isChasmLocked == true {
-            if gamesPlayed >= chasmUnlockReq {
-                isChasmLocked = false
-                UserDefaults.standard.set(isChasmLocked, forKey: "isChasmLocked")
-            }
-        }
         
         levelIndicator.position = CGPoint(x: frame.midX, y: frame.maxY * 0.05)
         levelIndicator.size = CGSize(width: levelIndicator.size.width * 1.5, height: levelIndicator.size.height * 1.5)
@@ -93,16 +140,16 @@ class WorldSelect: SKScene {
         lockedText.zPosition = 250
         lockedText.alpha = 0
         lockedText.preferredMaxLayoutWidth = frame.width / 2
-//        lockedTextNodes.append(lockedText)
+        //        lockedTextNodes.append(lockedText)
         addChild(lockedText)
-
+        
         lockedText2 = SKLabelNode(fontNamed: "Paper Plane Font")
         lockedText2.position = CGPoint(x: lockedText.position.x, y: frame.maxY * 0.665)
         lockedText2.fontSize = 32
         lockedText2.zPosition = 250
         lockedText2.alpha = 0
         lockedText2.preferredMaxLayoutWidth = frame.width / 2
-//        lockedTextNodes.append(lockedText2)
+        //        lockedTextNodes.append(lockedText2)
         addChild(lockedText2)
         
         lockedText3 = SKLabelNode(fontNamed: "Paper Plane Font")
@@ -111,19 +158,19 @@ class WorldSelect: SKScene {
         lockedText3.zPosition = 250
         lockedText3.alpha = 0
         lockedText3.preferredMaxLayoutWidth = frame.width / 2
-//        lockedTextNodes.append(lockedText3)
+        //        lockedTextNodes.append(lockedText3)
         addChild(lockedText3)
         
         createUI()
-        setPreview(currentPreview: "castle")
+        setPreview(currentPreview: "level_1")
         worldPreview()
-        
         
         firstLoad = false
     }
     
     
     func createUI() {
+        
         homeButton = SKSpriteNode(imageNamed: "home_button")
         homeButton.size = CGSize(width: 48, height: 48)
         homeButton.position = CGPoint(x: frame.maxX * 0.9, y: frame.maxY * 0.95)
@@ -131,29 +178,31 @@ class WorldSelect: SKScene {
         homeButton.name = "homeButton"
         addChild(homeButton)
         
-//        playButton = SKSpriteNode(imageNamed: "ws_play_button")
-//        playButton.size = CGSize(width: 80, height: 80)
-//        playButton.position = CGPoint(x: frame.midX, y: frame.midY / 2.5)
-//        playButton.zPosition = 200
-//        playButton.name = "playButton"
-//        addChild(playButton)
+        //        playButton = SKSpriteNode(imageNamed: "ws_play_button")
+        //        playButton.size = CGSize(width: 80, height: 80)
+        //        playButton.position = CGPoint(x: frame.midX, y: frame.midY / 2.5)
+        //        playButton.zPosition = 200
+        //        playButton.name = "playButton"
+        //        addChild(playButton)
         
         buttonLeft = SKSpriteNode(imageNamed: "arrow_left")
-        buttonLeft.size = CGSize(width: 48, height: 48)
+        buttonLeft.size = CGSize(width: 54, height: 54)
         buttonLeft.position = CGPoint(x: frame.maxX * 0.08, y: frame.midY)
         buttonLeft.zPosition = 180
         buttonLeft.name = "buttonLeft"
         addChild(buttonLeft)
         
         buttonRight = SKSpriteNode(imageNamed: "arrow_right")
-        buttonRight.size = CGSize(width: 48, height: 48)
+        buttonRight.size = CGSize(width: 54, height: 54)
         buttonRight.position = CGPoint(x: frame.maxX * 0.92, y: frame.midY)
         buttonRight.zPosition = 180
         buttonRight.name = "buttonRight"
         addChild(buttonRight)
     }
     
+    
     func animateBackground(texture: SKTexture) {
+        
         let disableButtons = SKAction.run {
             self.areButtonsEnabled = false
         }
@@ -174,6 +223,7 @@ class WorldSelect: SKScene {
     }
     
     func animateLabel(texture: SKTexture) {
+        
         let fadeOut = SKAction.fadeOut(withDuration: 0.4)
         let fadeIn = SKAction.fadeIn(withDuration: 0.4)
         let setTexture = SKAction.run {
@@ -184,139 +234,117 @@ class WorldSelect: SKScene {
         run(seq)
     }
     
-    func worldLocked() {
-        // change to a switch case if there are more levels that are locked
+    func updateLevelLockUI() {
         
-        // Sets default values so changing from one locked level to the other doesn't stack previous colorBlendFactor values
-        previewBackground.color = .clear
-        previewBackground.colorBlendFactor = 0
+        // 1. Find the configuration for the current level theme
+        guard let currentLevel = allLevels.first(where: { $0.id == theme }) else { return }
         
-        // note: swapping between two locked levels, the text get swapped and can be seen being changed before the new level preview appears
+        // 2. Stop any running actions to prevent the "text swap glitch"
+        // If the user taps fast, we want to cancel the previous fade-in immediately.
+        lockedText.removeAllActions()
+        lockedText2.removeAllActions()
+        lockedText3.removeAllActions()
+        lockSprite.removeAllActions()
+        previewBackground.removeAllActions()
         
-        if isSiloLocked == true {
-            if theme == "silo" {
-                
-                let textAction = SKAction.run {
-                    self.lockedText.text = "Get a score"
-                    self.lockedText2.text = "of 60 or more"
-                    self.lockedText3.text = "to unlock!"
-                }
-                
-                run(SKAction.sequence([SKAction.wait(forDuration: 0.1), textAction]))
-                
-                Animations.shared.fadeAlphaIn(node: lockSprite, duration: 0.4, waitTime: 0.3)
-                Animations.shared.colorize(node: previewBackground, color: .darkGray, colorBlendFactor: 0.85, duration: 0.3)
-                Animations.shared.fadeAlphaIn(node: lockedText, duration: 0.4, waitTime: 0.3)
-                Animations.shared.fadeAlphaIn(node: lockedText2, duration: 0.4, waitTime: 0.3)
-                Animations.shared.fadeAlphaIn(node: lockedText3, duration: 0.4, waitTime: 0.3)
-            } else {
-                Animations.shared.fadeAlphaOut(node: lockSprite, duration: 0.4, waitTime: 0)
-                Animations.shared.colorize(node: previewBackground, color: .clear, colorBlendFactor: 0, duration: 0.3)
-                Animations.shared.fadeAlphaOut(node: lockedText, duration: 0.0, waitTime: 0)
-                Animations.shared.fadeAlphaOut(node: lockedText2, duration: 0.0, waitTime: 0)
-                Animations.shared.fadeAlphaOut(node: lockedText3, duration: 0.0, waitTime: 0)
-            }
-        }
+        // 3. Check Status
+        if currentLevel.isUnlocked {
+            // --- UNLOCKED STATE ---
             
-        if isChasmLocked == true {
-            if theme == "chasm" {
-                    
-                
-                if chasmUnlockReq - gamesPlayed == 1 {
-                    let textAction = SKAction.run {
-                        self.lockedText.text = "Play \(self.chasmUnlockReq - gamesPlayed)"
-                        self.lockedText2.text = "more round"
-                        self.lockedText3.text = "to unlock!"
-                    }
-                    
-                    run(SKAction.sequence([SKAction.wait(forDuration: 0.1), textAction]))
-                    
-                } else {
-                    let textAction = SKAction.run {
-                        self.lockedText.text = "Play \(self.chasmUnlockReq - gamesPlayed)"
-                        self.lockedText2.text = "more rounds"
-                        self.lockedText3.text = "to unlock!"
-                    }
-                    
-                    run(SKAction.sequence([SKAction.wait(forDuration: 0.1), textAction]))
-                }
-                
-                Animations.shared.fadeAlphaIn(node: lockSprite, duration: 0.4, waitTime: 0.3)
-                Animations.shared.colorize(node: previewBackground, color: .darkGray, colorBlendFactor: 0.85, duration: 0.3)
-                Animations.shared.fadeAlphaIn(node: lockedText, duration: 0.4, waitTime: 0.3)
-                Animations.shared.fadeAlphaIn(node: lockedText2, duration: 0.4, waitTime: 0.3)
-                Animations.shared.fadeAlphaIn(node: lockedText3, duration: 0.4, waitTime: 0.3)
-            } else {
-                Animations.shared.fadeAlphaOut(node: lockSprite, duration: 0.4, waitTime: 0)
-                Animations.shared.colorize(node: previewBackground, color: .clear, colorBlendFactor: 0, duration: 0.3)
-                Animations.shared.fadeAlphaOut(node: lockedText, duration: 0.0, waitTime: 0)
-                Animations.shared.fadeAlphaOut(node: lockedText2, duration: 0.0, waitTime: 0)
-                Animations.shared.fadeAlphaOut(node: lockedText3, duration: 0.0, waitTime: 0)
-            }
+            // Fade out everything
+            let fadeOut = SKAction.fadeOut(withDuration: 0.2)
+            
+            lockSprite.run(fadeOut)
+            lockedText.run(fadeOut)
+            lockedText2.run(fadeOut)
+            lockedText3.run(fadeOut)
+            
+            // Reset background
+            previewBackground.run(SKAction.colorize(with: .clear, colorBlendFactor: 0.0, duration: 0.3))
+            
+        } else {
+            // --- LOCKED STATE ---
+            
+            // A. Get the specific text for this level from our Struct
+            let texts = currentLevel.getLockText()
+            
+            // B. Update text IMMEDIATELY (no wait action).
+            // This fixes the glitch where you see old text transforming into new text.
+            lockedText.text = texts.line1
+            lockedText2.text = texts.line2
+            lockedText3.text = texts.line3
+            
+            // C. Animate In
+            // We use alpha instead of run(block) to ensure they are visible
+            let wait = SKAction.wait(forDuration: 0.4)
+            let fadeIn = SKAction.fadeIn(withDuration: 0.2)
+            
+            lockSprite.alpha = 0
+            lockedText.alpha = 0
+            lockedText2.alpha = 0
+            lockedText3.alpha = 0
+            
+            lockSprite.run(.sequence([wait, fadeIn]))
+            lockedText.run(.sequence([wait, fadeIn]))
+            lockedText2.run(.sequence([wait, fadeIn]))
+            lockedText3.run(.sequence([wait, fadeIn]))
+            
+            // Darken Background
+            previewBackground.run(SKAction.colorize(with: .darkGray, colorBlendFactor: 0.85, duration: 0.3))
         }
     }
     
-    // Need to implement a disable of world change buttons while preview is being changed
+    
     func setPreview(currentPreview: String) {
         
+        // Set the theme first, as updateLevelLockUI relies on it
+        theme = currentPreview
+        
         switch currentPreview {
-        case "castle":
-            theme = "castle"
-            
-            if firstLoad == true {
-                previewBackgroundTexture = castlePreview
-                previewLabelTexture = castleLabel
+        case "level_1":
+            if firstLoad {
+                previewBackgroundTexture = level1Preview
+                previewLabelTexture = level1Label
             } else {
-                levelIndicator.texture = SKTexture(imageNamed: "level_indicator_1")
-                animateBackground(texture: castlePreview)
-                animateLabel(texture: castleLabel)
+                animateBackground(texture: level1Preview)
+                animateLabel(texture: level1Label)
+                levelIndicator.run(.sequence([
+                    .wait(forDuration: 0.4),
+                    .run { self.levelIndicator.texture = SKTexture(imageNamed: "level_indicator_1") }
+                ]))
             }
             
+        case "level_2":
+            animateBackground(texture: level2Preview)
+            animateLabel(texture: level2Label)
             
-//            playButton.isHidden = false
+            levelIndicator.run(.sequence([
+                .wait(forDuration: 0.4),
+                .run { self.levelIndicator.texture = SKTexture(imageNamed: "level_indicator_2") }
+            ]))
             
-        case "chasm":
-            theme = "chasm"
+        case "level_3":
+            animateBackground(texture: level3Preview)
+            animateLabel(texture: level3Label)
             
-            levelIndicator.texture = SKTexture(imageNamed: "level_indicator_2")
-            animateBackground(texture: chasmPreview)
-            animateLabel(texture: chasmLabel)
-            
-            
-            if isChasmLocked == true {
-//                playButton.isHidden = true
-            } else {
-//                playButton.isHidden = false
-            }
-            
-        case "silo":
-            theme = "silo"
-            
-            levelIndicator.texture = SKTexture(imageNamed: "level_indicator_3")
-            animateBackground(texture: siloPreview)
-            animateLabel(texture: siloLabel)
-            
-            
-            if isSiloLocked == true {
-//                playButton.isHidden = true
-            } else {
-//                playButton.isHidden = false
-            }
+            levelIndicator.run(.sequence([
+                .wait(forDuration: 0.4),
+                .run { self.levelIndicator.texture = SKTexture(imageNamed: "level_indicator_3") }
+            ]))
             
         default:
+            theme = "level_1"
             levelIndicator.texture = SKTexture(imageNamed: "level_indicator_1")
-            previewBackgroundTexture = castlePreview
-            previewLabelTexture = castleLabel
-            
-            theme = "castle"
-            
-//            playButton.isHidden = false
+            previewBackgroundTexture = level1Preview
+            previewLabelTexture = level1Label
         }
         
-        worldLocked()
+        updateLevelLockUI()
     }
     
+    
     func worldPreview() {
+        
         previewBackground = SKSpriteNode()
         previewBackground.texture = previewBackgroundTexture
         previewBackground.size = CGSize(width: frame.size.width, height: frame.size.width * 2.5)
@@ -335,15 +363,8 @@ class WorldSelect: SKScene {
         addChild(previewLabel)
     }
     
-    func changeWorld() {
-        
-    }
     
     func startGame() {
-        // Might be a bad way to ask if theme is not equal to any of the possible level designations, then default to a valid one.
-//        if theme != "castle" || theme != "chasm" || theme != "silo" {
-//            theme = "castle"
-//        }
         
         if let skView = self.view {
             
@@ -359,6 +380,7 @@ class WorldSelect: SKScene {
     }
     
     func backToTitle(node: SKSpriteNode) {
+        
         if let skView = self.view {
             
             guard let scene = TitleScreen(fileNamed: "TitleScreen") else { return }
@@ -371,6 +393,20 @@ class WorldSelect: SKScene {
         }
     }
     
+    
+    func cycleLevel(direction: Int) {
+        
+        // Current mapping (You can make this dynamic later if you want)
+        if theme == "level_1" {
+            setPreview(currentPreview: direction == 1 ? "level_2" : "level_3")
+        } else if theme == "level_2" {
+            setPreview(currentPreview: direction == 1 ? "level_3" : "level_1")
+        } else if theme == "level_3" {
+            setPreview(currentPreview: direction == 1 ? "level_1" : "level_2")
+        }
+    }
+    
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
@@ -378,150 +414,107 @@ class WorldSelect: SKScene {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             
+            // --- 1. Home Button ---
             if touchedNode.name == "homeButton" {
                 Animations.shared.shrink(node: homeButton)
                 isButtonTouched = "homeButton"
             }
             
+            // --- 2. Level Preview (Refactored) ---
             if touchedNode.name == "previewBackground" || touchedNode.name == "previewLabel" {
-                if theme == "chasm" {
-                    if isChasmLocked == true {
-                        return
-                    } else {
-                        Animations.shared.fadeAlphaTo(node: previewBackground, alpha: 0.5, duration: 0.1, waitTime: 0)
-                        Animations.shared.fadeAlphaTo(node: previewLabel, alpha: 0.5, duration: 0.1, waitTime: 0)
-                    }
-                } else if theme == "silo" {
-                    if isSiloLocked == true {
-                        return
-                    } else {
-                        Animations.shared.fadeAlphaTo(node: previewBackground, alpha: 0.5, duration: 0.1, waitTime: 0)
-                        Animations.shared.fadeAlphaTo(node: previewLabel, alpha: 0.5, duration: 0.1, waitTime: 0)
-
-                    }
-                } else {
-                    Animations.shared.fadeAlphaTo(node: previewBackground, alpha: 0.5, duration: 0.1, waitTime: 0)
-                    Animations.shared.fadeAlphaTo(node: previewLabel, alpha: 0.5, duration: 0.1, waitTime: 0)
-
-                }
+                
+                // Find current level config
+                if let currentLevel = allLevels.first(where: { $0.id == theme }) {
                     
-                isButtonTouched = "previewBackground"
+                    // Only show the "Pressed" visual effect (dimming) if UNLOCKED
+                    if currentLevel.isUnlocked {
+                        Animations.shared.fadeAlphaTo(node: previewBackground, alpha: 0.5, duration: 0.1, waitTime: 0)
+                        Animations.shared.fadeAlphaTo(node: previewLabel, alpha: 0.5, duration: 0.1, waitTime: 0)
+                        
+                        // Mark this as touched so touchesEnded knows to launch the game
+                        isButtonTouched = "previewBackground"
+                    } else {
+                        // If locked, we do nothing (no dimming effect).
+                        // We clear the tracker so touchesEnded doesn't accidentally trigger anything.
+                        isButtonTouched = ""
+                    }
+                }
             }
             
-            if touchedNode.name == "buttonLeft" && areButtonsEnabled == true {
+            // --- 3. Left Arrow ---
+            if touchedNode.name == "buttonLeft" && areButtonsEnabled {
                 Animations.shared.shrink(node: buttonLeft)
                 isButtonTouched = "buttonLeft"
             }
             
-            if touchedNode.name == "buttonRight" && areButtonsEnabled == true {
+            // --- 4. Right Arrow ---
+            if touchedNode.name == "buttonRight" && areButtonsEnabled {
                 Animations.shared.shrink(node: buttonRight)
                 isButtonTouched = "buttonRight"
             }
         }
     }
     
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
         for touch in touches {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             
+            // --- 1. Handle Home Button ---
             if touchedNode.name == "homeButton" {
-                
-                let expand = SKAction.run {
-                    Animations.shared.expand(node: self.homeButton)
-                }
+                let expand = SKAction.run { Animations.shared.expand(node: self.homeButton) }
                 let wait = SKAction.wait(forDuration: 0.175)
                 let sequence = SKAction.sequence([expand, wait])
-                
                 run(sequence, completion: { self.backToTitle(node: self.homeButton) } )
-                
-            } else if touchedNode.name != "" && isButtonTouched == "homeButton" {
-                Animations.shared.expand(node: homeButton)
+                return // Exit early
             }
             
-            // alpha fade in
-            
-            let fadeIn = SKAction.run {
-                Animations.shared.fadeAlphaIn(node: self.previewBackground, duration: 0.25, waitTime: 0)
-                Animations.shared.fadeAlphaIn(node: self.previewLabel, duration: 0.25, waitTime: 0)
-            }
-            let wait = SKAction.wait(forDuration: 0.45)
-            let sequence = SKAction.sequence([fadeIn, wait])
-            
-            // shakes text (and lock sprite) if level is locked
-            
-            let shakeLeft = SKAction.rotate(toAngle: (1 / 36) * .pi, duration: 0.06, shortestUnitArc: true)
-            let shakeRight = SKAction.rotate(toAngle: (71 / 36) * .pi, duration: 0.06, shortestUnitArc: true)
-            let center = SKAction.rotate(toAngle: 0, duration: 0.06, shortestUnitArc: true)
-            let seq = SKAction.sequence([shakeLeft, shakeRight, center])
-            
+            // --- 2. Handle Level Selection / Start Game ---
             if touchedNode.name == "previewBackground" || touchedNode.name == "previewLabel" {
-                if theme == "chasm" {
-                    if isChasmLocked == true {
-                        lockedText.run(seq)
-                        lockedText2.run(seq)
-                        lockedText3.run(seq)
-                        lockSprite.run(seq)
-                    } else {
-                        previewBackground.isUserInteractionEnabled = true
-                        Audio.shared.playSFX(sound: "sound_effect")
-                        run(sequence, completion: { self.startGame() } )
-                    }
-                } else if theme == "silo" {
-                    if isSiloLocked == true {
-                        lockedText.run(seq)
-                        lockedText2.run(seq)
-                        lockedText3.run(seq)
-                        lockSprite.run(seq)
-                    } else {
-                        previewBackground.isUserInteractionEnabled = true
-                        Audio.shared.playSFX(sound: "sound_effect")
-                        run(sequence, completion: { self.startGame() } )
-                    }
+                
+                // A. Find the config for the current level
+                guard let currentLevel = allLevels.first(where: { $0.id == theme }) else { return }
+                
+                // B. Check if Locked or Unlocked
+                if !currentLevel.isUnlocked {
+                    // --- LOCKED: Shake the text ---
+                    let shakeLeft = SKAction.rotate(toAngle: (1 / 36) * .pi, duration: 0.06, shortestUnitArc: true)
+                    let shakeRight = SKAction.rotate(toAngle: (71 / 36) * .pi, duration: 0.06, shortestUnitArc: true)
+                    let center = SKAction.rotate(toAngle: 0, duration: 0.06, shortestUnitArc: true)
+                    let shakeSeq = SKAction.sequence([shakeLeft, shakeRight, center])
+                    
+                    lockedText.run(shakeSeq)
+                    lockedText2.run(shakeSeq)
+                    lockedText3.run(shakeSeq)
+                    lockSprite.run(shakeSeq)
                 } else {
-                    previewBackground.isUserInteractionEnabled = true
+                    // --- UNLOCKED: Start Game ---
+                    previewBackground.isUserInteractionEnabled = true // Prevent double taps
                     Audio.shared.playSFX(sound: "sound_effect")
+                    
+                    // Animation sequence
+                    let expand = SKAction.run {
+                        Animations.shared.expand(node: self.previewBackground)
+                        Animations.shared.fadeAlphaTo(node: self.previewLabel, alpha: 1, duration: 0.1, waitTime: 0)// Optional: Add expand effect to bg?
+                    }
+                    let wait = SKAction.wait(forDuration: 0.45)
+                    let sequence = SKAction.sequence([expand, wait])
+                    
                     run(sequence, completion: { self.startGame() } )
                 }
-            } else if touchedNode.name != "previewBackground" && isButtonTouched == "previewBackground" || touchedNode.name != "previewBackground" && isButtonTouched == "previewBackground" {
-                run(fadeIn)
             }
             
-            
-
-            if touchedNode.name == "buttonLeft" && areButtonsEnabled == true {
+            // --- 3. Handle Navigation Arrows ---
+            if touchedNode.name == "buttonLeft" && areButtonsEnabled {
                 Animations.shared.expand(node: buttonLeft)
-                
-                if theme == "castle" {
-                    setPreview(currentPreview: "silo")
-                } else if theme == "chasm" {
-                    setPreview(currentPreview: "castle")
-                } else if theme == "silo" {
-                    setPreview(currentPreview: "chasm")
-                }
-                
-//                if previewBackgroundTexture == chasmPreview {
-//                    setPreview(currentPreview: "castle")
-//                } else {
-//                    setPreview(currentPreview: "chasm") // remove this when adding the third level
-//                }
-            } else if touchedNode.name != "buttonLeft" && isButtonTouched == "buttonLeft" {
-                Animations.shared.expand(node: buttonLeft)
+                cycleLevel(direction: -1)
             }
             
-            if touchedNode.name == "buttonRight" && areButtonsEnabled == true {
+            if touchedNode.name == "buttonRight" && areButtonsEnabled {
                 Animations.shared.expand(node: buttonRight)
-                
-                if theme == "castle" {
-                    setPreview(currentPreview: "chasm")
-                } else if theme == "chasm" {
-                    setPreview(currentPreview: "silo")
-                } else if theme == "silo" {
-                    setPreview(currentPreview: "castle")
-                }
-            
-            } else if touchedNode.name != "buttonRight" && isButtonTouched == "buttonRight" {
-                Animations.shared.expand(node: buttonRight)
+                cycleLevel(direction: 1)
             }
             
             isButtonTouched = ""

@@ -33,7 +33,7 @@ class Audio {
     
     
     func playSFX(sound: String) {
-        guard isSoundMuted == false else { return }
+		guard SavedSettings.shared.isSoundMuted == false else { return }
         
         switch sound {
         case "plane_turn_1":
@@ -105,7 +105,7 @@ class Audio {
     
     
     func playWindSound() {
-        guard isSoundMuted == false else { return }
+        guard SavedSettings.shared.isSoundMuted == false else { return }
         
         self.windSound?.volume = 0.65
         
@@ -116,7 +116,7 @@ class Audio {
     
     
     func stopAllSounds() {
-        guard isSoundMuted == false else { return }
+        guard SavedSettings.shared.isSoundMuted == false else { return }
         
         Sound.stopAll()
     }
@@ -157,7 +157,7 @@ class Audio {
     // first time soundPlayer is used caused a lag spike, every other instance of it being used seems to be fine. Possible simulator problem only
     
     func soundPlayer(soundName: String, shouldLoop: Bool = false) {
-        guard isSoundMuted == false else { return }
+        guard SavedSettings.shared.isSoundMuted == false else { return }
         
         guard let audioFile = audioFiles[soundName] else { return }
         

@@ -68,7 +68,7 @@
 		D696540E2C13E5BC00BBDE1B /* level_wind.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = level_wind.mp3; sourceTree = "<group>"; };
 		D69654102C13E7A700BBDE1B /* sound_effect.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sound_effect.wav; sourceTree = "<group>"; };
 		D6974234259C4C58006F6049 /* Asai-Analogue.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Asai-Analogue.ttf"; sourceTree = "<group>"; };
-		D6A513E52913534F0098F2DD /* WorldSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSelect.swift; sourceTree = "<group>"; };
+		D6A513E52913534F0098F2DD /* WorldSelect.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = WorldSelect.swift; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		D6A513E7291353660098F2DD /* WorldSelect.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = WorldSelect.sks; sourceTree = "<group>"; };
 		D6A513EB2914D3E70098F2DD /* Paper Plane Font.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Paper Plane Font.ttf"; sourceTree = "<group>"; };
 		D6A513EF291F42610098F2DD /* SavedData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedData.swift; sourceTree = "<group>"; };
@@ -445,7 +445,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = westonwilliams.PaperPlane;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -472,7 +472,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = westonwilliams.PaperPlane;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

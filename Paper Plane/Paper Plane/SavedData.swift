@@ -19,8 +19,8 @@ var totalScoreAsInt = UserDefaults.standard.integer(forKey: totalScore)
 //var highScores = [Int?](repeating: 0, count: 10)
 var highScores = UserDefaults.standard.array(forKey: "gameScore") ?? []
 
-var isChasmLocked: Bool = true
-var isSiloLocked: Bool = true
+var isLevel2Locked: Bool = true
+var isLevel3Locked: Bool = true
 
 // high scores was getting reset because when the app loads back up, it remembers the last values stored in UserDefaults in that last session, but since highscores is initialized as a default array when launched, when a new score is made and appended, setScore takes the current array of (var) highScores and sets UserDefaults value as that. Since on launch it starts with default values, it overwrites the UserDefaults saved values, because once again, UserDefaults value is set by taking the the values of the current highScores (and not just adds values to the existing saved data). Solution was to set highScores as the previously saved data of its UserDefaults on app start, before any new values are allowed to be appended on highScores and overwrite UserDefaults.
 
@@ -29,61 +29,118 @@ var gamesPlayed = UserDefaults.standard.integer(forKey: "gamesPlayed")
 var adsRemoved: Bool!
 
 class SavedData {
-    
-    private init() {}
-    static let shared = SavedData()
-
-    
-    func setScore(_ value: Int) {
-    
-        // Settings and getting scores
-        
-        if value > getHighscore() {
-            setHighScore(value)
-            highScores.append(value)
-        } else {
-            highScores.append(value) // if value is not higher than getHighscore(), it won't append a score to the array and the array will remain empty
-        }
-        
-        UserDefaults.standard.set(highScores, forKey: gameScore)
-        UserDefaults.standard.synchronize()
-    }
-    
-    func getScore() -> [Int]? {
-        return UserDefaults.standard.object(forKey: gameScore) as? [Int]
-    }
-    
-    func setHighScore(_ value: Int) {
-        UserDefaults.standard.set(value, forKey: gameHighScore)
-        UserDefaults.standard.synchronize()
-    }
-    
-    func getHighscore() -> Int {
-        return UserDefaults.standard.integer(forKey: gameHighScore)
-    }
-    
-    func setTotalScore(_ value: Int) {
-        UserDefaults.standard.set(totalScoreAsInt + value, forKey: totalScore)
-        totalScoreAsInt = UserDefaults.standard.integer(forKey: totalScore)
-        UserDefaults.standard.synchronize()
-    }
-    
-    func getTotalScore() -> Int {
-        return UserDefaults.standard.integer(forKey: totalScore)
-    }
-    
-    // Other stats
-    
-    func setGamesPlayed() {
-        gamesPlayed += 1
-        print("Games Played: \(gamesPlayed)")
-        UserDefaults.standard.set(gamesPlayed, forKey: "gamesPlayed")
-    }
-    
-    func getGamesPlayed() -> Int {
-        return UserDefaults.standard.integer(forKey: "gamesPlayed")
-    }
-    
+	
+	static let shared = SavedData()
+	private init() {}
+	
+	
+	private let keyLeaderboard = "leaderboardScores" // Stores top 10 highest scores
+	private let keyRecentScores = "recentScores" // Stores the last 20 scores
+	private let keyTotalScore = "totalscore" // Total scored over every game played - used to track the stat "Platforms Passed"
+	private let keyGamesPlayed = "gamesPlayed" // Total games played
+	private let keyGamesPlayedLevel1 = "gamesPlayedLevel1"
+	private let keyGamesPlayedLevel2 = "gamesPlayedLevel2"
+	private let keyGamesPlayedLevel3 = "gamesPlayedLevel3"
+	
+	
+	func saveGameResults(score: Int) {
+		
+		let currentTotal = getTotalScore()
+		UserDefaults.standard.set(currentTotal + score, forKey: keyTotalScore)
+		
+		let currentGames = getGamesPlayed()
+		UserDefaults.standard.set(currentGames + 1, forKey: keyGamesPlayed)
+		
+		let currentGamesLevel1 = getGamesPlayedLevel1()
+		let currentGamesLevel2 = getGamesPlayedLevel2()
+		let currentGamesLevel3 = getGamesPlayedLevel3()
+		
+		switch theme {
+		case "level_1":
+			UserDefaults.standard.set(currentGamesLevel1 + 1, forKey: keyGamesPlayedLevel1)
+			
+		case "level_2":
+			UserDefaults.standard.set(currentGamesLevel2 + 1, forKey: keyGamesPlayedLevel2)
+			
+		case "level_3":
+			UserDefaults.standard.set(currentGamesLevel3 + 1, forKey: keyGamesPlayedLevel3)
+			
+		default:
+			break
+		}
+		
+		
+		// If the score is 0, don't save the score
+		guard score > 0 else { return }
+		
+		var topScores = getLeaderboard()
+		
+		if !topScores.contains(score) {
+			
+			topScores.append(score)
+			topScores.sort(by: >)
+			
+			topScores = Array(topScores.prefix(20))
+			
+			UserDefaults.standard.set(topScores, forKey: keyLeaderboard)
+		}
+		
+		
+		var recentScores = getRecentsScores()
+		recentScores.append(score)
+		
+		if recentScores.count > 20 {
+			recentScores.removeFirst()
+		}
+		
+		UserDefaults.standard.set(recentScores, forKey: keyRecentScores)
+	}
+	
+	
+	func getLeaderboard() -> [Int] {
+		return UserDefaults.standard.array(forKey: keyLeaderboard) as? [Int] ?? []
+	}
+	
+	func getHighscore() -> Int {
+		return getLeaderboard().first ?? 0
+	}
+	
+	func getRecentsScores() -> [Int] {
+		return UserDefaults.standard.array(forKey: keyRecentScores) as? [Int] ?? []
+	}
+	
+	func getTotalScore() -> Int {
+		return UserDefaults.standard.integer(forKey: keyTotalScore)
+	}
+	
+	func getGamesPlayed() -> Int {
+		return UserDefaults.standard.integer(forKey: keyGamesPlayed)
+	}
+	
+	func getGamesPlayedLevel1() -> Int {
+		return UserDefaults.standard.integer(forKey: keyGamesPlayedLevel1)
+	}
+	
+	func getGamesPlayedLevel2() -> Int {
+		return UserDefaults.standard.integer(forKey: keyGamesPlayedLevel2)
+	}
+	
+	func getGamesPlayedLevel3() -> Int {
+		return UserDefaults.standard.integer(forKey: keyGamesPlayedLevel3)
+	}
+	
+	
+	func getAverageLast20() -> Int {
+		let recents = getRecentsScores()
+		if recents.isEmpty { return 0 }
+		let total = recents.reduce(0, +)
+		return total / recents.count
+	}
+	
+	// Out of date. Either delete this or add in the init to purge/merge old data
+	func getScore() -> [Int]? {
+		return UserDefaults.standard.object(forKey: gameScore) as? [Int]
+	}
 }
 
 // Consider removing isMusicMuted and isSoundMuted for only UserDefaults if it makes sense
@@ -97,49 +154,81 @@ var areControlsHidden = false
 var firstTimePlaying = UserDefaults.standard.bool(forKey: "firstTimePlaying")
 
 class SavedSettings {
-    
-    private init() {}
-    static let shared = SavedSettings()
-    
-    func setMusicSettings() {
-        UserDefaults.standard.set(isMusicMuted, forKey: "isMusicMuted")
-    }
-    
-    func getMusicSettings() -> Bool {
-        return UserDefaults.standard.bool(forKey: "isMusicMuted")
-    }
-    
-    
-    func setSoundSettings() {
-        UserDefaults.standard.set(isSoundMuted, forKey: "isSoundMuted")
-    }
-    
-    func getSoundSettings() -> Bool {
-        return UserDefaults.standard.bool(forKey: "isSoundMuted")
-    }
-    
-    
-    func setControlsSettings() {
-        UserDefaults.standard.set(areControlsHidden, forKey: "areControlsHidden")
-    }
-    
-    func getControlsSettings() -> Bool {
-        return UserDefaults.standard.bool(forKey: "areControlsHidden")
-    }
-    
-    func setTutorialData() {
-        UserDefaults.standard.set(firstTimePlaying, forKey: "firstTimePlaying")
-    }
-    
-    func getTutorialData() -> Bool {
-        return UserDefaults.standard.bool(forKey: "firstTimePlaying") ?? true
-    }
-    
-    func setAdsSettings() {
-        UserDefaults.standard.setValue(adsRemoved, forKey: "adsRemoved")
-    }
-    
-    func getAdsSettings() -> Bool {
-        return UserDefaults.standard.bool(forKey: "adsRemoved")
-    }
+	
+	private init() {
+		// --- MIGRATION START ---
+		if UserDefaults.standard.bool(forKey: "remove_ads") == true {
+			if UserDefaults.standard.object(forKey: keyAdsRemoved) == nil {
+				UserDefaults.standard.set(true, forKey: keyAdsRemoved)
+				UserDefaults.standard.removeObject(forKey: "remove_ads")
+				print("Migrated legacy ad purchase to new system.")
+			}
+		}
+	}
+	
+	static let shared = SavedSettings()
+	
+	private let keyAdsRemoved = "adsRemoved"
+	private let keyIsMusicMuted = "isMusicMuted"
+	private let keyIsSoundMuted = "isSoundMuted"
+	private let keyAreControlsHidden = "areControlsHidden"
+	private let keyFirstTimePlaying = "firstTimePlaying"
+	
+	
+	var areAdsRemoved: Bool {
+		get { return UserDefaults.standard.bool(forKey: keyAdsRemoved) }
+		set { UserDefaults.standard.set(newValue, forKey: keyAdsRemoved) }
+	}
+	
+	
+	var isMusicMuted: Bool {
+		get {
+			// If it doesn't exist, make it default to true
+			if UserDefaults.standard.object(forKey: keyIsMusicMuted) == nil {
+				return false
+			}
+			return UserDefaults.standard.bool(forKey: keyIsMusicMuted)
+		}
+		set { UserDefaults.standard.set(newValue, forKey: keyIsMusicMuted) }
+	}
+	
+	
+	var isSoundMuted: Bool {
+		get {
+			// If it doesn't exist, make it default to true
+			if UserDefaults.standard.object(forKey: keyIsSoundMuted) == nil {
+				return false
+			}
+			return UserDefaults.standard.bool(forKey: keyIsSoundMuted)
+		}
+		set { UserDefaults.standard.set(newValue, forKey: keyIsSoundMuted) }
+	}
+	
+	
+	var areControlsHidden: Bool {
+		get { return UserDefaults.standard.bool(forKey: keyAreControlsHidden) }
+		set { UserDefaults.standard.set(newValue, forKey: keyAreControlsHidden) }
+	}
+	
+	
+	var firstTimePlaying: Bool {
+		get {
+			// Check if key exists, otherwise return true
+			if UserDefaults.standard.object(forKey: keyFirstTimePlaying) == nil {
+				return true
+			}
+			return UserDefaults.standard.bool(forKey: keyFirstTimePlaying)
+		}
+		set { UserDefaults.standard.set(newValue, forKey: keyFirstTimePlaying) }
+		
+	}
+	
+	
+	func setAdsSettings() {
+		UserDefaults.standard.setValue(adsRemoved, forKey: "adsRemoved")
+	}
+	
+	func getAdsSettings() -> Bool {
+		return UserDefaults.standard.bool(forKey: "adsRemoved")
+	}
 }

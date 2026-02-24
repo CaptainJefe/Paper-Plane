@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "level_select_button.png",
+      "filename" : "home_button_2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "level_select_button@2x.png",
+      "filename" : "home_button_2@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "level_select_button@3x.png",
+      "filename" : "home_button_2@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
