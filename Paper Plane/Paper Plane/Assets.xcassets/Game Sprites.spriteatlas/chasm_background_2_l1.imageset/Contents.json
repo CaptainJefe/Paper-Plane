@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Cavern Full 3 - L2.png",
+      "filename" : "Cavern Full 3_2_L1.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Cavern Full 3 - L2@2x.png",
+      "filename" : "Cavern Full 3_2_L1@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Cavern Full 3 - L2@3x.png",
+      "filename" : "Cavern Full 3_2_L1@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

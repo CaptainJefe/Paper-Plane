@@ -36,9 +36,9 @@ class GameViewController: UIViewController {
         
 //        SavedSettings.shared.setTutorialData() // Resets saved tutorial setting so it shows tutorial again
                 
-        areControlsHidden = SavedSettings.shared.getControlsSettings()
-        isMusicMuted = SavedSettings.shared.getMusicSettings() // retrieves and sets value that was last saved
-        isSoundMuted = SavedSettings.shared.getSoundSettings() //
+//        areControlsHidden = SavedSettings.shared.getControlsSettings()
+//        isMusicMuted = SavedSettings.shared.getMusicSettings() // retrieves and sets value that was last saved
+//        isSoundMuted = SavedSettings.shared.getSoundSettings() //
         gamesPlayed = SavedData.shared.getGamesPlayed()
 //        firstTimePlaying = SavedSettings.shared.getTutorialData()
 		SavedSettings.shared.firstTimePlaying

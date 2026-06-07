@@ -77,9 +77,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 	var lastBackgroundPositionL3: CGFloat!
 	var lastWallPosition: CGFloat!
 	
-	var backgroundTextureL1: SKTexture! { didSet { for background in backgroundArrayL1 { background.texture = backgroundTextureL1 } } }
-	var backgroundTextureL2: SKTexture! { didSet { for background in backgroundArrayL2 { background.texture = backgroundTextureL2 } } }
-	var backgroundTextureL3: SKTexture! { didSet { for background in backgroundArrayL3 { background.texture = backgroundTextureL3 } } }
+	var backgroundTextureL1: SKTexture!
+	var backgroundTextureL2: SKTexture!
+	var backgroundTextureL3: SKTexture!
 	
 	var firstBackgroundL1: SKTexture!
 	var firstBackgroundL2: SKTexture!
@@ -93,12 +93,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 	var thirdBackgroundL2: SKTexture!
 	var thirdBackgroundL3: SKTexture!
 	
-	var wallLeftTexture: SKTexture! { didSet { for wallLeft in wallLeftArray { wallLeft.texture = wallLeftTexture } } } // these two might conflict with the background loop
+	var wallLeftTexture: SKTexture!
 	var firstWallLeft: SKTexture!
 	var secondWallLeft: SKTexture!
 	var thirdWallLeft: SKTexture!
 	
-	var wallRightTexture: SKTexture! { didSet { for wallRight in wallRightArray { wallRight.texture = wallRightTexture } } }
+	var wallRightTexture: SKTexture!
 	var firstWallRight: SKTexture!
 	var secondWallRight: SKTexture!
 	var thirdWallRight: SKTexture!
@@ -161,7 +161,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 	
 	var toggleNoClip: SKSpriteNode!
 	var noClipLabel: SKLabelNode!
-	var noClip = false { didSet { noClipLabel.text = "Collision: \(!noClip)" } }
+	var noClip = true { didSet { noClipLabel.text = "Collision: \(!noClip)" } }
 	
 	var planeCoords: SKLabelNode!
 	
@@ -270,6 +270,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 		//        admobDelegate.createInterstitial()
 		
 		initiateTextures()
+		preloadStageTextures()
 		createLabels()
 		createButtons()
 		createBackground()
@@ -571,15 +572,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 			cloudsTexture = SKTexture(imageNamed: "clouds_day")
 			
 		case "level_2":
-			firstBackgroundL1 = SKTexture(imageNamed: "Cavern Full 3")
-			firstBackgroundL2 = SKTexture(imageNamed: "Cavern Full 3 - L2")
-			firstBackgroundL3 = SKTexture(imageNamed: "Cavern Full 3 - L3")
-			secondBackgroundL1 = SKTexture(imageNamed: "chasm_background_2")
-			secondBackgroundL2 = SKTexture(imageNamed: "Cavern Full 3 - L2")
-			secondBackgroundL3 = SKTexture(imageNamed: "Cavern Full 3 - L3")
-			thirdBackgroundL1 = SKTexture(imageNamed: "chasm_background_3")
-			thirdBackgroundL2 = SKTexture(imageNamed: "Cavern Full 3 - L2")
-			thirdBackgroundL3 = SKTexture(imageNamed: "Cavern Full 3 - L3")
+			firstBackgroundL1 = SKTexture(imageNamed: "chasm_background_1_l1")
+			firstBackgroundL2 = SKTexture(imageNamed: "chasm_background_1_l2")
+			firstBackgroundL3 = SKTexture(imageNamed: "chasm_background_1_l3")
+			secondBackgroundL1 = SKTexture(imageNamed: "chasm_background_2_l1")
+			secondBackgroundL2 = SKTexture(imageNamed: "chasm_background_2_l2")
+			secondBackgroundL3 = SKTexture(imageNamed: "chasm_background_2_l3")
+			thirdBackgroundL1 = SKTexture(imageNamed: "chasm_background_3_l1")
+			thirdBackgroundL2 = SKTexture(imageNamed: "chasm_background_3_l2")
+			thirdBackgroundL3 = SKTexture(imageNamed: "chasm_background_3_l3")
 			
 			firstPlatform = SKTexture(imageNamed: "platform_1")
 			secondPlatform = SKTexture(imageNamed: "platform_2")
@@ -626,6 +627,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 	}
 	
 	
+	func preloadStageTextures() {
+		// 1. Gather every texture that might be used in this run
+		let texturesToPreload: [SKTexture?] = [
+			firstBackgroundL1, secondBackgroundL1, thirdBackgroundL1,
+			firstBackgroundL2, secondBackgroundL2, thirdBackgroundL2,
+			firstBackgroundL3, secondBackgroundL3, thirdBackgroundL3,
+			firstWallLeft, secondWallLeft, thirdWallLeft,
+			firstWallRight, secondWallRight, thirdWallRight,
+			firstPlatform, secondPlatform, thirdPlatform, transitionPlatform,
+			skyTexture, cloudsTexture
+		]
+		
+		// 2. Safely unwrap them (ignore any nils from unused layers)
+		let validTextures = texturesToPreload.compactMap { $0 }
+		
+		// 3. Force SpriteKit to decode and upload them to the GPU immediately
+		SKTexture.preload(validTextures) {
+			print("GPU Preload Complete: All stage textures are locked into VRAM.")
+		}
+	}
+	
+	
 	func setPlatforms() {
 		
 		switch currentStage {
@@ -645,31 +668,113 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 	
 	func setBackground() {
 		
-		switch currentBG { // previously currentStage
+		// Define the new textures
+		var nextBGL1: SKTexture?
+		var nextBGL2: SKTexture?
+		var nextBGL3: SKTexture?
+		var nextWallLeft: SKTexture?
+		var nextWallRight: SKTexture?
+		
+		// Determine which textures we are switching TO
+		switch currentBG {
 		case 1:
-			backgroundTextureL1 = firstBackgroundL1
-			backgroundTextureL2 = firstBackgroundL2
-			backgroundTextureL3 = firstBackgroundL3
-			wallLeftTexture = firstWallLeft
-			wallRightTexture = firstWallRight
+			nextBGL1 = firstBackgroundL1
+			nextBGL2 = firstBackgroundL2
+			nextBGL3 = firstBackgroundL3
+			nextWallLeft = firstWallLeft
+			nextWallRight = firstWallRight
 		case 2:
-			backgroundTextureL1 = secondBackgroundL1
-			backgroundTextureL2 = firstBackgroundL2
-			backgroundTextureL3 = firstBackgroundL3
-			wallLeftTexture = secondWallLeft
-			wallRightTexture = secondWallRight
-			//            animateBackground(texture: secondBackground)
+			// Switching to Level 2 (Red/Night/Cave)
+			nextBGL1 = secondBackgroundL1
+			nextBGL2 = secondBackgroundL2
+			nextBGL3 = secondBackgroundL3
+			nextWallLeft = secondWallLeft
+			nextWallRight = secondWallRight
 		case 3...:
-			backgroundTextureL1 = thirdBackgroundL1
-			backgroundTextureL2 = firstBackgroundL2
-			backgroundTextureL3 = firstBackgroundL3
-			wallLeftTexture = thirdWallLeft
-			wallRightTexture = thirdWallRight
+			nextBGL1 = thirdBackgroundL1
+			nextBGL2 = thirdBackgroundL2
+			nextBGL3 = thirdBackgroundL3
+			nextWallLeft = thirdWallLeft
+			nextWallRight = thirdWallRight
 		default:
 			break
 		}
 		
+		// 1. Update the variables IMMEDIATELY.
+		// This ensures any NEW walls spawned during the 1.5s transition
+		// will start as Red (so they don't spawn Blue and then fade).
+		if let t = nextBGL1 { backgroundTextureL1 = t; t.filteringMode = .nearest }
+		if let t = nextBGL2 { backgroundTextureL2 = t; t.filteringMode = .nearest }
+		if let t = nextBGL3 { backgroundTextureL3 = t; t.filteringMode = .nearest }
+		if let t = nextWallLeft { wallLeftTexture = t; t.filteringMode = .nearest }
+		if let t = nextWallRight { wallRightTexture = t; t.filteringMode = .nearest }
+		
+		// 2. Animate the EXISTING nodes on screen
+		// This makes the Blue walls currently visible fade into Red walls
+		let transitionTime: TimeInterval = 1.0
+		
+		if let t = nextBGL1, !backgroundArrayL1.isEmpty {
+			animateTextureChange(for: backgroundArrayL1, to: t, duration: transitionTime)
+		}
+		if let t = nextBGL2, !backgroundArrayL2.isEmpty {
+			animateTextureChange(for: backgroundArrayL2, to: t, duration: transitionTime)
+		}
+		if let t = nextBGL3, !backgroundArrayL3.isEmpty {
+			animateTextureChange(for: backgroundArrayL3, to: t, duration: transitionTime)
+		}
+		if let t = nextWallLeft, !wallLeftArray.isEmpty {
+			animateTextureChange(for: wallLeftArray, to: t, duration: transitionTime)
+		}
+		if let t = nextWallRight, !wallRightArray.isEmpty {
+			animateTextureChange(for: wallRightArray, to: t, duration: transitionTime)
+		}
+
 		currentBG += 1
+	}
+	
+	
+	func animateTextureChange(for nodes: [SKSpriteNode], to newTexture: SKTexture?, duration: TimeInterval) {
+		
+		guard let targetTexture = newTexture else { return }
+		targetTexture.filteringMode = .nearest // Keep pixel art crisp
+		
+		for node in nodes {
+			guard let currentTexture = node.texture else { continue }
+			
+			
+			// CREATE THE GHOST (The OLD Texture)
+			let oldGhost = SKSpriteNode(texture: currentTexture)
+			oldGhost.texture?.filteringMode = .nearest
+			oldGhost.size = node.size
+			oldGhost.anchorPoint = CGPoint(x: 0.5, y: 0.5) // Matches your background setup
+			
+			// Use a microscopic Z-offset. This prevents it from clipping into
+			// the background layers in front of or behind it.
+			oldGhost.zPosition = 0.01
+			
+			// Inherit exact properties so there is zero visual change when spawned
+			oldGhost.color = node.color
+			oldGhost.colorBlendFactor = node.colorBlendFactor
+			oldGhost.alpha = node.alpha
+			
+			// 3. Attach the Ghost to the scrolling block
+			node.addChild(oldGhost)
+			
+			// 4. SWAP THE PARENT TEXTURE
+			// We set the real wall to the New Texture immediately.
+			// The player CANNOT see this happen, because the Old Ghost perfectly covers it!
+			node.texture = targetTexture
+			
+			// 5. THE FADE
+			// As the Old Ghost fades out, it gracefully reveals the New Texture underneath.
+			// Because the New Texture is solid 1.0 alpha, there is NO background bleed!
+			let fadeOut = SKAction.fadeOut(withDuration: duration)
+			fadeOut.timingMode = .linear
+			
+			let removeGhost = SKAction.removeFromParent()
+			
+			oldGhost.run(SKAction.sequence([fadeOut, removeGhost]))
+		}
 	}
 	
 	
